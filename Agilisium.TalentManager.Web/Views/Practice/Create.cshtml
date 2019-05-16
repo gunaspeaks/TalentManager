@@ -1,0 +1,62 @@
+﻿@model Agilisium.TalentManager.Web.Models.PracticeModel
+
+@{
+    ViewBag.Title = "Create POD";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Create a New POD</b></h3></td></tr>
+        </table>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            <div>
+                <table style="width:80%;">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BusinessUnitID)
+                                @Html.DropDownListFor(model => model.BusinessUnitID, (IEnumerable<SelectListItem>)ViewBag.BuListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PracticeName)
+                                @Html.EditorFor(model => model.PracticeName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShortName)
+                                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ManagerID)
+                                @Html.DropDownListFor(model => model.ManagerID, (IEnumerable<SelectListItem>)ViewBag.ManagerListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,88 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+@model Agilisium.TalentManager.Web.Models.EmployeeViewModel
+
+@{
+    ViewBag.Title = "Practice-wise Employees";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Practice-wise Employees</b></h3></td></tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeID)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayName("Employee Name")
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().BusinessUnitName)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().PracticeName)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().SubPracticeName)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().DateOfJoin)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().LastWorkingDay)
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().ReportingManagerName)
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Employees)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeID)
+                    </td>
+                    <td>
+                        @Html.ActionLink($"{item.LastName}, {item.FirstName}", "Edit", new { id = item.EmployeeEntryID })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusinessUnitName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PracticeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SubPracticeName)
+                    </td>
+                    <td class="text-right">
+                        <text>@item.DateOfJoin.ToString("dd/MMM/yyyy")</text>
+                    </td>
+                    <td class="text-right">
+                        @if (item.LastWorkingDay.HasValue)
+                        {
+                            <text>@item.LastWorkingDay.Value.ToString("dd/MMM/yyyy")</text>
+                        }
+                        else
+                        {
+                            <text>&nbsp</text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReportingManagerName)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group pull-right">
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("PracticeWiseList", new { page = x }))
+        </div>
+    </div>
+</div>

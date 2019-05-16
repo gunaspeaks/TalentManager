@@ -1,0 +1,49 @@
+﻿@model Agilisium.TalentManager.Web.Models.CategoryModel
+
+@{
+    ViewBag.Title = "Edit Category";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Update Category Details</b></h3></td></tr>
+        </table>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        <div class="panel-body">
+            @Html.HiddenFor(model => model.CategoryID)
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                if (property.PropertyName != "CategoryID" &&
+                    property.PropertyName != "IsReserved" &&
+                    property.PropertyName != "LoggedInUserName")
+                {
+                    <div class="form-group">
+                        <label>@(property.DisplayName ?? property.PropertyName)</label>
+                        @if (property.PropertyName == "Description")
+                        {
+                            @Html.TextArea(property.PropertyName, null, new { @class = "form-control", rows = 5 })
+                        }
+                        else
+                        {
+                            @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                        }
+                    </div>
+                }
+            }
+            <div class="panel-footer">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>
+

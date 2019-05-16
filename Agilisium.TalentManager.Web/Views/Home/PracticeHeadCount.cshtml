@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.PracticeHeadCountModel>
+
+<div class="dashboardItem">
+    <div class="dashboardItemHeader">POD-wise Head Count</div>
+    <div class="dashboardItemBody">
+        <table class="tbl">
+            <tr>
+                <th class="text-left">POD</th>
+                <th class="text-right">Head Count</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-left">@item.Practice</td>
+                    <td class="text-right">@item.HeadCount</td>
+                </tr>
+            }
+        </table>
+        <text class="pull-right">
+            @Html.ActionLink("Show All", "SubPracticeHeadCount", null, new { @style = "color:darkblue" })
+        </text>
+    </div>
+</div>

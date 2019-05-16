@@ -1,0 +1,106 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/error-styles.css" rel="stylesheet" />
+    <link href="~/Content/dashboard.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/Agilisium/content-updater.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        rootUrl = '@Url.Content("~")'
+    </script>
+</head>
+<body style="background-color:lightskyblue">
+    <div class="navbar navbar-fixed-top" style="background-color:black; height:50px">
+        <div>
+            <div class="navbar-header">
+                <div class="navbar-header pull-left" style="vertical-align:top">
+                    <a class="navbar-brand" href="@Url.Action("Index", "Default")">
+                        <img src="~/Content/Images/agilisium.jpg" alt="Agilisium-Talent Manager" style="height:25px;width:25px;" />
+                    </a>
+                </div>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="color:darkblue; font-weight:bold;">
+                    @if (Request.Url.ToString().ToLower().Contains("vindex"))
+                    {
+                        <li>@Html.ActionLink("Home", "VIndex", "Vendor", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Home", "VIndex", "Vendor")</li>
+                    }
+                    @if (Request.Url.ToString().ToLower().Contains("vendor")
+                        && Request.Url.ToString().ToLower().Contains("search") == false
+                        && Request.Url.ToString().ToLower().Contains("vindex") == false
+                        && Request.Url.ToString().ToLower().Contains("servicerequest") == false)
+                    {
+                        <li>@Html.ActionLink("Vendors", "List", "Vendor", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Vendors", "List", "Vendor")</li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav" style="color:darkblue; font-weight:bold;">
+                    @if (Request.Url.ToString().ToLower().Contains("search"))
+                    {
+                        <li>@Html.ActionLink("Find Vendors", "Search", "Vendor", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Find Vendors", "Search", "Vendor")</li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav" style="color:darkblue; font-weight:bold;">
+                    @if (Request.Url.ToString().ToLower().Contains("servicerequest"))
+                    {
+                        <li>@Html.ActionLink("Contractor Requests", "List", "ServiceRequest", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Contractor Requests", "List", "ServiceRequest")</li>
+                    }
+                </ul>
+                @*@Html.Partial("_LoginPartial")*@
+            </div>
+        </div>
+    </div>
+    <div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkgreen; border-bottom-width:1px; border-bottom-right-radius:40%; border-bottom-left-radius:40%; font-size:large; text-align:center" class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkblue; border-bottom-width:1px; border-bottom-right-radius:40%; border-bottom-left-radius:40%; font-size:large; text-align:center" class="alert alert-warning">
+                @TempData["WarningMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div style="font-weight:bold;color:red; border-bottom-right-radius:40%; border-bottom-left-radius:40%; border-bottom-width:1px; font-size:large; text-align:center" class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @RenderBody()
+    </div>
+</body>
+</html>

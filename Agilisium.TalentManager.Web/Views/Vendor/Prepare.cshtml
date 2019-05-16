@@ -1,0 +1,56 @@
+﻿@model List<Agilisium.TalentManager.Web.Models.ServiceRequestModel>
+
+@{
+    ViewBag.Title = "Prepare Service Requests";
+    Layout = "~/Views/Shared/_VendorManagementLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3><b>Prepare Service Requests</b></h3>
+    </div>
+    @using (Html.BeginForm("SendRequests", "Vendor", FormMethod.Post))
+    {
+        <div class="panel-body">
+            <table class="table table-striped table-condensed table-bordered">
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().VendorName)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().RequestedSkill)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().RequestedDate)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().EmailMessage)
+                    </th>
+                </tr>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.Hidden($"[{i}].VendorID", Model[i].VendorID)
+                            @Model[i].VendorName
+                        </td>
+                        <td>
+                            @Html.Hidden($"[{i}].RequestedSkill", Model[i].RequestedSkill)
+                            @Model[i].RequestedSkill
+                        </td>
+                        <td>
+                            @Html.Hidden($"[{i}].RequestedDate", Model[i].RequestedDate)
+                            @Model[i].RequestedDate
+                        </td>
+                        <td>
+                            @Html.TextArea($"[{i}].EmailMessage", Model[i].EmailMessage, new { rows = "5", cols = "150" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="panel-footer">
+            <input type="submit" value="Send Contractor Requests" class = "btn btn-default" />
+        </div>
+    }
+</div>

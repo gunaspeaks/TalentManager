@@ -1,0 +1,179 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/error-styles.css" rel="stylesheet" />
+    <link href="~/Content/dashboard.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/Agilisium/content-updater.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        rootUrl = '@Url.Content("~")';
+    </script>
+</head>
+<body style="background-color:Highlight">
+    <div class="navbar navbar-fixed-top" style="background-color:black; height:50px">
+        <div>
+            <div class="navbar-header">
+                <div class="navbar-header pull-left" style="vertical-align:top">
+                    <a class="navbar-brand" href="@Url.Action("Index", "Default")">
+                        <img src="~/Content/Images/agilisium.jpg" alt="Agilisium-Talent Manager" style="height:25px;width:25px;" />
+                    </a>
+                </div>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav" style="color:darkblue; font-weight:bold;">
+                    @if (Request.Url.ToString().ToLower().Contains("home"))
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    }
+                    @if (Request.Url.ToString().ToLower().Contains("employee"))
+                    {
+                        <li>@Html.ActionLink("Employees", "List", "Employee", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Employees", "List", "Employee")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("accounts"))
+                    {
+                        <li>@Html.ActionLink("Accounts", "List", "Accounts", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Accounts", "List", "Accounts")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("project") 
+                        && Request.Url.ToString().ToLower().Contains("managerwiseprojects") == false
+                        && Request.Url.ToString().ToLower().Contains("allocationhistory") == false)
+                    {
+                        <li>@Html.ActionLink("Projects", "List", "Project", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Projects", "List", "Project")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("allocation") && Request.Url.ToString().ToLower().Contains("managerwiseallocations") == false
+&& Request.Url.ToString().ToLower().Contains("billabilitywiseallocationdetail") == false
+&& Request.Url.ToString().ToLower().Contains("billabilitywiseallocationsummary") == false)
+                    {
+                        <li>@Html.ActionLink("Allocations", "List", "Allocation", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Allocations", "List", "Allocation")</li>
+                    }
+                    @if (Request.Url.ToString().ToLower().Contains("category") && !Request.Url.ToString().ToLower().Contains("subcategory"))
+                    {
+                        <li>@Html.ActionLink("Categories", "List", "Category", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Categories", "List", "Category")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("subcategory") && Request.Url.ToString().ToLower().Contains("category"))
+                    {
+                        <li>@Html.ActionLink("Sub Categories", "List", "SubCategory", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Sub Categories", "List", "SubCategory")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("practice") && !Request.Url.ToString().ToLower().Contains("subpractice"))
+                    {
+                        <li>@Html.ActionLink("PODs", "List", "Practice", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("PODs", "List", "Practice")</li>
+                    }
+
+                    @if (Request.Url.ToString().ToLower().Contains("subpractice"))
+                    {
+                        <li>@Html.ActionLink("Competencies", "List", "SubPractice", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Competencies", "List", "SubPractice")</li>
+                    }
+
+                    @*<li class="dropdown">
+                                <a href="#" data-toggle="dropdown" style="font-size:small;" class="dropdown-toggle">Reports <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Manager-Wise Allocation Report", "ManagerWiseAllocations", "Reports")</li>
+                                    <li>@Html.ActionLink("Billability-Wise Allocation Report", "Index", "Reports")</li>
+                                    @*<li>@Html.ActionLink("Practices", "Index", "Practice")</li>
+                                    <li>@Html.ActionLink("Sub Practices", "Index", "SubPractice")</li>
+                        </ul>
+                        </li>*@
+                    @if (Request.Url.ToString().ToLower().Contains("reports"))
+                    {
+                        <li>@Html.ActionLink("Reports", "Index", "Reports", new { @style = "color:GreenYellow" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
+                    }
+                    @*<li>
+                        @{
+                            string userName = User.Identity.Name;
+                            if (User.Identity.Name.Split('\\').Count() > 1)
+                            {
+                                userName = User.Identity.Name.Split('\\')[1];
+                            }
+
+                            <p class="nav navbar-text navbar-right" style="color:GreenYellow">
+                                Hello, @userName
+                            </p>
+                        }
+                    </li>*@
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkgreen; border-bottom-width:1px; border-bottom-right-radius:40%; border-bottom-left-radius:40%; font-size:large; text-align:center" class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkblue; border-bottom-width:1px; border-bottom-right-radius:40%; border-bottom-left-radius:40%; font-size:large; text-align:center" class="alert alert-warning">
+                @TempData["WarningMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div style="font-weight:bold;color:red; border-bottom-right-radius:40%; border-bottom-left-radius:40%; border-bottom-width:1px; font-size:large; text-align:center" class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @RenderBody()
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+@model Agilisium.TalentManager.Web.Models.ContractorViewModel
+
+@{
+    ViewBag.Title = "Contractors Master";
+    Layout = "~/Views/Shared/_ContractorManagerLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3><b>Contractors Master</b></h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().ContractorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().ProjectName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().AgilisiumManagerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().VendorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().SkillSet)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().StartDate)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().EndDate)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().BillingRate)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().ClientRate)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().OnshoreRate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Contractors.FirstOrDefault().ContractPeriod)
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Contractors)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.ContractorName, "Edit", new { id = item.ContractorID })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AgilisiumManagerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SkillSet)
+                    </td>
+                    <td class="text-right">
+                        <text>@item.StartDate.ToString("dd/MMM/yyy")</text>
+                    </td>
+                    <td class="text-right">
+                        <text>@item.EndDate.ToString("dd/MMM/yyy")</text>
+                    </td>
+                    <td class="text-right">
+                        <text>@item.BillingRate.ToString("C")</text>
+                    </td>
+                    <td class="text-right">
+                        <text>@item.ClientRate.ToString("C")</text>
+                    </td>
+                    <td class="text-right">
+                        <text>@item.OnshoreRate.ToString("C")</text>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContractPeriod)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Create a Contractor Request", "Create", null, new { @class = "btn btn-primary" })
+        <div class="btn-group pull-right">
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </div>
+    </div>
+</div>

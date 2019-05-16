@@ -1,0 +1,216 @@
+﻿@model Agilisium.TalentManager.Web.Models.AllocationModel
+
+@{
+    ViewBag.Title = "Create New Allocation";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="~/Scripts/Agilisium/content-updater.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        var buID = 1;
+
+        $("#AllocationStartDate").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+
+        $("#AllocationEndDate").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+
+        updateEmployeeAndProjectDetails();
+        updateFieldsBasedOnProjectType();
+    });
+
+    updateEmployeeAndProjectDetails = function () {
+        if ($("#ProjectID").val().length > 0) {
+            updateProjectDetailsSectionOnAllocationPage();
+        }
+
+        if ($("#EmployeeID").val().length > 0) {
+            loadEmployeeDetailsForAllocationEditPage();
+            getEmployeeOtherProjectAllocations();
+            getEmployeePercentageOfAllocation();
+        }
+    }
+
+    updateFieldsBasedOnProjectType = function () {
+
+        //$("#AllocationTypeID").removeAttr('disabled');
+        var pname = $("#ProjectID").text().toLowerCase();
+
+        if (($("#ProjectID").val() < 0) || $("#ProjectID").val().length == 0)
+            return;
+
+        if (pname.indexOf("lab") >= 0 || pname.indexOf("management") >= 0) {
+            $("#AllocationTypeID").val(7);
+            //$("#AllocationTypeID").attr('disabled', 'disabled');
+        } else if (pname.indexOf("bench") >= 0) {
+            $("#AllocationTypeID").val(6);
+            //$("#AllocationTypeID").attr('disabled', 'disabled');
+        }
+    }
+
+    $(function () {
+        $("#ProjectID").change(function (evt) {
+            updateEmployeeAndProjectDetails();
+            updateFieldsBasedOnProjectType();
+        });
+    });
+
+    $(function () {
+        $("#EmployeeID").change(function (evtn) {
+            updateEmployeeAndProjectDetails();
+        });
+    });
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Create a New Project Allcation</b></h3></td></tr>
+        </table>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            <div>
+                <table style="width:95%">
+                    <tr>
+                        <td width="25%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ProjectID)
+                                @Html.DropDownListFor(model => model.ProjectID, (IEnumerable<SelectListItem>)ViewBag.ProjectListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="25%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EmployeeID)
+                                @Html.DropDownListFor(model => model.EmployeeID, (IEnumerable<SelectListItem>)ViewBag.EmployeeListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="45%" valign="top" rowspan="3">
+                            <table cellpadding="5" , cellspacing="0" border="1" style="width:100%; height:100%; border-color:lightgray;">
+                                <tr>
+                                    <td align="center" style="background-color:lightgreen; vertical-align:middle">
+                                        <label style="font-size:large; color:darkgreen">PROJECT DETAILS</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px">&nbsp;&nbsp;Project Manager</label>
+                                            <label>:&nbsp;</label>
+                                            <label style="color:darkgreen; font-size:medium" id="pmName"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px">&nbsp;&nbsp;Project Type</label>
+                                            <label>:&nbsp;</label>
+                                            <label style="color:darkgreen; font-size:medium" id="projectType"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px">&nbsp;&nbsp;Project Start Date</label>
+                                            <label>:&nbsp;</label>
+                                            <label style="color:darkgreen; font-size:medium" id="projectStartDate"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px">&nbsp;&nbsp;Project End date</label>
+                                            <label>:&nbsp;</label>
+                                            <label style="color:darkgreen; font-size:medium" id="projectEndDate"></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="background-color:lightgreen; vertical-align:middle">
+                                        <label style="font-size:large; color:darkgreen;">EMPLOYEE DETAILS</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px; ">&nbsp;&nbsp;How Much Occupied</label>
+                                            <label>:&nbsp;</label>
+                                            <label style=" font-size:medium" id="howMuchOccupied"></label><text>%</text>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px; ">&nbsp;&nbsp;Employee ID</label>
+                                            <label>:&nbsp;</label>
+                                            <label style=" font-size:medium" id="employeeID"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px; ">&nbsp;&nbsp;Employee Type</label>
+                                            <label>:&nbsp;</label>
+                                            <label style=" font-size:medium" id="employeeType"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px; ">&nbsp;&nbsp;Primary Skills</label>
+                                            <label>:&nbsp;</label>
+                                            <label style=" font-size:medium" id="primarySkills"></label>
+                                        </div>
+                                        <div class="form-group-lg">
+                                            <label style="width:155px; ">&nbsp;&nbsp;Secondary Skills</label>
+                                            <label>:&nbsp;</label>
+                                            <label style=" font-size:medium" id="secondarySkills"></label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllocationStartDate)
+                                @Html.EditorFor(model => model.AllocationStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllocationEndDate)
+                                @Html.EditorFor(model => model.AllocationEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllocationTypeID)
+                                @Html.DropDownListFor(model => model.AllocationTypeID, (IEnumerable<SelectListItem>)ViewBag.ProjectTypeListItems, "Please Select", new { @class = "form-control" })
+                                <br />
+                                @Html.LabelFor(model => model.PercentageOfAllocation)
+                                @Html.EditorFor(model => model.PercentageOfAllocation, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Remarks)
+                                @Html.TextAreaFor(model => model.Remarks, 5, 3, new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-footer">
+                @Html.HiddenFor(model => model.AllocationEntryID)
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+            <div id="employeeAllocationDiv">
+            </div>
+        </div>
+    }
+</div>

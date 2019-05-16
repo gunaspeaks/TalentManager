@@ -1,0 +1,71 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+@model Agilisium.TalentManager.Web.Models.PracticeViewModel
+
+@{
+    ViewBag.Title = "PODs Master";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="align-content:center">
+        <table width="100%">
+            <tr><td><h3><b>PODs Master</b></h3></td></tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table style="width: 60%" class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.Practices.FirstOrDefault().BusinessUnitName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.Practices.FirstOrDefault().PracticeName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.Practices.FirstOrDefault().ShortName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.Practices.FirstOrDefault().ManagerName)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Practices.FirstOrDefault().HeadCount)
+                </th>
+                <th class="text-center">Actions</th>
+            </tr>
+            @foreach (var item in Model.Practices)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusinessUnitName)
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.PracticeName, "Edit", new { id = item.PracticeID })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShortName)
+                    </td>
+                    <td>
+                        @Html.DisplayTextFor(modelItem => item.ManagerName)
+                    </td>
+                    <td class="text-right">
+                        @Html.ActionLink(item.HeadCount.ToString(), "PracticeWiseList", "Employee", new { pid = item.PracticeID }, null)
+                    </td>
+                    <td class="text-center">
+                        @using (Html.BeginForm("Delete", "Practice"))
+                        {
+                            @Html.Hidden("id", item.PracticeID)
+                            <input type="submit" onclick="return confirm('Are you sure you about deleting this POD?');" class="btn btn-default btn-xs" value="Delete" />
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Add a New POD", "Create", null, new { @class = "btn btn-primary" })
+        <div class="btn-group pull-right">
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </div>
+    </div>
+</div>
+

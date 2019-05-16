@@ -1,0 +1,123 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+@model Agilisium.TalentManager.Web.Models.VendorViewModel
+
+@{
+    ViewBag.Title = "Vendors Master";
+    Layout = "~/Views/Shared/_VendorManagementLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3><b>Vendors Master</b></h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().VendorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().SpecializedPartner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().CEO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().PrimarySkills)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().PoC1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().PoC2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Vendors.FirstOrDefault().PoCPhone1)
+                </th>
+                <th>
+                    EMail
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+            @foreach (var item in Model.Vendors)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.VendorName, "Edit", new { id = item.VendorID })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SpecializedPartner)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CEO)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrimarySkills)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PoC1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PoC2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PoCPhone1)
+                    </td>
+                    <td>
+                        @{
+                            string emailID = "";
+                            if (string.IsNullOrEmpty(item.PoCEmail1) == false)
+                            {
+                                emailID += item.PoCEmail1;
+                            }
+                            if (string.IsNullOrEmpty(item.PoCEmail1) == false && string.IsNullOrEmpty(item.PoCEmail2))
+                            {
+                                emailID += "; " + item.PoCEmail2;
+                            }
+                            @emailID
+                        }
+                    </td>
+                    <td class="text-center">
+                        @using (Html.BeginForm("Delete", "Vendor"))
+                        {
+                            @Html.Hidden("id", item.VendorID)
+                            <input type="submit" onclick="return confirm('Are you sure you about deleting this Vendor?');" class="btn btn-default btn-xs" value="Delete" />
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <div class="panel-footer">
+        <table style=" height:50px; width:100%">
+            <tr>
+                <td width="50%">
+                    @using (Html.BeginForm("Search", "Vendor"))
+                    {
+                        @Html.Label("Search Available Skills")
+                        @Html.EditorFor(model => model.By, new { css = "form-control" })
+                        <input type="submit" class="btn btn-default" value="Find All" />
+                    }
+
+                </td>
+                <td>
+                    @Html.ActionLink("Create a New Vendor", "Create", null, new { @class = "btn btn-primary" })
+                    <div class="btn-group pull-right">
+                        @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>

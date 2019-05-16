@@ -1,0 +1,88 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/error-styles.css" rel="stylesheet" />
+    <link href="~/Content/dashboard.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div>
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Agilisium - Talent Manager", "Index", "Home")</li>
+                    @if (Request.Url.ToString().Contains("Employee"))
+                    {
+                        <li>@Html.ActionLink("Employees", "Index", "Employee", new { @style = "color:Yellow; font-size:large;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
+                    }
+
+                    @if (Request.Url.ToString().Contains("Project"))
+                    {
+                        <li>@Html.ActionLink("Projects", "Index", "Project", new { @style = "color:Yellow; font-size:large;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Projects", "Index", "Project")</li>
+                    }
+
+                    *@if (Request.Url.ToString().Contains("Allocation"))
+                    {
+                        <li>@Html.ActionLink("Project Allocations", "Index", "Allocation", new { @style = "color:Yellow; font-size:large;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Project Allocations", "Index", "Allocation")</li>
+                    }
+
+                    <li>@Html.ActionLink("Settings", "Index", "Category")</li>
+                </ul>
+                @*@Html.Partial("_LoginPartial")*@
+            </div>
+        </div>
+    </div>
+    <div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div style="font-weight:bold;color:blue; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkgreen; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-warning">
+                @TempData["WarningMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div style="font-weight:bold;color:red; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @RenderBody()
+    </div>
+</body>
+</html>

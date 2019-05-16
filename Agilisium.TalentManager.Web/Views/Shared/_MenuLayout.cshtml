@@ -1,0 +1,103 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" , initial-scale=1 />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/error-styles.css" rel="stylesheet" />
+    <link href="~/Content/dashboard.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"><img src="~/Content/Images/Agilisium_Logopng.png" /></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Agilisium - Talent Manager", "Index", "Home", new { @style = "font-size:large;" })</li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" style = "font-size:large;" class="dropdown-toggle">File <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Manage Employees", "Index", "Employee")</li>
+                            <li>@Html.ActionLink("Manage Contractors", "Index", "Employee")</li>
+                            <li>@Html.ActionLink("Manage Vendors", "Index", "Employee")</li>
+                        </ul>
+                    </li>
+                    @if (Request.Url.ToString().Contains("Project"))
+                    {
+                        <li>@Html.ActionLink("Projects", "Index", "Project", new { @style = "color:Yellow; font-size:large;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Projects", "Index", "Project", new { @style = "font-size:large;" })</li>
+                    }
+
+                    @if (Request.Url.ToString().Contains("Allocation"))
+                    {
+                        <li>@Html.ActionLink("Project Allocations", "Index", "Allocation", new { @style = "color:Yellow; font-size:large;" })</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Project Allocations", "Index", "Allocation", new { @style = "font-size:large;" })</li>
+                    }
+
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" style = "font-size:large;" class="dropdown-toggle">Admin <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Categories", "Index", "Category")</li>
+                            <li>@Html.ActionLink("Sub Categories", "Index", "SubCategory")</li>
+                            <li>@Html.ActionLink("Practices", "Index", "Practice")</li>
+                            <li>@Html.ActionLink("Sub Practices", "Index", "SubPractice")</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Login<b class="caret"></b></a>
+                        @*<ul class="dropdown-menu">
+                            <li><a href="#">Log off</a></li>
+                            <li><a href="#">My Profile</a></li>
+                        </ul>*@
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div style="font-weight:bold;color:blue; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div style="font-weight:bold;color:darkgreen; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-warning">
+                @TempData["WarningMessage"]
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div style="font-weight:bold;color:red; border-radius:25%; font-size:x-large; text-align:center" class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        @RenderBody()
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+﻿@model Agilisium.TalentManager.Web.Models.EmployeeWidgetModel
+
+<div class="dashboardItem">
+    <div class="dashboardItemHeader">Our Strength</div>
+    <div class="dashboardItemBody">
+        <table class="tbl">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.TotalEmployees)
+                </td>
+                <td>:</td>
+                <td>@Html.DisplayFor(model => model.TotalEmployees)</td>
+            </tr>
+            <tr>
+
+                <td>
+                    @Html.DisplayNameFor(model => model.TotalBillableEmployees)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.TotalBillableEmployees)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.EmployeesOnInternalProjects)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.EmployeesOnInternalProjects)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.BenchStrength)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.BenchStrength)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.EmployeesOnLabProjects)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.EmployeesOnLabProjects)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.ShadowResources)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.ShadowResources)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.AwaitingProposal)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.DisplayFor(model => model.AwaitingProposal)
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

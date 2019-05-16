@@ -1,0 +1,86 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Web", "Agilisium.TalentManager.Web\Agilisium.TalentManager.Web.csproj", "{168C3162-B3F6-416E-B331-55468C9C79D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Repository", "Agilisium.TalentManager.Data\Agilisium.TalentManager.Repository.csproj", "{5CFE3B1B-F50D-4D49-9008-819F6F708F21}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Agilisium.TalentManager.Database", "Agilisium.TalentManager.Database\Agilisium.TalentManager.Database.sqlproj", "{8B79995F-454D-40BF-A0C9-26825E82922D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Dto", "Agilisium.TalentManager.Dto\Agilisium.TalentManager.Dto.csproj", "{210C185D-668E-4460-9DF0-E96460A1AE81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Model", "Agilisium.TalentManager.Model\Agilisium.TalentManager.Model.csproj", "{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ReportingService", "Agilisium.TalentManager.ReportingService\Agilisium.TalentManager.ReportingService.csproj", "{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ServerUtilities", "Agilisium.TalentManager.ServerUtilities\Agilisium.TalentManager.ServerUtilities.csproj", "{6FF908C2-833E-4A3B-A936-21E36ED88B3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Service", "Agilisium.TalentManager.Service\Agilisium.TalentManager.Service.csproj", "{E93E7895-5291-4D88-A402-8E0E3B49AD12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.WindowServices", "Agilisium.TalentManager.WindowServices\Agilisium.TalentManager.WindowServices.csproj", "{0F1E3658-85B8-499F-892A-23463CFF6419}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataUploader", "Tools\DataUploader\DataUploader.csproj", "{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{168C3162-B3F6-416E-B331-55468C9C79D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168C3162-B3F6-416E-B331-55468C9C79D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168C3162-B3F6-416E-B331-55468C9C79D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168C3162-B3F6-416E-B331-55468C9C79D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CFE3B1B-F50D-4D49-9008-819F6F708F21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CFE3B1B-F50D-4D49-9008-819F6F708F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CFE3B1B-F50D-4D49-9008-819F6F708F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CFE3B1B-F50D-4D49-9008-819F6F708F21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B79995F-454D-40BF-A0C9-26825E82922D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{210C185D-668E-4460-9DF0-E96460A1AE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210C185D-668E-4460-9DF0-E96460A1AE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210C185D-668E-4460-9DF0-E96460A1AE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210C185D-668E-4460-9DF0-E96460A1AE81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1E3658-85B8-499F-892A-23463CFF6419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1E3658-85B8-499F-892A-23463CFF6419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1E3658-85B8-499F-892A-23463CFF6419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1E3658-85B8-499F-892A-23463CFF6419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E90358CF-9064-4138-88C2-63D7559469D6}
+	EndGlobalSection
+EndGlobal

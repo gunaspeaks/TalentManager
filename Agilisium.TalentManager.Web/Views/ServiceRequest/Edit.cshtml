@@ -1,0 +1,90 @@
+﻿@model Agilisium.TalentManager.Web.Models.ServiceRequestModel
+
+@{
+    ViewBag.Title = "Update Service Request Status";
+    Layout = "~/Views/Shared/_VendorManagementLayout.cshtml";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#CompletedDate").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+    }
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Update Service Request</b></h3></td></tr>
+        </table>
+        
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            <div>
+                <table style="width:70%;">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VendorName)
+                                @Html.DisplayFor(model => model.VendorName)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RequestedDate)
+                                @Html.DisplayFor(model => model.RequestedDate)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RequestedSkill)
+                                @Html.DisplayFor(model => model.RequestedSkill)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CompletedDate)
+                                @Html.EditorFor(model => model.CompletedDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RequestStatus)
+                                @Html.DropDownListFor(model => model.RequestStatusID, (IEnumerable<SelectListItem>)ViewBag.RequestStatusListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="panel-footer">
+                @Html.HiddenFor(model => model.ServiceRequestID)
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>

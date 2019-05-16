@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.AllocationModel>
+
+@{
+    ViewBag.Title = "Project Allocations";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading" style="align-content:center">
+        <table width="100%">
+            <tr><td><h3><b>Project Allocations</b></h3></td></tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.EmployeeName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.ProjectName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.AccountName)
+                </th>
+                <th class="text-left">
+                    @Html.DisplayNameFor(model => model.AllocationTypeName)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.PercentageOfAllocation)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.AllocationStartDate)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.AllocationEndDate)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.EmployeeName, "Edit", new { id = item.AllocationEntryID })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocationTypeName)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.PercentageOfAllocation)
+                    </td>
+                    <td class="text-right">
+                        <text>@item.AllocationStartDate.ToString("dd/MMM/yyy")</text>
+                    </td>
+                    <td class="text-right">
+                        <text>@item.AllocationEndDate.ToString("dd/MMM/yyy")</text>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model Agilisium.TalentManager.Web.Models.SubPracticeModel
+
+@{
+    ViewBag.Title = "Update Competency";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+
+<script>
+
+    $(document).ready(function () {
+        if ($("#PracticeID").val().length > 0) {
+            getPracticeManagerNameForSubPracticePage();
+        }
+    })
+
+    $(function () {
+        $("#PracticeID").change(function (evt) {
+            if ($("#PracticeID").val().length > 0) {
+                getPracticeManagerNameForSubPracticePage();
+            }
+        });
+    });
+
+</script>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>Update Competency</b></h3></td></tr>
+        </table>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            <div>
+                <table style="width:70%;">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PracticeID)
+                                @Html.DropDownListFor(model => model.PracticeID, (IEnumerable<SelectListItem>)ViewBag.PracticeListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td align="left">
+                            <label id="practiceManagerName">&nbsp;&nbsp;POD Manager:</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SubPracticeName)
+                                @Html.EditorFor(model => model.SubPracticeName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShortName)
+                                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ManagerID)
+                                @Html.DropDownListFor(model => model.ManagerID, (IEnumerable<SelectListItem>)ViewBag.ManagerListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="panel-footer">
+                @Html.HiddenFor(model => model.SubPracticeID)
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>

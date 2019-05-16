@@ -1,0 +1,108 @@
+﻿@model Agilisium.TalentManager.Web.Models.VendorSearchResultViewModel
+
+@{
+    ViewBag.Title = "Skill Search";
+    Layout = "~/Views/Shared/_VendorManagementLayout.cshtml";
+}
+
+
+<div class="panel-heading">
+    <h3>Search for Available Skills from Vendors</h3>
+    @using (Html.BeginForm("Search", "Vendor"))
+    {
+        @Html.Editor("By", new { css = "form-control" })
+        <input type="submit" class="btn btn-default" value="Find All" />
+    }
+</div>
+
+<div>
+    <div class="panel panel-default">
+        @using (Html.BeginForm("PrepareServiceRequests", "Vendor", FormMethod.Post))
+        {
+            <div style="max-height:400px; overflow-y:scroll" class="panel-body">
+                @if (Model.SearchResults != null)
+                {
+                    var searchResults = Model.SearchResults.ToList();
+                    for (int j = 0; j < searchResults.Count; j++)
+                    {@Html.Hidden($"[{j}].SearchedFor", searchResults[j].SearchedFor)
+                    <h4><b><u>Searched For: @searchResults[j].SearchedFor (@searchResults[j].MatchingVendors.Count())</u></b></h4>
+                    if (searchResults[j].MatchingVendors.Count() > 0)
+                    {
+                        <table style="width:70%" class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th class="text-center"><input type="checkbox" id="selectAll" /></th>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => searchResults[j].MatchingVendors.FirstOrDefault().VendorName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => searchResults[j].MatchingVendors.FirstOrDefault().PrimarySkills)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(modelItem => searchResults[j].MatchingVendors.FirstOrDefault().SecondarySkills)
+                                </th>
+                                <th>
+                                    Contact Email
+                                </th>
+                            </tr>
+                            @{
+                                var matchingVendors = searchResults[j].MatchingVendors.ToList();
+                                int recordIndex = j;
+                                for (int i = 0; i < matchingVendors.Count; i++)
+                                {
+                                    var vendorItem = matchingVendors[i];
+
+                                    <tr>
+                                        @if (string.IsNullOrEmpty(vendorItem.PoCEmail1) && string.IsNullOrEmpty(vendorItem.PoCEmail2))
+                                        {
+                                            <td>&nbsp;</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">@Html.CheckBox($"MatchingVendors[{recordIndex}].IsSelected", matchingVendors[i].IsSelected)</td>
+                                        }
+                                            <td>
+                                                @matchingVendors[i].VendorName
+                                                @Html.Hidden($"MatchingVendors[{recordIndex}].VendorID", matchingVendors[i].VendorID)
+                                                @Html.Hidden($"MatchingVendors[{recordIndex}].VendorName", matchingVendors[i].VendorName)
+                                                @Html.Hidden($"MatchingVendors[{recordIndex}].RequestedSkill", searchResults[j].SearchedFor)
+                                            </td>
+                                        <td>
+                                            @matchingVendors[i].PrimarySkills
+                                        </td>
+                                        <td>
+                                            @matchingVendors[i].SecondarySkills
+                                        </td>
+                                        <td>
+                                            @matchingVendors[i].PoCEmail1
+                                            @if (string.IsNullOrEmpty(vendorItem.PoCEmail2) == false)
+                                            {
+                                                <label>;&nbsp;</label>@matchingVendors[i].PoCEmail2
+                                            }
+                                        </td>
+                                    </tr>
+
+                                    recordIndex++;
+                                }
+                            }
+                        </table>
+                    }
+                }
+            }
+            </div>
+            <div class="panel-footer">
+                <table style="width:80%">
+                    <tr>
+                        <td>
+                            @Html.TextArea("emailMessage", new { rows="8", cols="500"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Send Contractor Requests" class="btn btn-primary" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        }
+    </div>
+</div>

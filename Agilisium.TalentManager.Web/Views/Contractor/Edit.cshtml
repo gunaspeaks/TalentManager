@@ -1,0 +1,165 @@
+﻿@model Agilisium.TalentManager.Web.Models.ContractorModel
+
+@{
+    ViewBag.Title = "Modify Contractor Request";
+    Layout = "~/Views/Shared/_ContractorManagerLayout.cshtml";
+}
+<link href="~/Content/error-styles.css" rel="stylesheet" />
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="~/Scripts/Agilisium/content-updater.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#StartDate").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+        $("#EndDate").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+
+        $(function () {
+            $("#ContractPeriodID").change(function () {
+                if ($("#ContractPeriodID").val().length > 0) {
+                    try {
+                        var eDate = Date.parse($("#StartDate").val());
+                        var dt = new Date(eDate);
+                        var selectedPeriod = $("#ContractPeriodID").val();
+                        selectedPeriod = parseInt(selectedPeriod) - 24;
+                        dt.setDate(dt.getDate() + (selectedPeriod * 30));
+                        $("#EndDate").val(dt.toLocaleString());
+                    }
+                    catch (exp) {
+                    }
+                }
+            });
+        });
+
+        updateProjectManagerName();
+    });
+
+    updateProjectManagerName = function () {
+        if ($("#ProjectID").val().length > 0) {
+            getProjectManagerByProjectID();
+        }
+    }
+
+    $(function () {
+        $("#ProjectID").change(function (evt) {
+            getProjectManagerByProjectID();
+        });
+    });
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Update Contractor Request</h3>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            <div>
+                <table style="width:75%">
+                    <tr>
+                        <td width="25%">
+                            <div class="form-group">
+                                @Html.HiddenFor(model => model.ContractorID)
+                                @Html.LabelFor(model => model.ContractorName)
+                                @Html.EditorFor(model => model.ContractorName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td width="25%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ProjectID)
+                                @Html.DropDownListFor(model => model.ProjectID, (IEnumerable<SelectListItem>)ViewBag.ProjectListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            @Html.LabelFor(model => model.AgilisiumManagerName)<br />
+                            <label id="projectManagerLabel"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VendorID)
+                                @Html.DropDownListFor(model => model.VendorID, (IEnumerable<SelectListItem>)ViewBag.VendorListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.SkillSet)
+                                @Html.EditorFor(model => model.SkillSet, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ContractPeriodID)
+                                @Html.DropDownListFor(model => model.ContractPeriodID, (IEnumerable<SelectListItem>)ViewBag.ContractPeriodListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.StartDate)
+                                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.EndDate)
+                                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BillingRate)
+                                @Html.EditorFor(model => model.BillingRate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ClientRate)
+                                @Html.EditorFor(model => model.ClientRate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OnshoreRate)
+                                @Html.EditorFor(model => model.OnshoreRate, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>
+

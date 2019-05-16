@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.ManagerWiseAllocationModel>
+
+@{
+    ViewBag.Title = "Manager-Wise Projects Summary";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Manager-Wise Projects Summary</h3>
+    </div>
+    <div class="panel-body">
+        <table style="width:50%" class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ManagerName)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.ProjectCount)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ManagerName)
+                    </td>
+                    <td class="text-right">
+                        @Html.ActionLink(item.ProjectCount.ToString(), "ManagerWiseProjects", new { id = item.ProjectManagerID })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Back to Reports Index", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

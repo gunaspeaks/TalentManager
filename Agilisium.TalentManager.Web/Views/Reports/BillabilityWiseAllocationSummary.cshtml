@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.BillabilityWiseAllocationSummaryModel>
+
+@{
+    ViewBag.Title = "Billability-Wise Allocation Summary";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Billability-Wise Allocation Summary</h3>
+    </div>
+    <div class="panel-body">
+        <table style="width:40%" class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.AllocationType)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.NumberOfEmployees)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocationType)
+                    </td>
+                    <td class="text-right">
+                        @Html.ActionLink(item.NumberOfEmployees.ToString(), "BillabilityWiseAllocationDetail", new { id = item.AllocationTypeID })
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                    <b>Total</b>
+                </td>
+                <td class="text-right">
+                    <b>@Model.Sum(a => a.NumberOfEmployees)</b>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Back to Reports Index", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>
+

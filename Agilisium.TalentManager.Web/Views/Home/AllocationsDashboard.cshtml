@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.AllocationWidgetModel>
+
+<div class="dashboardItem">
+    <div class="dashboardItemHeader">Our Utilization</div>
+    <div class="dashboardItemBody">
+        <table class="tbl">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>Project Name</td>
+                    <td>:</td>
+                    <td>@item.ProjectName</td>
+                </tr>
+                <tr>
+                    <td>Head Count</td>
+                    <td>:</td>
+                    <td>@item.HeadCount</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+﻿@using Agilisium.TalentManager.Web.Helpers
+
+@model Agilisium.TalentManager.Web.Models.ServiceRequestViewModel
+
+@{
+    ViewBag.Title = "All Contractor Requests";
+    Layout = "~/Views/Shared/_VendorManagementLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <table width="100%">
+            <tr><td><h3><b>All Contractor Requests</b></h3></td></tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table style="width: 70%" class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th width="15%" class="text-center">
+                    @Html.DisplayNameFor(model => model.ServiceRequests.FirstOrDefault().VendorName)
+                </th>
+                <th width="10%"  class="text-right">
+                    @Html.DisplayNameFor(model => model.ServiceRequests.First().RequestedDate)
+                </th>
+                <th width="15%" class="text-right">
+                    @Html.DisplayNameFor(model => model.ServiceRequests.First().CompletedDate)
+                </th>
+                <th width="15%" class="text-center">
+                    @Html.DisplayNameFor(model => model.ServiceRequests.First().RequestedSkill)
+                </th>
+                <th width="15%" class="text-center">
+                    @Html.DisplayNameFor(model => model.ServiceRequests.First().RequestStatus)
+                </th>
+            </tr>
+
+            @foreach (var item in Model.ServiceRequests)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VendorName)
+                    </td>
+                    <td class="text-right">
+                        <text>@item.RequestedDate.ToString("dd/MMM/yyy")</text>
+                    </td>
+                    <td class="text-right">
+                        @if (item.CompletedDate.HasValue)
+                        {
+                            <text>@item.CompletedDate.Value.ToString("dd/MMM/yyy")</text>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.RequestedSkill)
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.RequestStatus, "Edit", new { id = item.ServiceRequestID })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group pull-right">
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { page = x }))
+        </div>
+    </div>
+</div>
+
