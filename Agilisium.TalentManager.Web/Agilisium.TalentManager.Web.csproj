@@ -294,10 +294,16 @@
     <Content Include="Content\Images\Agilisium_Logo.jpg" />
     <Content Include="Content\Images\Agilisium_Logo_Color-01.jpg" />
     <Content Include="Content\Images\Agilisium_Logo_Color-01.png" />
+    <Content Include="Content\Images\alph-sort-asc.png" />
+    <Content Include="Content\Images\alph-sort-desc.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\contact-manager.jpg" />
     <Content Include="Content\Images\Contractor-management-3.jpg" />
     <Content Include="Content\Images\contractor.jpg" />
     <Content Include="Content\Images\email-icon.png" />
+    <Content Include="Content\Images\num-sort-asc.png" />
+    <Content Include="Content\Images\num-sort-desc.png" />
     <Content Include="Content\Images\sort-ascending.ico" />
     <Content Include="Content\Images\sort-descending.ico" />
     <Content Include="Content\Images\talent-management-1.jpg" />

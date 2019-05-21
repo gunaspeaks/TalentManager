@@ -63,6 +63,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<ProjectAllocationDto> GetAll(int pageSize = -1, int pageNo = -1)
         {
+            return GetAll("", 0, "", "", pageSize, pageNo);
+        }
+
+        public IQueryable<ProjectAllocationDto> GetAllRecords(int pageSize = -1, int pageNo = -1)
+        {
             IQueryable<ProjectAllocationDto> allocations = from p in Entities
                                                            join em in DataContext.Employees on p.EmployeeID equals em.EmployeeEntryID into eme
                                                            from emd in eme.DefaultIfEmpty()
@@ -70,9 +75,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                                            from scd in sce.DefaultIfEmpty()
                                                            join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                                                            from prd in pre.DefaultIfEmpty()
+                                                           join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                                                           from pmd in pme.DefaultIfEmpty()
                                                            join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                                                            from acd in ace.DefaultIfEmpty()
-                                                           where p.IsDeleted == false && p.IsActive == true
+                                                           where p.IsDeleted == false && p.AllocationEndDate >= DateTime.Now
                                                            orderby prd.ProjectName, p.AllocationStartDate
                                                            select new ProjectAllocationDto
                                                            {
@@ -80,38 +87,40 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                                                AllocationEntryID = p.AllocationEntryID,
                                                                AllocationStartDate = p.AllocationStartDate,
                                                                AllocationTypeName = scd.SubCategoryName,
-                                                               EmployeeName = emd.LastName + ", " + emd.FirstName,
+                                                               EmployeeName = emd.FirstName + " " + emd.LastName,
+                                                               ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                                                                EmployeeID = p.EmployeeID,
                                                                ProjectName = prd.ProjectName,
                                                                Remarks = p.Remarks,
                                                                PercentageOfAllocation = p.PercentageOfAllocation,
                                                                AccountName = acd.AccountName
                                                            };
+            return allocations;
 
-            if (pageSize < 0)
-            {
-                return allocations;
-            }
-            return allocations.Skip((pageNo - 1) * pageSize).Take(pageSize);
         }
 
-        public IEnumerable<ProjectAllocationDto> GetAll(string filterType, int filterValueID, int pageSize = -1, int pageNo = -1)
+        public IEnumerable<ProjectAllocationDto> GetAll(string filterType, int filterValueID, string sortBy = "empname", string sortType = "asc", int pageSize = -1, int pageNo = -1)
         {
+            IQueryable<ProjectAllocationDto> allocations = null;
             if (string.IsNullOrWhiteSpace(filterType))
             {
-                return GetAll(pageSize, pageNo);
+                allocations = GetAllRecords(pageSize, pageNo);
             }
 
-            IQueryable<ProjectAllocationDto> allocations = null;
-            switch (filterType)
+            switch (filterType?.ToLower())
             {
-                case "Employee":
+                case "emp":
                     allocations = GetAllocationsByEmployeeID(filterValueID);
                     break;
-                case "Project":
+                case "prj":
+                    allocations = GetAllocationsByProjectID(filterValueID);
+                    break;
+                case "pm":
                     allocations = GetAllocationsByProjectID(filterValueID);
                     break;
             }
+
+            allocations = SortAllocationItems(allocations, sortBy, sortType);
 
             if (pageSize < 0)
             {
@@ -129,6 +138,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false && p.ProjectID == projectID
@@ -139,7 +150,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
@@ -158,9 +170,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
-                   where p.IsDeleted == false && p.IsActive == true && p.EmployeeID == empID
+                   where p.IsDeleted == false && p.AllocationEndDate >= DateTime.Now && p.EmployeeID == empID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -168,7 +182,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
@@ -186,9 +201,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
-                   where p.IsDeleted == false && p.IsActive == true && p.ProjectID == projectID
+                   where p.IsDeleted == false && p.AllocationEndDate >= DateTime.Now && p.ProjectID == projectID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -196,7 +213,39 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
+                       EmployeeID = p.EmployeeID,
+                       ProjectName = prd.ProjectName,
+                       Remarks = p.Remarks,
+                       PercentageOfAllocation = p.PercentageOfAllocation,
+                       AccountName = acd.AccountName
+                   };
+        }
+
+        private IQueryable<ProjectAllocationDto> GetAllocationsByProjectManagerID(int managerID)
+        {
+            return from p in Entities
+                   join em in DataContext.Employees on p.EmployeeID equals em.EmployeeEntryID into eme
+                   from emd in eme.DefaultIfEmpty()
+                   join sc in DataContext.DropDownSubCategories on p.AllocationTypeID equals sc.SubCategoryID into sce
+                   from scd in sce.DefaultIfEmpty()
+                   join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
+                   from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
+                   join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
+                   from acd in ace.DefaultIfEmpty()
+                   where p.IsDeleted == false && p.AllocationEndDate >= DateTime.Now && prd.ProjectManagerID == managerID
+                   orderby prd.ProjectName, p.AllocationStartDate
+                   select new ProjectAllocationDto
+                   {
+                       AllocationEndDate = p.AllocationEndDate,
+                       AllocationEntryID = p.AllocationEntryID,
+                       AllocationStartDate = p.AllocationStartDate,
+                       AllocationTypeName = scd.SubCategoryName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
@@ -284,34 +333,37 @@ namespace Agilisium.TalentManager.Repository.Repositories
         public int GetTotalCountForAllocationHistory(string filterType, int filterValue)
         {
             int recordsCount = 0;
-            if (string.IsNullOrWhiteSpace(filterType))
+            if (string.IsNullOrWhiteSpace(filterType) || filterType?.ToLower() == "please select")
             {
                 recordsCount = (from a in Entities
                                 where a.IsDeleted == false
-                                    && (a.IsActive == false || (a.IsActive == true && (a.AllocationEndDate.Year <= DateTime.Now.Year
-                                    && a.AllocationEndDate.Month <= DateTime.Now.Month
-                                    && a.AllocationEndDate.Day < DateTime.Now.Day)))
+                                    && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate <= DateTime.Now))
                                 select a).Count();
             }
 
-            switch (filterType)
+            switch (filterType?.ToLower())
             {
-                case "Employee":
+                case "emp":
                     recordsCount = (from a in Entities
                                     where a.IsDeleted == false
-                                        && (a.IsActive == false || (a.IsActive == true && (a.AllocationEndDate.Year <= DateTime.Now.Year
-                                        && a.AllocationEndDate.Month <= DateTime.Now.Month
-                                        && a.AllocationEndDate.Day < DateTime.Now.Day)))
+                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
                                         && a.EmployeeID == filterValue
                                     select a).Count();
                     break;
-                case "Project":
+                case "prj":
                     recordsCount = (from a in Entities
                                     where a.IsDeleted == false
-                                        && (a.IsActive == false || (a.IsActive == true && (a.AllocationEndDate.Year <= DateTime.Now.Year
-                                        && a.AllocationEndDate.Month <= DateTime.Now.Month
-                                        && a.AllocationEndDate.Day < DateTime.Now.Day)))
+                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
                                         && a.ProjectID == filterValue
+                                    select a).Count();
+                    break;
+                case "pm":
+                    recordsCount = (from a in Entities
+                                    join p in DataContext.Projects on a.ProjectID equals p.ProjectID into pe
+                                    from pd in pe.DefaultIfEmpty()
+                                    where a.IsDeleted == false
+                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
+                                        && a.ProjectID == filterValue && pd.ProjectManagerID == filterValue
                                     select a).Count();
                     break;
             }
@@ -319,30 +371,76 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return recordsCount;
         }
 
-        public IEnumerable<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, int pageSize = -1, int pageNo = -1)
+        public IEnumerable<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, string sortBy, string sortType, int pageSize = -1, int pageNo = -1)
         {
             IQueryable<ProjectAllocationDto> allocations = null;
 
-            if (string.IsNullOrWhiteSpace(filterType))
+            if (string.IsNullOrWhiteSpace(filterType) || filterType?.ToLower() == "please select")
             {
                 allocations = GetAllAllocationHistory();
             }
 
             switch (filterType)
             {
-                case "Employee":
+                case "emp":
                     allocations = GetAllAllocationHistoryByEmployeeID(filterValue);
                     break;
-                case "Project":
+                case "prj":
                     allocations = GetAllAllocationHistoryByProject(filterValue);
                     break;
+                case "pm":
+                    allocations = GetAllAllocationHistoryByManagerID(filterValue);
+                    break;
             }
+
+            allocations = SortAllocationItems(allocations, sortBy, sortType);
 
             if (pageSize < 0)
             {
                 return allocations;
             }
             return allocations.Skip((pageNo - 1) * pageSize).Take(pageSize);
+        }
+
+        private IQueryable<ProjectAllocationDto> SortAllocationItems(IQueryable<ProjectAllocationDto> allocations, string sortBy, string sortType)
+        {
+            switch (sortBy?.ToLower())
+            {
+                case "pname":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.ProjectName) :
+                        allocations.OrderByDescending(a => a.ProjectName);
+                    break;
+                case "pmname":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.ProjectName) :
+                        allocations.OrderByDescending(a => a.ProjectManagerName);
+                    break;
+                case "accname":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.AccountName) :
+                        allocations.OrderByDescending(a => a.AccountName);
+                    break;
+                case "altype":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.AllocationTypeName) :
+                        allocations.OrderByDescending(a => a.AllocationTypeName);
+                    break;
+                case "percent":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.PercentageOfAllocation) :
+                        allocations.OrderByDescending(a => a.PercentageOfAllocation);
+                    break;
+                case "sdate":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.AllocationStartDate) :
+                        allocations.OrderByDescending(a => a.AllocationStartDate);
+                    break;
+                case "edate":
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.AllocationEndDate) :
+                       allocations.OrderByDescending(a => a.AllocationEndDate);
+                    break;
+                default:
+                    allocations = sortType == "asc" ? allocations.OrderBy(a => a.EmployeeName) :
+                        allocations.OrderByDescending(a => a.EmployeeName);
+                    break;
+            }
+
+            return allocations;
         }
 
         private IQueryable<ProjectAllocationDto> GetAllAllocationHistory()
@@ -354,12 +452,12 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate.Year <= DateTime.Now.Year
-                        && p.AllocationEndDate.Month <= DateTime.Now.Month
-                        && p.AllocationEndDate.Day < DateTime.Now.Day)))
+                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate < DateTime.Now)))
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -367,13 +465,19 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
                        PercentageOfAllocation = p.PercentageOfAllocation,
                        AccountName = acd.AccountName
                    };
+
+            //            && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate.Year <= DateTime.Now.Year
+            //&& p.AllocationEndDate.Month <= DateTime.Now.Month
+            //&& p.AllocationEndDate.Day < DateTime.Now.Day)))
+
         }
 
         private IQueryable<ProjectAllocationDto> GetAllAllocationHistoryByProject(int projectID)
@@ -385,12 +489,12 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate.Year <= DateTime.Now.Year
-                        && p.AllocationEndDate.Month <= DateTime.Now.Month
-                        && p.AllocationEndDate.Day < DateTime.Now.Day)))
+                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
                         && p.ProjectID == projectID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -399,7 +503,44 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
+                       EmployeeID = p.EmployeeID,
+                       ProjectName = prd.ProjectName,
+                       Remarks = p.Remarks,
+                       PercentageOfAllocation = p.PercentageOfAllocation,
+                       AccountName = acd.AccountName
+                   };
+
+
+
+        }
+
+        private IQueryable<ProjectAllocationDto> GetAllAllocationHistoryByManagerID(int managerID)
+        {
+            return from p in Entities
+                   join em in DataContext.Employees on p.EmployeeID equals em.EmployeeEntryID into eme
+                   from emd in eme.DefaultIfEmpty()
+                   join sc in DataContext.DropDownSubCategories on p.AllocationTypeID equals sc.SubCategoryID into sce
+                   from scd in sce.DefaultIfEmpty()
+                   join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
+                   from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
+                   join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
+                   from acd in ace.DefaultIfEmpty()
+                   where p.IsDeleted == false
+                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
+                        && prd.ProjectManagerID == managerID
+                   orderby prd.ProjectName, p.AllocationStartDate
+                   select new ProjectAllocationDto
+                   {
+                       AllocationEndDate = p.AllocationEndDate,
+                       AllocationEntryID = p.AllocationEntryID,
+                       AllocationStartDate = p.AllocationStartDate,
+                       AllocationTypeName = scd.SubCategoryName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
@@ -420,12 +561,12 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from scd in sce.DefaultIfEmpty()
                    join pr in DataContext.Projects on p.ProjectID equals pr.ProjectID into pre
                    from prd in pre.DefaultIfEmpty()
+                   join pm in DataContext.Employees on prd.ProjectManagerID equals pm.EmployeeEntryID into pme
+                   from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate.Year <= DateTime.Now.Year
-                        && p.AllocationEndDate.Month <= DateTime.Now.Month
-                        && p.AllocationEndDate.Day < DateTime.Now.Day)))
+                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
                         && p.EmployeeID == employeeID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -434,7 +575,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        AllocationEntryID = p.AllocationEntryID,
                        AllocationStartDate = p.AllocationStartDate,
                        AllocationTypeName = scd.SubCategoryName,
-                       EmployeeName = emd.LastName + ", " + emd.FirstName,
+                       EmployeeName = emd.FirstName + " " + emd.LastName,
+                       ProjectManagerName = pmd.FirstName + " " + pmd.LastName,
                        EmployeeID = p.EmployeeID,
                        ProjectName = prd.ProjectName,
                        Remarks = p.Remarks,
@@ -458,11 +600,14 @@ namespace Agilisium.TalentManager.Repository.Repositories
             int count = 0;
             switch (filterType)
             {
-                case "Employee":
+                case "emp":
                     count = GetAllocationsByEmployeeID(filterValueID).Count();
                     break;
-                case "Project":
+                case "prj":
                     count = GetAllocationsByProjectID(filterValueID).Count();
+                    break;
+                case "pm":
+                    count = GetAllocationsByProjectManagerID(filterValueID).Count();
                     break;
             }
 
@@ -588,7 +733,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             targetEntity.UpdateTimeStamp(sourceEntity.LoggedInUserName);
         }
 
-        #endregion 
+        #endregion
     }
 
     public interface IAllocationRepository : IRepository<ProjectAllocationDto>
@@ -605,9 +750,9 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         int GetTotalCountForAllocationHistory(string filterType, int filterValue);
 
-        IEnumerable<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, int pageSize = -1, int pageNo = -1);
+        IEnumerable<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, string sortBy, string sortType, int pageSize = -1, int pageNo = -1);
 
-        IEnumerable<ProjectAllocationDto> GetAll(string filterType, int filterValueID, int pageSize = -1, int pageNo = -1);
+        IEnumerable<ProjectAllocationDto> GetAll(string filterType, int filterValueID, string sortBy, string sortType, int pageSize = -1, int pageNo = -1);
 
         int TotalRecordsCount(string filterType, int filterValueID);
 

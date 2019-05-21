@@ -41,11 +41,11 @@
 <div class="panel panel-default">
     <div class="panel-heading" style="align-content:center">
         <table width="100%">
-            <tr><td><h3><b>Project Allocations</b></h3>(@Html.ActionLink("Click here for Allocations History", "AllocationHistory", "Allocation"))</td></tr>
+            <tr><td><h3><b>Project Allocations</b></h3>(@Html.ActionLink("Allocations History", "AllocationHistory", "Allocation"))</td></tr>
         </table>
     </div>
     <div class="panel-body">
-        @using (Html.BeginForm("List", "Allocation", new { filterType = Model.FilterType, filterValue = Model.FilterValue }))
+        @using (Html.BeginForm("List", "Allocation", new { filterType = Model.FilterType, filterValue = Model.FilterValue, sortBy = Model.SortBy, sortType = Model.SortType }))
         {
             <table style=" align-self:center; width:550px">
                 <tr>
@@ -70,27 +70,254 @@
             <table class="table table-striped table-condensed table-bordered">
                 <tr>
                     <th class="text-left">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName)
+                        @if (String.Compare(Model.SortBy, "empname", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
+                                        <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
+                                        <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-left">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName)
+                        @if (String.Compare(Model.SortBy, "pname", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="pname" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName).ToString()
+                                        <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="pname" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName).ToString()
+                                        <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="pname" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-left">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName)
+                        @if (String.Compare(Model.SortBy, "pmname", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="pmname" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectManagerName).ToString()
+                                        <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="pmname" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectManagerName).ToString()
+                                        <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="pmname" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectManagerName).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-left">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationTypeName)
+                        @if (String.Compare(Model.SortBy, "accname", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="accname" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName).ToString()
+                                        <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="accname" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName).ToString()
+                                        <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="accname" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName).ToString()
+                                </div>
+                            </a>
+                        }
+                    </th>
+                    <th class="text-left">
+                        @if (String.Compare(Model.SortBy, "altype", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="altype" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationTypeName).ToString()
+                                        <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="altype" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationTypeName).ToString()
+                                        <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="altype" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationTypeName).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-right">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().PercentageOfAllocation)
+                        @if (String.Compare(Model.SortBy, "percent", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="percent" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().PercentageOfAllocation).ToString()
+                                        <img src="~/Content/Images/num-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="percent" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().PercentageOfAllocation).ToString()
+                                        <img src="~/Content/Images/num-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="percent" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().PercentageOfAllocation).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-right">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationStartDate)
+                        @if (String.Compare(Model.SortBy, "sdate", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="sdate" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationStartDate).ToString()
+                                        <img src="~/Content/Images/num-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="sdate" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationStartDate).ToString()
+                                        <img src="~/Content/Images/num-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="sdate" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationStartDate).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
                     <th class="text-right">
-                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate)
+                        @if (String.Compare(Model.SortBy, "edate", true) == 0)
+                        {
+                            if (String.Compare(Model.SortType, "asc", true) == 0)
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="edate" , sortType="desc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate).ToString()
+                                        <img src="~/Content/Images/num-sort-desc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="edate" , sortType="asc" })">
+                                    <div style="color:darkgreen;">
+                                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate).ToString()
+                                        <img src="~/Content/Images/num-sort-asc.png" style="height:20px; width:20px" />
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="edate" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate).ToString()
+                                </div>
+                            </a>
+                        }
                     </th>
-                    <th class="text-center">De-Allocate</th>
+                    @*<th class="text-center">De-Allocate</th>*@
                     <th class="text-center">Actions</th>
                 </tr>
 
@@ -102,6 +329,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectManagerName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.AccountName)
@@ -118,13 +348,13 @@
                         <td class="text-right">
                             <text>@item.AllocationEndDate.ToString("dd/MMM/yyy")</text>
                         </td>
-                        <td class="text-center">
-                            @using (Html.BeginForm("DeAllocate", "Allocation"))
-                            {
-                                @Html.Hidden("id", item.AllocationEntryID)
-                                <input type="submit" onclick="return confirm('Are you sure you about de-allocating this employee?');" class="btn btn-default btn-xs" value="De-Allocate" />
-                            }
-                        </td>
+                        @*<td class="text-center">
+                                @using (Html.BeginForm("DeAllocate", "Allocation"))
+                                {
+                                    @Html.Hidden("id", item.AllocationEntryID)
+                                    <input type="submit" onclick="return confirm('Are you sure you about de-allocating this employee?');" class="btn btn-default btn-xs" value="De-Allocate" />
+                                }
+                            </td>*@
                         <td class="text-center">
                             @using (Html.BeginForm("Delete", "Allocation"))
                             {
@@ -141,7 +371,7 @@
     <div class="panel-footer">
         @Html.ActionLink("Create a New Project Allocation", "Create", null, new { @class = "btn btn-primary" })
         <div class="btn-group pull-right">
-            @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { filterType = Model.FilterType, filterValue = Model.FilterValue, page = x }))
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("List", new { filterType = Model.FilterType, filterValue = Model.FilterValue, sortBy = Model.SortBy, sortType = Model.SortType, page = x }))
         </div>
     </div>
 </div>

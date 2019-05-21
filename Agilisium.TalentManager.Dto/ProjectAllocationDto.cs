@@ -26,6 +26,8 @@ namespace Agilisium.TalentManager.Dto
 
         public string ProjectName { get; set; }
 
+        public string ProjectManagerName { get; set; }
+
         public string Remarks { get; set; }
 
         public int PercentageOfAllocation { get; set; }

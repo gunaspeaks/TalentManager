@@ -23,6 +23,10 @@ namespace Agilisium.TalentManager.Web.Models
 
         public string FilterValue { get; set; }
 
+        public string SortBy { get; set; }
+
+        public string SortType { get; set; }
+
         public IEnumerable<SelectListItem> FilterTypeDropDownItems { get; set; }
 
         public IEnumerable<SelectListItem> FilterValueDropDownItems { get; set; }

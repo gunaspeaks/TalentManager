@@ -19,13 +19,13 @@ namespace Agilisium.TalentManager.Web.Models
         public string EmployeeName { get; set; }
 
         [Required(ErrorMessage = "Allocation Start Date is required")]
-        [DisplayName("Allocation Start Date")]
+        [DisplayName("Allocated From")]
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         //[DataType(DataType.Date)]
         public DateTime AllocationStartDate { get; set; }
 
         [Required(ErrorMessage = "Allocation End Date is required")]
-        [DisplayName("Allocation End Date")]
+        [DisplayName("Allocated Upto")]
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         //[DataType(DataType.Date)]
         public DateTime AllocationEndDate { get; set; }
@@ -43,6 +43,9 @@ namespace Agilisium.TalentManager.Web.Models
 
         [DisplayName("Project Name")]
         public string ProjectName { get; set; }
+
+        [DisplayName("Manager Name")]
+        public string ProjectManagerName { get; set; }
 
         [DisplayName("Account Name")]
         public string AccountName { get; set; }

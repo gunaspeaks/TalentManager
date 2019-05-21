@@ -35,11 +35,11 @@ namespace Agilisium.TalentManager.Service.Abstract
 
         int GetTotalRecordsCountForAllocationHistory(string filterType, int filterValue);
 
-        List<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, int pageSize = -1, int pageNo = -1);
+        List<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, string sortBy, string sortType, int pageSize = -1, int pageNo = -1);
 
         int TotalRecordsCount(string filterType, int filterValueID);
 
-        List<ProjectAllocationDto> GetAll(string filterType, int filterValueID, int pageSize = -1, int pageNo = -1);
+        List<ProjectAllocationDto> GetAll(string filterType, int filterValueID, string sortBy, string sortType, int pageSize = -1, int pageNo = -1);
 
         bool AnyActiveBillableAllocations(int employeeID, int allocationID);
 

@@ -1,5 +1,5 @@
-﻿using Agilisium.TalentManager.Repository.Repositories;
-using Agilisium.TalentManager.Dto;
+﻿using Agilisium.TalentManager.Dto;
+using Agilisium.TalentManager.Repository.Repositories;
 using Agilisium.TalentManager.Service.Abstract;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace Agilisium.TalentManager.Service.Concreate
             return repository.Exists(itemName);
         }
 
-        public IEnumerable<ProjectAllocationDto> GetAll(int pageSize=-1, int pageNo = -1)
+        public IEnumerable<ProjectAllocationDto> GetAll(int pageSize = -1, int pageNo = -1)
         {
             return repository.GetAll(pageSize, pageNo);
         }
@@ -75,9 +75,9 @@ namespace Agilisium.TalentManager.Service.Concreate
             return repository.GetAllocatedProjectsByEmployeeID(employeeID);
         }
 
-        public List<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, int pageSize = -1, int pageNo = -1)
+        public List<ProjectAllocationDto> GetAllocationHistory(string filterType, int filterValue, string sortBy, string sortType, int pageSize = -1, int pageNo = -1)
         {
-            return repository.GetAllocationHistory(filterType, filterValue, pageSize, pageNo).ToList();
+            return repository.GetAllocationHistory(filterType, filterValue, sortBy, sortType, pageSize, pageNo).ToList();
         }
 
         public int GetTotalRecordsCountForAllocationHistory(string filterType, int filterValue)
@@ -85,9 +85,9 @@ namespace Agilisium.TalentManager.Service.Concreate
             return repository.GetTotalCountForAllocationHistory(filterType, filterValue);
         }
 
-        public List<ProjectAllocationDto> GetAll(string filterType, int filterValueID, int pageSize = -1, int pageNo = -1)
+        public List<ProjectAllocationDto> GetAll(string filterType, int filterValueID, string sortBy, string sortType, int pageSize = -1, int pageNo = -1)
         {
-            return repository.GetAll(filterType, filterValueID, pageSize, pageNo).ToList();
+            return repository.GetAll(filterType, filterValueID, sortBy, sortType, pageSize, pageNo).ToList();
         }
 
         public int TotalRecordsCount(string filterType, int filterValueID)

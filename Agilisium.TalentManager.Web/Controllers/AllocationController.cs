@@ -28,12 +28,14 @@ namespace Agilisium.TalentManager.Web.Controllers
         }
 
         // GET: Project
-        public ActionResult List(string filterType, string filterValue, int page = 1)
+        public ActionResult List(string filterType, string filterValue, string sortBy = "EmpName", string sortType = "asc", int page = 1)
         {
             AllocationViewModel viewModel = new AllocationViewModel()
             {
                 FilterType = filterType,
-                FilterValue = filterValue
+                FilterValue = filterValue,
+                SortBy = sortBy,
+                SortType = sortType
             };
 
             try
@@ -49,7 +51,7 @@ namespace Agilisium.TalentManager.Web.Controllers
 
                 if (viewModel.PagingInfo.TotalRecordsCount > 0)
                 {
-                    viewModel.Allocations = GetAllocations(filterType, filterValueID, page);
+                    viewModel.Allocations = GetAllocations(filterType, filterValueID, sortBy, sortType, page);
                 }
                 else
                 {
@@ -80,12 +82,14 @@ namespace Agilisium.TalentManager.Web.Controllers
             return View(allocations);
         }
 
-        public ActionResult AllocationHistory(string filterType = "Please Select", string filterValue = "0", int page = 1)
+        public ActionResult AllocationHistory(string filterType = "Please Select", string filterValue = "0", string sortBy = "EmployeeName", string sortType = "asc", int page = 1)
         {
             AllocationViewModel viewModel = new AllocationViewModel()
             {
                 FilterType = filterType,
-                FilterValue = filterValue
+                FilterValue = filterValue,
+                SortBy = sortBy,
+                SortType = sortType
             };
 
             int.TryParse(filterValue, out int filterValueID);
@@ -101,7 +105,7 @@ namespace Agilisium.TalentManager.Web.Controllers
                 InitializeListPage(viewModel);
                 if (viewModel.PagingInfo.TotalRecordsCount > 0)
                 {
-                    viewModel.Allocations = GetAllocationsHistory(filterType, filterValueID, page);
+                    viewModel.Allocations = GetAllocationsHistory(filterType, filterValueID, sortBy, sortType, page);
                 }
                 else
                 {
@@ -318,13 +322,16 @@ namespace Agilisium.TalentManager.Web.Controllers
         public JsonResult LoadFilterValueListItems(string filterType)
         {
             List<SelectListItem> filterValues = new List<SelectListItem>();
-            switch (filterType)
+            switch (filterType.ToLower())
             {
-                case "Employee":
+                case "emp":
                     filterValues = GetEmployeesList();
                     break;
-                case "Project":
+                case "prj":
                     filterValues = GetProjectsList();
+                    break;
+                case "pm":
+                    filterValues = GetReportingManagersList();
                     break;
             }
 
@@ -338,16 +345,16 @@ namespace Agilisium.TalentManager.Web.Controllers
             return Json(filterValues);
         }
 
-        private IEnumerable<AllocationModel> GetAllocations(string filterType, int filterValueID, int pageNo)
+        private IEnumerable<AllocationModel> GetAllocations(string filterType, int filterValueID, string sortBy, string sortType, int pageNo)
         {
-            IEnumerable<ProjectAllocationDto> allocations = allocationService.GetAll(filterType, filterValueID, RecordsPerPage, pageNo);
+            IEnumerable<ProjectAllocationDto> allocations = allocationService.GetAll(filterType, filterValueID, sortBy, sortType, RecordsPerPage, pageNo);
             IEnumerable<AllocationModel> projectModels = Mapper.Map<IEnumerable<ProjectAllocationDto>, IEnumerable<AllocationModel>>(allocations);
             return projectModels;
         }
 
-        private IEnumerable<AllocationModel> GetAllocationsHistory(string filterType, int filterValue, int pageNo)
+        private IEnumerable<AllocationModel> GetAllocationsHistory(string filterType, int filterValue, string sortBy, string sortType, int pageNo)
         {
-            IEnumerable<ProjectAllocationDto> allocations = allocationService.GetAllocationHistory(filterType, filterValue, RecordsPerPage, pageNo);
+            IEnumerable<ProjectAllocationDto> allocations = allocationService.GetAllocationHistory(filterType, filterValue, sortBy, sortType, RecordsPerPage, pageNo);
             IEnumerable<AllocationModel> projectModels = Mapper.Map<IEnumerable<ProjectAllocationDto>, IEnumerable<AllocationModel>>(allocations);
             return projectModels;
         }
@@ -443,12 +450,17 @@ namespace Agilisium.TalentManager.Web.Controllers
                 new SelectListItem
                 {
                     Text = "Employee",
-                    Value = "Employee"
+                    Value = "emp"
                 },
                 new SelectListItem
                 {
                     Text = "Project",
-                    Value = "Project"
+                    Value = "prj"
+                },
+                new SelectListItem
+                {
+                    Text = "Project Manager",
+                    Value = "pm"
                 },
             };
 
@@ -456,6 +468,25 @@ namespace Agilisium.TalentManager.Web.Controllers
             {
                 viewModel.FilterValueDropDownItems = (List<SelectListItem>)Session["FilterValueListItemsAllocation"];
             }
+        }
+
+        private List<SelectListItem> GetReportingManagersList()
+        {
+            List<EmployeeDto> managers = empService.GetAllManagers();
+
+            List<SelectListItem> empDDList = new List<SelectListItem>();
+
+            if (managers != null)
+            {
+                empDDList = (from e in managers
+                             select new SelectListItem
+                             {
+                                 Text = $"{e.FirstName} {e.LastName}",
+                                 Value = e.EmployeeEntryID.ToString()
+                             }).OrderBy(i => i.Text).ToList();
+            }
+
+            return empDDList;
         }
     }
 }
