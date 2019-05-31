@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Abstract\IAllocationService.cs" />
     <Compile Include="Abstract\IContractorService.cs" />
+    <Compile Include="Abstract\IDevRequestService.cs" />
     <Compile Include="Abstract\IDropDownCategoryService.cs" />
     <Compile Include="Abstract\IDropDownSubCategoryService.cs" />
     <Compile Include="Abstract\IProjectAccountService.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Abstract\ISubPracticeService.cs" />
     <Compile Include="Concreate\AllocationService.cs" />
     <Compile Include="Concreate\ContractorService.cs" />
+    <Compile Include="Concreate\DevRequestService.cs" />
     <Compile Include="Concreate\DropDownCategoryService.cs" />
     <Compile Include="Concreate\DropDownSubCategoryService.cs" />
     <Compile Include="Concreate\EmployeeService.cs" />

@@ -1,6 +1,7 @@
 ﻿using Agilisium.TalentManager.Dto;
 using Agilisium.TalentManager.Model.Entities;
 using Agilisium.TalentManager.Repository.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -127,7 +128,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<ProjectDto> GetAll(string filterType, int filterValue, int pageSize = -1, int pageNo = -1)
         {
-            if(string.IsNullOrWhiteSpace(filterType))
+            if (string.IsNullOrWhiteSpace(filterType))
             {
                 return GetAll(pageSize, pageNo);
             }
@@ -355,7 +356,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                               };
             //if (pageSize < 0)
             //{
-                return projects;
+            return projects;
             //}
             //return projects.Skip((pageNo - 1) * pageSize).Take(pageSize);
         }
@@ -445,14 +446,14 @@ namespace Agilisium.TalentManager.Repository.Repositories
             {
                 BusinessUnitID = projectDto.BusinessUnitID,
                 DeliveryManagerID = projectDto.DeliveryManagerID,
-                EndDate = projectDto.EndDate,
+                EndDate = new DateTime(projectDto.EndDate.Year, projectDto.EndDate.Month, projectDto.EndDate.Day),
                 PracticeID = projectDto.PracticeID,
                 ProjectCode = projectDto.ProjectCode,
                 ProjectManagerID = projectDto.ProjectManagerID,
                 ProjectName = projectDto.ProjectName,
                 ProjectTypeID = projectDto.ProjectTypeID,
                 Remarks = projectDto.Remarks,
-                StartDate = projectDto.StartDate,
+                StartDate = new DateTime(projectDto.StartDate.Year, projectDto.StartDate.Month, projectDto.StartDate.Day),
                 SubPracticeID = projectDto.SubPracticeID,
                 ProjectID = projectDto.ProjectID,
                 IsSowAvailable = projectDto.IsSowAvailable,
@@ -470,18 +471,25 @@ namespace Agilisium.TalentManager.Repository.Repositories
         {
             targetEntity.BusinessUnitID = sourceEntity.BusinessUnitID;
             targetEntity.DeliveryManagerID = sourceEntity.DeliveryManagerID;
-            targetEntity.EndDate = sourceEntity.EndDate;
+            targetEntity.EndDate = new DateTime(sourceEntity.EndDate.Year, sourceEntity.EndDate.Month, sourceEntity.EndDate.Day);
             targetEntity.PracticeID = sourceEntity.PracticeID;
             targetEntity.ProjectCode = sourceEntity.ProjectCode;
             targetEntity.ProjectManagerID = sourceEntity.ProjectManagerID;
             targetEntity.ProjectName = sourceEntity.ProjectName;
             targetEntity.ProjectTypeID = sourceEntity.ProjectTypeID;
             targetEntity.Remarks = sourceEntity.Remarks;
-            targetEntity.StartDate = sourceEntity.StartDate;
+            targetEntity.StartDate = new DateTime(sourceEntity.StartDate.Year, sourceEntity.StartDate.Month, sourceEntity.StartDate.Day);
             targetEntity.SubPracticeID = sourceEntity.SubPracticeID;
             targetEntity.IsSowAvailable = sourceEntity.IsSowAvailable;
             targetEntity.SowEndDate = sourceEntity.SowEndDate;
-            targetEntity.SowStartDate = sourceEntity.SowStartDate;
+            if (sourceEntity.SowEndDate.HasValue)
+            {
+                targetEntity.SowEndDate = new DateTime(sourceEntity.SowEndDate.Value.Year, sourceEntity.SowEndDate.Value.Month, sourceEntity.SowEndDate.Value.Day);
+            }
+            if (sourceEntity.SowStartDate.HasValue)
+            {
+                targetEntity.SowStartDate = new DateTime(sourceEntity.SowStartDate.Value.Year, sourceEntity.SowStartDate.Value.Month, sourceEntity.SowStartDate.Value.Day);
+            }
             targetEntity.ProjectAccountID = sourceEntity.ProjectAccountID;
             targetEntity.IsReserved = sourceEntity.IsReserved;
 

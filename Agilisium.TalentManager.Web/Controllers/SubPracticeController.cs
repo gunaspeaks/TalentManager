@@ -32,6 +32,11 @@ namespace Agilisium.TalentManager.Web.Controllers
             try
             {
                 model.PracticeListItems = (IEnumerable<SelectListItem>)Session["PracticeListItems"] ?? GetPracticesDropDownList();
+                if (model.PracticeListItems.Count() == 0)
+                {
+                    DisplayWarningMessage("There are no PODs configured yet. You will not be able to configure Competencies");
+                    return View(model);
+                }
 
                 if (string.IsNullOrEmpty(selectedPracticeID))
                 {

@@ -45,7 +45,8 @@
                     {
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     }
-                    @if (Request.Url.ToString().ToLower().Contains("employee"))
+                    @if (Request.Url.ToString().ToLower().Contains("employee")
+                        && Request.Url.ToString().ToLower().Contains("allocation") == false)
                     {
                         <li>@Html.ActionLink("Employees", "List", "Employee", new { @style = "color:GreenYellow" })</li>
                     }
@@ -63,7 +64,7 @@
                         <li>@Html.ActionLink("Accounts", "List", "Accounts")</li>
                     }
 
-                    @if (Request.Url.ToString().ToLower().Contains("project") 
+                    @if (Request.Url.ToString().ToLower().Contains("project")
                         && Request.Url.ToString().ToLower().Contains("managerwiseprojects") == false
                         && Request.Url.ToString().ToLower().Contains("allocationhistory") == false)
                     {
@@ -137,6 +138,7 @@
                     {
                         <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
                     }
+                    <li><label style="width:30px;">&nbsp;</label></li>
                     <li>
                         @{
                             string userName = User.Identity.Name;
@@ -146,10 +148,11 @@
                             }
 
                             <p class="nav navbar-text navbar-right" style="color:GreenYellow">
-                                Hello, @userName
+                                Hello, @userName &nbsp;
                             </p>
                         }
                     </li>
+                    <li>@Html.ActionLink("+", "List", "DevReq", null, new { @style = "font-size:20px; color:Green" })</li>
                 </ul>
             </div>
         </div>

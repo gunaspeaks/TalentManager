@@ -116,7 +116,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                     allocations = GetAllocationsByProjectID(filterValueID);
                     break;
                 case "pm":
-                    allocations = GetAllocationsByProjectID(filterValueID);
+                    allocations = GetAllocationsByProjectManagerID(filterValueID);
                     break;
             }
 
@@ -346,14 +346,14 @@ namespace Agilisium.TalentManager.Repository.Repositories
                 case "emp":
                     recordsCount = (from a in Entities
                                     where a.IsDeleted == false
-                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
+                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
                                         && a.EmployeeID == filterValue
                                     select a).Count();
                     break;
                 case "prj":
                     recordsCount = (from a in Entities
                                     where a.IsDeleted == false
-                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
+                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
                                         && a.ProjectID == filterValue
                                     select a).Count();
                     break;
@@ -362,8 +362,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                     join p in DataContext.Projects on a.ProjectID equals p.ProjectID into pe
                                     from pd in pe.DefaultIfEmpty()
                                     where a.IsDeleted == false
-                                        && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate < DateTime.Now))
-                                        && a.ProjectID == filterValue && pd.ProjectManagerID == filterValue
+                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
+                                        && pd.ProjectManagerID == filterValue
                                     select a).Count();
                     break;
             }
@@ -457,7 +457,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate < DateTime.Now)))
+                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -494,7 +494,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
+                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
                         && p.ProjectID == projectID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -530,7 +530,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
+                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
                         && prd.ProjectManagerID == managerID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -566,7 +566,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate <= DateTime.Now)))
+                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
                         && p.EmployeeID == employeeID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -706,8 +706,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
         {
             ProjectAllocation entity = new ProjectAllocation
             {
-                AllocationEndDate = projectDto.AllocationEndDate,
-                AllocationStartDate = projectDto.AllocationStartDate,
+                AllocationEndDate = new DateTime(projectDto.AllocationEndDate.Year, projectDto.AllocationEndDate.Month, projectDto.AllocationEndDate.Day),
+                AllocationStartDate = new DateTime(projectDto.AllocationStartDate.Year, projectDto.AllocationStartDate.Month, projectDto.AllocationStartDate.Day),
                 AllocationTypeID = projectDto.AllocationTypeID,
                 EmployeeID = projectDto.EmployeeID,
                 ProjectID = projectDto.ProjectID,
@@ -723,8 +723,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         private void MigrateEntity(ProjectAllocationDto sourceEntity, ProjectAllocation targetEntity)
         {
-            targetEntity.AllocationEndDate = sourceEntity.AllocationEndDate;
-            targetEntity.AllocationStartDate = sourceEntity.AllocationStartDate;
+            targetEntity.AllocationEndDate = new DateTime(sourceEntity.AllocationEndDate.Year, sourceEntity.AllocationEndDate.Month, sourceEntity.AllocationEndDate.Day);
+            targetEntity.AllocationStartDate = new DateTime(sourceEntity.AllocationStartDate.Year, sourceEntity.AllocationStartDate.Month, sourceEntity.AllocationStartDate.Day);
             targetEntity.AllocationTypeID = sourceEntity.AllocationTypeID;
             targetEntity.EmployeeID = sourceEntity.EmployeeID;
             targetEntity.ProjectID = sourceEntity.ProjectID;

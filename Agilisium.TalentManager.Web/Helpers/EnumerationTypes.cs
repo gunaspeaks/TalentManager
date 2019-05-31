@@ -14,7 +14,10 @@ namespace Agilisium.TalentManager.Web.Helpers
         SpecializedPartner,
         ContractPeriod,
         ServiceRequestType,
-        Country
+        Country,
+        DevelopmentRequestType,
+        DevelopmentPriority,
+        DevelopmentRequestStatus
     }
 
     public enum PracticeType

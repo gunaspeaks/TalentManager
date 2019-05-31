@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Agilisium.TalentManager.Web.Helpers
@@ -78,11 +79,26 @@ namespace Agilisium.TalentManager.Web.Helpers
             }
         }
 
-        public string EmailTemplatesFolderPath
+        public string EmailTemplatesFolderPath => HttpContext.Application[UIConstants.CONFIG_EMAIL_TEMPLATES_FOLDER_PATH]?.ToString();
+
+        public string AdminUserName => HttpContext.Application[UIConstants.CONFIG_ADMIN_USER_NAME]?.ToString();
+
+        public string LoggedInUserName
         {
             get
             {
-                return HttpContext.Application[UIConstants.CONFIG_EMAIL_TEMPLATES_FOLDER_PATH]?.ToString();
+                StringBuilder adminName = new StringBuilder(HttpContext.User.Identity.Name);
+                string ignorableString = HttpContext.Application[UIConstants.CONFIG_IGNORABLE_TEXT_IN_USER_NAME]?.ToString();
+                if (!string.IsNullOrWhiteSpace(ignorableString))
+                {
+                    string[] spl = { "__" };
+                    string[] ignorableNames = ignorableString.Split(spl, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string name in ignorableNames)
+                    {
+                        adminName.Replace(name, "");
+                    }
+                }
+                return adminName.ToString();
             }
         }
 

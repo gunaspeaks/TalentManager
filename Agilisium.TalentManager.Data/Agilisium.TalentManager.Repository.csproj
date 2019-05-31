@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Abstract\RepositoryBase.cs" />
     <Compile Include="Abstract\IRepository.cs" />
+    <Compile Include="Repositories\DevRequestRepository.cs" />
     <Compile Include="Repositories\ProjectAccountRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ContractorRepository.cs" />
@@ -72,6 +73,10 @@
     <ProjectReference Include="..\Agilisium.TalentManager.Model\Agilisium.TalentManager.Model.csproj">
       <Project>{dd86b3ba-80c3-43be-ad22-10aa29a1c7b2}</Project>
       <Name>Agilisium.TalentManager.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Agilisium.TalentManager.PostgresModel\Agilisium.TalentManager.PostgresModel.csproj">
+      <Project>{472abbe3-7cdd-4640-8225-cee8d0ede62d}</Project>
+      <Name>Agilisium.TalentManager.PostgresModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

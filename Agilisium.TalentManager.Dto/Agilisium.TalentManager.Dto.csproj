@@ -45,6 +45,7 @@
     <Compile Include="BillabilityWiseAllocationSummaryDto.cs" />
     <Compile Include="ContractorDto.cs" />
     <Compile Include="CustomAllocationDto.cs" />
+    <Compile Include="DevelopmentRequestDto.cs" />
     <Compile Include="DropDownCategoryDto.cs" />
     <Compile Include="DropDownSubCategoryDto.cs" />
     <Compile Include="DtoBase.cs" />

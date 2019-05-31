@@ -1,5 +1,5 @@
 ﻿using Agilisium.TalentManager.Model;
-using Agilisium.TalentManager.Model.Entities;
+//using Agilisium.TalentManager.PostgresModel;
 using System;
 using System.Data.Entity;
 using System.Linq;

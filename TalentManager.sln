@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataUploader", "Tools\DataU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.PostgresModel", "Agilisium.TalentManager.PostgresModel\Agilisium.TalentManager.PostgresModel.csproj", "{472ABBE3-7CDD-4640-8225-CEE8D0EDE62D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigrationTool", "Tools\DataMigrationTool\DataMigrationTool.csproj", "{8D09095E-51BB-47B0-82F7-3B46754BAF3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,12 +81,17 @@ Global
 		{472ABBE3-7CDD-4640-8225-CEE8D0EDE62D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{472ABBE3-7CDD-4640-8225-CEE8D0EDE62D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{472ABBE3-7CDD-4640-8225-CEE8D0EDE62D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D09095E-51BB-47B0-82F7-3B46754BAF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D09095E-51BB-47B0-82F7-3B46754BAF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D09095E-51BB-47B0-82F7-3B46754BAF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D09095E-51BB-47B0-82F7-3B46754BAF3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
+		{8D09095E-51BB-47B0-82F7-3B46754BAF3A} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E90358CF-9064-4138-88C2-63D7559469D6}

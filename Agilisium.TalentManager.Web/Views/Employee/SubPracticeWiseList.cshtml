@@ -3,13 +3,13 @@
 @model Agilisium.TalentManager.Web.Models.EmployeeViewModel
 
 @{
-    ViewBag.Title = "Sub-Practice-wise Employees";
+    ViewBag.Title = "Competency-wise Employees";
 }
 
 <div class="panel panel-default">
     <div class="panel-heading">
         <table width="100%">
-            <tr><td><h3><b>Sub-Practice-wise Employees</b></h3></td></tr>
+            <tr><td><h3><b>Competency-wise Employees</b></h3></td></tr>
         </table>
     </div>
     <div class="panel-body">
@@ -82,7 +82,7 @@
     </div>
     <div class="panel-footer">
         <div class="btn-group pull-right">
-            @Html.AddPagination(Model.PagingInfo, x => Url.Action("SubPracticeWiseList", new { page = x }))
+            @Html.AddPagination(Model.PagingInfo, x => Url.Action("SubPracticeWiseList", new {sid=Model.SID, page = x }))
         </div>
     </div>
 </div>

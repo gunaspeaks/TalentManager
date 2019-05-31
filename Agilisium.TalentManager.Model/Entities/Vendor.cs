@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model.Entities
 {
     public class Vendor : EntityBase
     {
+        [Key]
         public int VendorID { get; set; }
 
         public string VendorName { get; set; }

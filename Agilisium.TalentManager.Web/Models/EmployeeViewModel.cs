@@ -18,5 +18,9 @@ namespace Agilisium.TalentManager.Web.Models
         public PagingInfo PagingInfo { get; set; }
 
         public string SearchText { get; set; }
+
+        public int PID { get; set; }
+
+        public int SID { get; set; }
     }
 }

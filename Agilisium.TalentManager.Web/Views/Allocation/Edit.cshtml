@@ -162,7 +162,7 @@
                                         <div class="form-group-lg">
                                             <label style="width:155px; ">&nbsp;&nbsp;Secondary Skills</label>
                                             <label>:&nbsp;</label>
-                                            <label style=" font-size:medium" id="secondarySkills"></label>
+                                            <label style="font-size:medium" id="secondarySkills"></label>
                                         </div>
                                     </td>
                                 </tr>
@@ -202,7 +202,7 @@
                     </tr>
                 </table>
             </div>
-            @Html.HiddenFor(model => model.ProjectID);
+            @Html.HiddenFor(model => model.ProjectID)
             <div class="panel-footer">
                 @Html.HiddenFor(model => model.AllocationEntryID)
                 <input type="submit" value="Save" class="btn btn-primary" />

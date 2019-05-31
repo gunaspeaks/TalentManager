@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Agilisium.TalentManager.Model.Configuration
 {
-    class PracticeEntityConfiguration : EntityTypeConfiguration<Practice>
+    public class PracticeEntityConfiguration : EntityTypeConfiguration<Practice>
     {
         public PracticeEntityConfiguration()
         {

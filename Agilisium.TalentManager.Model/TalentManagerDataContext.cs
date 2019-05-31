@@ -9,7 +9,7 @@ namespace Agilisium.TalentManager.Model
         public TalentManagerDataContext() : base("TalentDataContext")
         {
             //// Uu-comment the below line to re-create the database freshly
-            Database.SetInitializer<TalentManagerDataContext>(null);
+            //Database.SetInitializer<TalentManagerDataContext>(null);
         }
 
         public DbSet<Practice> Practices { get; set; }
@@ -38,6 +38,8 @@ namespace Agilisium.TalentManager.Model
 
         public DbSet<ProjectAccount> ProjectAccounts { get; set; }
 
+        public DbSet<DevelopmentRequest> DevelopmentRequests { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new PracticeEntityConfiguration());
@@ -53,6 +55,7 @@ namespace Agilisium.TalentManager.Model
             modelBuilder.Configurations.Add(new ServiceRequestEntityConfiguration());
             modelBuilder.Configurations.Add(new SystemSettingTypeConfiguration());
             modelBuilder.Configurations.Add(new ProjectAccountEntityConfiguration());
+            modelBuilder.Configurations.Add(new DevelopmentRequestTypeConfiguration());
         }
     }
 }

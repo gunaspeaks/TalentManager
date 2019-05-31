@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Agilisium.TalentManager.Model.Configuration
 {
-    internal class EmployeeEntityConfiguration : EntityTypeConfiguration<Employee>
+    public  class EmployeeEntityConfiguration : EntityTypeConfiguration<Employee>
     {
         public EmployeeEntityConfiguration()
         {

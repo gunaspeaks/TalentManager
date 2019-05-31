@@ -243,7 +243,7 @@ function loadPracticeDropDownListForProjectPage() {
     $("#PracticeID").append($("<option></option>").val(0).text("Please Select"));
 
     $.ajax({
-        url: rootUrl + "/Practice/GetPracticesByBuID",
+        url: rootUrl + "Practice/GetPracticesByBuID",
         type: "POST",
         data: { buID: $("#BusinessUnitID").val() },
         success: function (data) {

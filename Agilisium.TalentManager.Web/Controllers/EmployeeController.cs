@@ -98,7 +98,8 @@ namespace Agilisium.TalentManager.Web.Controllers
         {
             EmployeeViewModel viewModel = new EmployeeViewModel
             {
-                SearchText = ""
+                SearchText = "",
+                PID = pid
             };
 
             try
@@ -132,7 +133,8 @@ namespace Agilisium.TalentManager.Web.Controllers
         {
             EmployeeViewModel viewModel = new EmployeeViewModel
             {
-                SearchText = ""
+                SearchText = "",
+                SID = sid
             };
 
             try
@@ -449,7 +451,7 @@ namespace Agilisium.TalentManager.Web.Controllers
                              {
                                  Text = $"{e.FirstName} {e.LastName}",
                                  Value = e.EmployeeEntryID.ToString()
-                             }).OrderBy(i=>i.Text).ToList();
+                             }).OrderBy(i => i.Text).ToList();
             }
 
             ViewBag.ReportingManagerListItems = empDDList;

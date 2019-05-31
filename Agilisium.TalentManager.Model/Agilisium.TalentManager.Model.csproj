@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ContractorTypeConfiguration.cs" />
+    <Compile Include="Configuration\DevelopmentRequestTypeConfiguration.cs" />
     <Compile Include="Configuration\DropDownCategoryConfiguration.cs" />
     <Compile Include="Configuration\DropDownSubCategoryConfiguration.cs" />
     <Compile Include="Configuration\EmployeeEntityConfiguration.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Configuration\VendorEntityConfiguration.cs" />
     <Compile Include="Entities\Contractor.cs" />
     <Compile Include="Entities\CustomAllocation.cs" />
+    <Compile Include="Entities\DevelopmentRequest.cs" />
     <Compile Include="Entities\DropDownCategory.cs" />
     <Compile Include="Entities\DropDownSubCategory.cs" />
     <Compile Include="Entities\Employee.cs" />
@@ -81,7 +83,6 @@
     <Compile Include="TalentManagerSeedData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

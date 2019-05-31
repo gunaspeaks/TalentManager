@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model
 {
@@ -9,8 +10,10 @@ namespace Agilisium.TalentManager.Model
             IsDeleted = false;
         }
 
+        [MaxLength(100)]
         public string CreatedBy { get; set; }
 
+        [MaxLength(100)]
         public string UpdatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

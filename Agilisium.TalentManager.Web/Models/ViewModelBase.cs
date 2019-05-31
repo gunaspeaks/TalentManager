@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Agilisium.TalentManager.Web.Helpers;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace Agilisium.TalentManager.Web.Models
@@ -12,7 +14,18 @@ namespace Agilisium.TalentManager.Web.Models
 
         public ViewModelBase()
         {
-            LoggedInUserName = HttpContext.Current.User.Identity.Name;
+            StringBuilder adminName = new StringBuilder(HttpContext.Current.User.Identity.Name);
+            string ignorableString = HttpContext.Current.Application[UIConstants.CONFIG_IGNORABLE_TEXT_IN_USER_NAME]?.ToString();
+            if (!string.IsNullOrWhiteSpace(ignorableString))
+            {
+                string[] spl = { "__" };
+                string[] ignorableNames = ignorableString.Split(spl, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string name in ignorableNames)
+                {
+                    adminName.Replace(name, "");
+                }
+            }
+            LoggedInUserName = adminName.ToString();
         }
     }
 }

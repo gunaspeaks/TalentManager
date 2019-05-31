@@ -1,7 +1,10 @@
-﻿namespace Agilisium.TalentManager.Model.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Agilisium.TalentManager.Model.Entities
 {
     public class EmployeeIDTracker
     {
+        [Key]
         public int TrackerID { get; set; }
 
         public int EmploymentTypeID { get; set; }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model.Entities
 {
     public class Contractor : EntityBase
     {
+        [Key]
         public int ContractorID { get; set; }
 
         public int ProjectID { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Agilisium.TalentManager.Dto;
 using Agilisium.TalentManager.Model.Entities;
 using Agilisium.TalentManager.Repository.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -71,13 +72,21 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<EmployeeDto> GetAll(string searchText, int pageSize = -1, int pageNo = -1)
         {
-            IEnumerable<EmployeeDto> employees = GetAllActiveEmployees(searchText);
-
-            if (pageSize <= 0 || pageNo < 1)
+            IEnumerable<EmployeeDto> employees = null;
+            try
             {
-                return employees;
-            }
+                employees = GetAllActiveEmployees(searchText);
 
+                if (pageSize <= 0 || pageNo < 1)
+                {
+                    return employees;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
             return employees.Skip((pageNo - 1) * pageSize).Take(pageSize);
         }
 
@@ -343,6 +352,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return dto;
         }
 
+        public string GetNameByEmployeeID(string empID)
+        {
+            return Entities.FirstOrDefault(e => e.EmployeeID == empID)?.FirstName;
+        }
+
         #endregion
 
         #region Private Methods
@@ -426,7 +440,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             Employee employee = new Employee
             {
                 BusinessUnitID = employeeDto.BusinessUnitID,
-                DateOfJoin = employeeDto.DateOfJoin,
+                DateOfJoin = new DateTime(employeeDto.DateOfJoin.Year, employeeDto.DateOfJoin.Month, employeeDto.DateOfJoin.Day),
                 EmailID = employeeDto.EmailID,
                 EmployeeID = employeeDto.EmployeeID,
                 FirstName = employeeDto.FirstName,
@@ -449,7 +463,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
         private void MigrateEntity(EmployeeDto sourceEntity, Employee targetEntity)
         {
             targetEntity.BusinessUnitID = sourceEntity.BusinessUnitID;
-            targetEntity.DateOfJoin = sourceEntity.DateOfJoin;
+            targetEntity.DateOfJoin = new DateTime(sourceEntity.DateOfJoin.Year, sourceEntity.DateOfJoin.Month, sourceEntity.DateOfJoin.Day);
             targetEntity.EmailID = sourceEntity.EmailID;
             targetEntity.EmployeeID = sourceEntity.EmployeeID;
             targetEntity.FirstName = sourceEntity.FirstName;
@@ -507,5 +521,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
         EmployeeWidgetDto GetEmployeesCountSummary();
 
         IEnumerable<EmployeeDto> GetAllAccountManagers();
+
+        string GetNameByEmployeeID(string empID);
     }
 }

@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model.Entities
 {
     public class DropDownSubCategory : EntityBase
     {
+        [Key]
         public int SubCategoryID { get; set; }
 
         public string SubCategoryName { get; set; }

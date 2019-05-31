@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model.Entities
 {
     public class ProjectAccount : EntityBase
     {
+        [Key]
         public int AccountID { get; set; }
 
         public string AccountName { get; set; }

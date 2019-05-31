@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agilisium.TalentManager.Model.Entities
 {
     public class ServiceRequest : EntityBase
     {
+        [Key]
         public int ServiceRequestID { get; set; }
 
         public int VendorID { get; set; }

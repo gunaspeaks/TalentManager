@@ -118,30 +118,40 @@ namespace Agilisium.TalentManager.Model
                      Description = "Country",
                      ShortName = "CN",
                      IsReserved = true
-                }
+                },
+                new DropDownCategory
+                {
+                     CategoryName = "Development Request Type",
+                     Description = "Development Request Type",
+                     ShortName = "RT",
+                     IsReserved = true
+                },
+                new DropDownCategory
+                {
+                     CategoryName = "Development Priority",
+                     Description = "Development Priority",
+                     ShortName = "DP",
+                     IsReserved = true
+                },
+                new DropDownCategory
+                {
+                     CategoryName = "Development Request Status",
+                     Description = "Development Request Status",
+                     ShortName = "DP",
+                     IsReserved = true
+                },
             };
         }
 
         private static List<DropDownSubCategory> GetSubCategories_New01(TalentManagerDataContext context)
         {
-            //int etCID = context.DropDownCategories.FirstOrDefault(c => c.CategoryName == "Employment Type").CategoryID;
+            int rtCID = context.DropDownCategories.FirstOrDefault(c => c.CategoryName == "Development Request Type").CategoryID;
             int cnCID = context.DropDownCategories.FirstOrDefault(c => c.CategoryName == "Country").CategoryID;
+            int dpCID = context.DropDownCategories.FirstOrDefault(c => c.CategoryName == "Development Priority").CategoryID;
+            int rsCID = context.DropDownCategories.FirstOrDefault(c => c.CategoryName == "Development Request Status").CategoryID;
 
             return new List<DropDownSubCategory>
             {
-                #region Employment Type
-
-                //new DropDownSubCategory
-                //{
-                //    SubCategoryName = "Yet to Join",
-                //    ShortName = "YTJ",
-                //    CategoryID = etCID,
-                //    Description = "Yet to Join",
-                //    IsReserved = true
-                //},
- 
-                #endregion
-
                 #region Country
 
                 new DropDownSubCategory
@@ -164,7 +174,7 @@ namespace Agilisium.TalentManager.Model
                     ShortName = "FR",
                     CategoryID = cnCID,
                     Description = "France",
-                }          ,
+                },
                 new DropDownSubCategory
                 {
                     SubCategoryName = "India",
@@ -178,9 +188,121 @@ namespace Agilisium.TalentManager.Model
                     ShortName = "CH",
                     CategoryID = cnCID,
                     Description = "China",
-                }
+                },
 
                 #endregion
+                
+                #region Development Request Type
+
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "New Feature - Nice to Have",
+                    ShortName = "NFN",
+                    CategoryID = rtCID,
+                    Description = "New Feature - Nice to have",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "New Feature - Must Have",
+                    ShortName = "REQ",
+                    CategoryID = rtCID,
+                    Description = "New Feature - Must Have",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "A Defect",
+                    ShortName = "REQ",
+                    CategoryID = rtCID,
+                    Description = "Defect",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Change of Approach",
+                    ShortName = "COA",
+                    CategoryID = rtCID,
+                    Description = "Change of Approach",
+                    IsReserved = true
+                },
+
+                #endregion
+
+                #region Development Priority
+
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Immediately Required",
+                    ShortName = "IMM",
+                    CategoryID = dpCID,
+                    Description = "Immediate",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "High",
+                    ShortName = "HIG",
+                    CategoryID = dpCID,
+                    Description = "High",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Medium",
+                    ShortName = "MED",
+                    CategoryID = dpCID,
+                    Description = "Medium",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Low",
+                    ShortName = "LOW",
+                    CategoryID = dpCID,
+                    Description = "Low",
+                    IsReserved = true
+                },
+
+                #endregion
+
+                #region Development Request Status
+
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Open",
+                    ShortName = "OPN",
+                    CategoryID = rsCID,
+                    Description = "Open",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Development In Progress",
+                    ShortName = "DIP",
+                    CategoryID = rsCID,
+                    Description = "High",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Development Complete & Delivered",
+                    ShortName = "CAD",
+                    CategoryID = rsCID,
+                    Description = "Closed",
+                    IsReserved = true
+                },
+                new DropDownSubCategory
+                {
+                    SubCategoryName = "Ignored as Agreed",
+                    ShortName = "IAS",
+                    CategoryID = rsCID,
+                    Description = "Ignored as Agreed",
+                    IsReserved = true
+                },
+
+                #endregion
+
             };
         }
 
@@ -1042,27 +1164,5 @@ namespace Agilisium.TalentManager.Model
                 #endregion
             };
         }
-
-        //private static List<Project> GetReservedProjects(List<Practice> practices, TalentManagerDataContext context)
-        //{
-        //    List<Project> projects = null;
-
-        //    foreach (Practice practice in practices)
-        //    {
-        //        projects = new List<Project>
-        //        {
-        //            new Project
-        //            {
-        //                ProjectName = "Lab " + practice.PracticeName.Replace(" ",""),
-        //                BusinessUnitID = practice.BusinessUnitID,
-        //                EndDate = new DateTime(DateTime.Now.Year, 12, 31),
-        //                StartDate = new DateTime(DateTime.Now.Year, 1, 1),
-        //                PracticeID = practice.PracticeID
-        //            }
-        //        };
-        //    }
-
-        //    return projects;
-        //}
     }
 }

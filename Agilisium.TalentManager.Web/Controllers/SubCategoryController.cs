@@ -29,6 +29,11 @@ namespace Agilisium.TalentManager.Web.Controllers
             try
             {
                 model.CategoryListItems = (IEnumerable<SelectListItem>)Session["CategoryListItems"] ?? GetCategoriesDropDownList();
+                if(model.CategoryListItems.Count()==0)
+                {
+                    DisplayWarningMessage("There are no Categories configured yet. You will not be able to configure Sub-Categories");
+                    return View(model);
+                }
 
                 if (string.IsNullOrEmpty(selectedCategoryID))
                 {
