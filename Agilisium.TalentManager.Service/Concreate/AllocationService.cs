@@ -125,9 +125,9 @@ namespace Agilisium.TalentManager.Service.Concreate
             return repository.GetBillabilityWiseAllocationSummary().ToList();
         }
 
-        public List<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(int allocationTypeID)
+        public List<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue)
         {
-            return repository.GetBillabilityWiseAllocationDetail(allocationTypeID).ToList();
+            return repository.GetBillabilityWiseAllocationDetail(filterBy, filterValue).ToList();
         }
     }
 }

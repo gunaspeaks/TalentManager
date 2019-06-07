@@ -276,15 +276,15 @@ namespace Agilisium.TalentManager.Repository.Repositories
         public IEnumerable<PracticeHeadCountDto> GetPracticeWiseHeadCount()
         {
             return (from e in Entities
+                    where e.IsDeleted == false && e.LastWorkingDay.HasValue == false
                     group e by e.PracticeID into eg
-                    where eg.Count() > 10
                     orderby eg.Count() descending
                     select new PracticeHeadCountDto
                     {
                         HeadCount = eg.Count(emp => emp.IsDeleted == false),
                         PracticeID = eg.Key,
                         Practice = DataContext.Practices.FirstOrDefault(p => p.PracticeID == eg.Key).PracticeName
-                    }).Take(5);
+                    });
         }
 
         public IEnumerable<SubPracticeHeadCountDto> GetSubPracticeWiseHeadCount()
@@ -336,17 +336,26 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return Entities.Count(e => e.IsDeleted == false && e.SubPracticeID == subPracticeID);
         }
 
-        public EmployeeWidgetDto GetEmployeesCountSummary()
+        public ResourceCountDto GetEmployeesCountSummary()
         {
-            EmployeeWidgetDto dto = new EmployeeWidgetDto
+            ResourceCountDto dto = new ResourceCountDto
             {
-                TotalEmployees = Entities.Where(e => e.IsDeleted == false).Count(),
-                TotalBillableEmployees = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 4 && p.IsDeleted == false).Count(),
-                ShadowResources = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 5 && p.IsDeleted == false).Count(),
-                BenchStrength = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 6 && p.IsDeleted == false).Count(),
-                EmployeesOnInternalProjects = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 7 && p.IsDeleted == false).Count(),
-                EmployeesOnLabProjects = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 8 && p.IsDeleted == false).Count(),
-                AwaitingProposal = DataContext.ProjectAllocations.Where(p => p.AllocationTypeID == 9 && p.IsDeleted == false).Count(),
+                TotalCount = Entities.Count(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false),
+                DeliveryCount = GetEmployeesCountByBU(BusinessUnit.Delivery),
+                BoCount = GetEmployeesCountByBU(BusinessUnit.BusinessOperations),
+                BdCount = GetEmployeesCountByBU(BusinessUnit.BusinessDevelopment),
+            };
+
+            return dto;
+        }
+
+        public BillabilityWiseResourceCountDto GetBillabilityCountSummary()
+        {
+            BillabilityWiseResourceCountDto dto = new BillabilityWiseResourceCountDto
+            {
+                BillableCount = GetEmployeesCountByAllocationType(AllocationType.Billable),
+                CommittedBufferCount = GetEmployeesCountByAllocationType(AllocationType.CommittedBuffer),
+                NonCommittedBufferCount = GetEmployeesCountByAllocationType(AllocationType.NonCommittedBuffer),
             };
 
             return dto;
@@ -481,6 +490,21 @@ namespace Agilisium.TalentManager.Repository.Repositories
             targetEntity.UpdateTimeStamp(sourceEntity.LoggedInUserName);
         }
 
+        private int GetEmployeesCountByAllocationType(AllocationType allocationType)
+        {
+            return (from e in Entities
+                    join a in DataContext.ProjectAllocations on e.EmployeeEntryID equals a.EmployeeID
+                    where a.AllocationTypeID == (int)allocationType
+                    && e.LastWorkingDay.HasValue == false && e.IsDeleted == false && a.IsDeleted == false
+                    && a.AllocationEndDate >= DateTime.Now
+                    select a.EmployeeID).Distinct().Count();
+        }
+
+        private int GetEmployeesCountByBU(BusinessUnit bu)
+        {
+            return Entities.Count(e => e.LastWorkingDay.HasValue == false && e.IsDeleted == false && e.BusinessUnitID == (int)bu);
+        }
+
         #endregion
     }
 
@@ -518,10 +542,12 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         int SubPracticeWiseRecordsCount(int subPracticeID);
 
-        EmployeeWidgetDto GetEmployeesCountSummary();
+        ResourceCountDto GetEmployeesCountSummary();
 
         IEnumerable<EmployeeDto> GetAllAccountManagers();
 
         string GetNameByEmployeeID(string empID);
+
+        BillabilityWiseResourceCountDto GetBillabilityCountSummary();
     }
 }

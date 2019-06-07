@@ -12,10 +12,12 @@ namespace Agilisium.TalentManager.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IEmployeeService empService;
+        private readonly IAllocationService allocationService;
 
-        public HomeController(IEmployeeService empService)
+        public HomeController(IEmployeeService empService, IAllocationService allocationService)
         {
             this.empService = empService;
+            this.allocationService = allocationService;
         }
 
         public ActionResult Index()
@@ -33,21 +35,29 @@ namespace Agilisium.TalentManager.Web.Controllers
         [ChildActionOnly]
         public ActionResult EmployeesDashboard()
         {
-            EmployeeWidgetModel model = new EmployeeWidgetModel();
+            ResourceCountModel model = new ResourceCountModel();
 
             try
             {
-                EmployeeWidgetDto dto = empService.GetEmployeesCountSummary();
-                model = Mapper.Map<EmployeeWidgetDto, EmployeeWidgetModel>(dto);
+                ResourceCountDto dto = empService.GetEmployeesCountSummary();
+                model = Mapper.Map<ResourceCountDto, ResourceCountModel>(dto);
             }
             catch (Exception) { }
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult AllocationsDashboard()
+        public ActionResult UtilizationDashboard()
         {
-            return PartialView(new List<AllocationWidgetModel>());
+            List<BillabilityWiseAllocationSummaryModel> model = new List<BillabilityWiseAllocationSummaryModel>();
+
+            try
+            {
+                List<BillabilityWiseAllocationSummaryDto> dto = allocationService.GetBillabilityWiseAllocationSummary();
+                model = Mapper.Map<List<BillabilityWiseAllocationSummaryDto>, List<BillabilityWiseAllocationSummaryModel>>(dto);
+            }
+            catch (Exception) { }
+            return PartialView(model);
         }
 
         [ChildActionOnly]

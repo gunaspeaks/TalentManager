@@ -12,6 +12,7 @@ namespace Agilisium.TalentManager.Web.Models
 
         public int PracticeID { get; set; }
 
+        [DisplayName("POD")]
         public string Practice { get; set; }
 
         [DisplayName("Head Count")]
@@ -24,7 +25,7 @@ namespace Agilisium.TalentManager.Web.Models
     {
         public int? SubPracticeID { get; set; }
 
-        [DisplayName("Sub Practice")]
+        [DisplayName("Competency")]
         public string SubPractice { get; set; }
 
         [DisplayName("Head Count")]

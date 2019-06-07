@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BillabilityWiseAllocationDetailDto.cs" />
     <Compile Include="BillabilityWiseAllocationSummaryDto.cs" />
+    <Compile Include="BillabilityWiseResourceCountDto.cs" />
     <Compile Include="ContractorDto.cs" />
     <Compile Include="CustomAllocationDto.cs" />
     <Compile Include="DevelopmentRequestDto.cs" />
@@ -50,7 +51,7 @@
     <Compile Include="DropDownSubCategoryDto.cs" />
     <Compile Include="DtoBase.cs" />
     <Compile Include="EmployeeDto.cs" />
-    <Compile Include="EmployeeWidgetDto.cs" />
+    <Compile Include="ResourceCountDto.cs" />
     <Compile Include="ManagerWiseAllocationDto.cs" />
     <Compile Include="PracticeDto.cs" />
     <Compile Include="PracticeHeadCountDto.cs" />

@@ -53,6 +53,6 @@ namespace Agilisium.TalentManager.Service.Abstract
 
         List<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary();
 
-        List<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(int allocationTypeID);
+        List<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue);
     }
 }

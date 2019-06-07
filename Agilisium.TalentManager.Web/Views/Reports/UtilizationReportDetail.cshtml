@@ -1,0 +1,173 @@
+﻿@model Agilisium.TalentManager.Web.Models.UtilizationReportDetailViewModel
+
+@{
+    ViewBag.Title = "Utilization Report";
+}
+
+<script>
+
+    $(function () {
+        $("#FilterType").change(function (evt) {
+            loadFilterDropDown();
+        });
+    });
+
+    loadFilterDropDown = function () {
+        if ($("#FilterType").text() != "Filter By") {
+            $.ajax({
+                url: rootUrl + "Reports/LoadFilterValueListItems",
+                type: 'POST',
+                data: { filterType: $("#FilterType").val() },
+                success: function (data) {
+                    $('#FilterValue').empty();
+                    $.each(data, function () {
+                        $("#FilterValue").append($("<option></option>").val(parseInt(this['Value'])).text(this['Text']));
+                    });
+                },
+                error: function (xhr) { alert('Error while loading the Sub Practice list'); }
+            });
+        }
+    }
+
+</script>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Utilization Report</h3>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("UtilizationReportDetail", "Reports", new { filterType = Model.FilterType, filterValue = Model.FilterValue }))
+        {
+            <table style="align-content:flex-start">
+                <tr>
+                    <td>
+                        @Html.DropDownListFor(model => model.FilterType, Model.FilterTypeListItems, "Filter By", new { @class = "form-control" })
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        @Html.DropDownListFor(model => model.FilterValue, Model.FilterValueListItems, "Please Select", new { @class = "form-control" })
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="submit" class="btn btn-primary" value="Show" />
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>@Model.Allocations.Count records found</td>
+                    <td>&nbsp;</td>
+                    <td>
+                        @Html.ActionLink("(Download as CSV Format)", "DownloadAllocationDetails", new { filterType = Model.FilterType, filterValue = Model.FilterValue })
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        }
+        <div>
+            <table class="table table-striped table-condensed table-bordered">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().PrimarySkills)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().SecondarySkills)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().BusinessUnit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().POD)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationType)
+                    </th>
+                    <th class="text-right">
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationStartDate)
+                    </th>
+                    <th class="text-right">
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate)
+                    </th>
+                    <th class="text-right">
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().Comments)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Allocations)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrimarySkills)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SecondarySkills)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BusinessUnit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.POD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllocationType)
+                    </td>
+                    <td class="text-right">
+                        @if (item.AllocationStartDate.HasValue)
+                        {
+                            <text>@item.AllocationStartDate.Value.ToString("dd/MMM/yyyy")</text>
+                        }
+                        else
+                        {
+                            <text> &nbsp;</text>
+                        }
+                    </td>
+                    <td class="text-right">
+                        @if (item.AllocationEndDate.HasValue)
+                        {
+                            <text>@item.AllocationEndDate.Value.ToString("dd/MMM/yyyy")</text>
+                        }
+                        else
+                        {
+                            <text> &nbsp;</text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+        @Html.ActionLink("Back to Summary", "UtilizationReportSummary", null, new { @class = "btn btn-default" })
+        @*<div class="btn-group pull-right">
+                @Html.AddPagination(Model.PagingInfo, x => Url.Action("UtilizationReportDetail", new { filterType = Model.FilterType, filterValue = Model.FilterValue, page = x }))
+            </div>*@
+    </div>
+</div>

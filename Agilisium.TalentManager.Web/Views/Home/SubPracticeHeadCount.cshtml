@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.SubPracticeHeadCountModel>
 
 @{
-    ViewBag.Title = "Sub-Practice-Wise Head Count";
+    ViewBag.Title = "Competency-Wise Head Count";
 }
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3>Head Count based on Sub-Practice</h3>
+        <h3>Head Count based on Competency</h3>
     </div>
     <div class="panel-body">
 
@@ -16,16 +16,16 @@
                 <tr>
                     <td style="color:red">
 
-                        Practice Name: <b>
+                        POD Name: <b>
                             @Html.DisplayFor(model => item.Practice)
                         </b>
                         
                         <table style="color:black" class="table table-striped table-condensed table-bordered">
                             <tr>
-                                <th class="text-center">
+                                <th class="text-left">
                                     @Html.DisplayNameFor(model => model.SubPractices.FirstOrDefault().SubPractice)
                                 </th>
-                                <th class="text-center">
+                                <th class="text-right">
                                     @Html.DisplayNameFor(model => model.SubPractices.FirstOrDefault().HeadCount)
                                 </th>
                             </tr>

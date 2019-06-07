@@ -1,4 +1,4 @@
-﻿@model Agilisium.TalentManager.Web.Models.EmployeeWidgetModel
+﻿@model Agilisium.TalentManager.Web.Models.ResourceCountModel
 
 <div class="dashboardItem">
     <div class="dashboardItemHeader">Our Strength</div>
@@ -6,64 +6,37 @@
         <table class="tbl">
             <tr>
                 <td>
-                    @Html.DisplayNameFor(model => model.TotalEmployees)
+                    @Html.DisplayNameFor(model => model.TotalCount)
                 </td>
                 <td>:</td>
-                <td>@Html.DisplayFor(model => model.TotalEmployees)</td>
+                <td class="text-right">@Html.DisplayFor(model => model.TotalCount)</td>
             </tr>
             <tr>
 
                 <td>
-                    @Html.DisplayNameFor(model => model.TotalBillableEmployees)
+                    @Html.DisplayNameFor(model => model.DeliveryCount)
                 </td>
                 <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.TotalBillableEmployees)
+                <td class="text-right">
+                    @Html.DisplayFor(model => model.DeliveryCount)
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(model => model.EmployeesOnInternalProjects)
+                    @Html.DisplayNameFor(model => model.BdCount)
                 </td>
                 <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.EmployeesOnInternalProjects)
+                <td class="text-right">
+                    @Html.DisplayFor(model => model.BdCount)
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(model => model.BenchStrength)
+                    @Html.DisplayNameFor(model => model.BoCount)
                 </td>
                 <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.BenchStrength)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(model => model.EmployeesOnLabProjects)
-                </td>
-                <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.EmployeesOnLabProjects)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(model => model.ShadowResources)
-                </td>
-                <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.ShadowResources)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(model => model.AwaitingProposal)
-                </td>
-                <td>:</td>
-                <td>
-                    @Html.DisplayFor(model => model.AwaitingProposal)
+                <td class="text-right">
+                    @Html.DisplayFor(model => model.BoCount)
                 </td>
             </tr>
         </table>

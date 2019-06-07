@@ -49,8 +49,10 @@ namespace Agilisium.TalentManager.Service.Abstract
 
         int SubPracticeWiseRecordsCount(int subPracticeID);
 
-        EmployeeWidgetDto GetEmployeesCountSummary();
+        ResourceCountDto GetEmployeesCountSummary();
 
         string GetNameByEmployeeID(string empID);
+
+        BillabilityWiseResourceCountDto GetBillabilityCountSummary();
     }
 }

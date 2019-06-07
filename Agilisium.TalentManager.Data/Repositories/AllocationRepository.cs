@@ -660,42 +660,82 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary()
         {
-            DbCommand cmd = DataContext.Database.Connection.CreateCommand();
-            cmd.CommandText = "dbo.GetBillabilityWiseSummary";
-            cmd.CommandType = CommandType.StoredProcedure;
-            DataContext.Database.Connection.Open();
-            DbDataReader reader = cmd.ExecuteReader();
-            ObjectResult<BillabilityWiseAllocationSummaryDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<BillabilityWiseAllocationSummaryDto>(reader);
-            List<BillabilityWiseAllocationSummaryDto> listItems = items.ToList();
-            DataContext.Database.Connection.Close();
-            return listItems;
+            List<BillabilityWiseAllocationSummaryDto> items = new List<BillabilityWiseAllocationSummaryDto>
+            {
+                new BillabilityWiseAllocationSummaryDto
+                {
+                    AllocationType = "Billable",
+                    AllocationTypeID = (int)AllocationType.Billable,
+                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.Billable)
+                },
+                new BillabilityWiseAllocationSummaryDto
+                {
+                    AllocationType = "Committed Buffer",
+                    AllocationTypeID = (int)AllocationType.CommittedBuffer,
+                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.CommittedBuffer)
+                },
+                new BillabilityWiseAllocationSummaryDto
+                {
+                    AllocationType = "Non-Committed Buffer",
+                    AllocationTypeID = (int)AllocationType.NonCommittedBuffer,
+                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.NonCommittedBuffer)
+                },
+                new BillabilityWiseAllocationSummaryDto
+                {
+                    AllocationType = "Not Allocated Yet (Delivery)",
+                    AllocationTypeID = -1,
+                    NumberOfEmployees = GetNonAllocatedResourcesCount(true),
+                },
+                new BillabilityWiseAllocationSummaryDto
+                {
+                    AllocationType = "Not Allocated Yet (Others)",
+                    AllocationTypeID = -2,
+                    NumberOfEmployees = GetNonAllocatedResourcesCount(false),
+                },
+            };
+
+            return items;
         }
 
-        public IEnumerable<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(int allocationTypeID)
+        public IEnumerable<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue)
         {
-            try
-            {
-                DbCommand cmd = DataContext.Database.Connection.CreateCommand();
-                cmd.CommandText = "dbo.GetBillabilityWiseDetails";
-                SqlParameter param = new SqlParameter
-                {
-                    ParameterName = "AllocationType",
-                    Value = allocationTypeID
-                };
-                cmd.Parameters.Add(param);
-                cmd.CommandType = CommandType.StoredProcedure;
-                DataContext.Database.Connection.Open();
-                DbDataReader reader = cmd.ExecuteReader();
-                ObjectResult<BillabilityWiseAllocationDetailDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<BillabilityWiseAllocationDetailDto>(reader);
-                List<BillabilityWiseAllocationDetailDto> listItems = items.ToList();
-                DataContext.Database.Connection.Close();
-                return listItems;
-            }
-            catch (Exception)
-            {
+            IEnumerable<BillabilityWiseAllocationDetailDto> allocationDetailDtos = null;
 
+            switch (filterBy?.ToLower())
+            {
+                case "emp":
+                case "psk":
+                case "ssk":
+                    // filter by employee name/ primary skills/ secondary skills
+                    allocationDetailDtos = GetAllAllocationDetailFilteredByEmployeeData(filterBy, filterValue);
+                    break;
+                case "pod":
+                case "prj":
+                case "acc":
+                    // filter by project's pod/project name/account
+                    allocationDetailDtos = GetAllAllocationDetailFilteredByProjectData(filterBy, filterValue);
+                    break;
+                case "alt":
+                    // filter by allocation type
+                    int.TryParse(filterValue, out int allocationTypeID);
+                    DbCommand cmd = DataContext.Database.Connection.CreateCommand();
+                    cmd.CommandText = "dbo.GetBillabilityWiseDetails";
+                    SqlParameter param = new SqlParameter
+                    {
+                        ParameterName = "AllocationType",
+                        Value = allocationTypeID
+                    };
+                    cmd.Parameters.Add(param);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    DataContext.Database.Connection.Open();
+                    DbDataReader reader = cmd.ExecuteReader();
+                    ObjectResult<BillabilityWiseAllocationDetailDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<BillabilityWiseAllocationDetailDto>(reader);
+                    allocationDetailDtos = items.ToList();
+                    DataContext.Database.Connection.Close();
+                    break;
             }
-            return null;
+
+            return allocationDetailDtos;
         }
 
         #endregion
@@ -733,6 +773,185 @@ namespace Agilisium.TalentManager.Repository.Repositories
             targetEntity.UpdateTimeStamp(sourceEntity.LoggedInUserName);
         }
 
+        private int GetEmployeesCountByAllocationType(AllocationType allocationType)
+        {
+            return (from e in DataContext.Employees
+                    join a in Entities on e.EmployeeEntryID equals a.EmployeeID
+                    where a.AllocationTypeID == (int)allocationType
+                    && e.LastWorkingDay.HasValue == false && e.IsDeleted == false && a.IsDeleted == false
+                    && a.AllocationEndDate >= DateTime.Now
+                    select a.EmployeeID).Distinct().Count();
+        }
+
+        private List<BillabilityWiseAllocationDetailDto> GetAllAllocationDetailFilteredByProjectData(string filterBy, string filterValue)
+        {
+            List<BillabilityWiseAllocationDetailDto> allocationDetails = new List<BillabilityWiseAllocationDetailDto>();
+            List<Project> projects = null;
+            string filterByText = filterBy?.ToLower();
+            int.TryParse(filterValue, out int filterValueID);
+
+            if (filterByText == "pod")
+            {
+                projects = DataContext.Projects.Where(p => p.IsDeleted == false && p.PracticeID == filterValueID).ToList();
+            }
+            else if (filterByText == "prj")
+            {
+                projects = DataContext.Projects.Where(p => p.IsDeleted == false && p.ProjectID == filterValueID).ToList();
+            }
+            else if (filterByText == "acc")
+            {
+                projects = DataContext.Projects.Where(p => p.IsDeleted == false && p.ProjectAccountID == filterValueID).ToList();
+            }
+
+            if (projects.Count == 0)
+            {
+                return allocationDetails;
+            }
+
+            foreach (Project project in projects)
+            {
+                List<ProjectAllocation> allocations = DataContext.ProjectAllocations.Where(a => a.IsDeleted == false
+                    && a.AllocationEndDate >= DateTime.Now && a.ProjectID == project.ProjectID).ToList();
+                foreach (ProjectAllocation allocation in allocations)
+                {
+                    Employee emp = DataContext.Employees.FirstOrDefault(e => e.EmployeeEntryID == allocation.EmployeeID);
+                    allocationDetails.Add(new BillabilityWiseAllocationDetailDto
+                    {
+                        AllocationTypeID = allocation.AllocationTypeID,
+                        AllocationType = DataContext.DropDownSubCategories.FirstOrDefault(ds => ds.SubCategoryID == allocation.AllocationTypeID)?.SubCategoryName,
+                        EmployeeEntryID = emp.EmployeeEntryID,
+                        EmployeeID = emp.EmployeeID,
+                        EmployeeName = emp.FirstName + " " + emp.LastName,
+                        PrimarySkills = emp.PrimarySkills,
+                        SecondarySkills = emp.SecondarySkills,
+                        AllocationEndDate = allocation.AllocationEndDate,
+                        AllocationStartDate = allocation.AllocationStartDate,
+                        BusinessUnitID = project.BusinessUnitID,
+                        BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.BusinessUnitID).SubCategoryName,
+                        POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == project.PracticeID)?.PracticeName,
+                        PracticeID = project.PracticeID,
+                        ProjectID = project.ProjectID,
+                        ProjectManager = (from e in DataContext.Employees where e.EmployeeEntryID == project.ProjectManagerID select e.FirstName + " " + e.LastName).FirstOrDefault(),
+                        ProjectManagerID = project.ProjectManagerID,
+                        ProjectName = project.ProjectName,
+                        ProjectTypeID = project.ProjectTypeID,
+                        ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.ProjectTypeID).SubCategoryName,
+                    });
+                }
+            }
+
+            return allocationDetails;
+        }
+
+        private List<BillabilityWiseAllocationDetailDto> GetAllAllocationDetailFilteredByEmployeeData(string filterBy, string filterValue)
+        {
+            List<BillabilityWiseAllocationDetailDto> allocationDetails = new List<BillabilityWiseAllocationDetailDto>();
+            List<Employee> employees = null;
+            string filterByText = filterBy?.ToLower();
+
+            if (filterByText == "emp")
+            {
+                int.TryParse(filterValue, out int empID);
+                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                             && e.EmployeeEntryID == empID).ToList();
+            }
+            else if (filterByText == "psk")
+            {
+                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                             && e.PrimarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+            }
+            else if (filterByText == "ssk")
+            {
+                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                             && e.SecondarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+            }
+
+            if (employees.Count() == 0)
+            {
+                return allocationDetails;
+            }
+
+            foreach (Employee emp in employees)
+            {
+                List<ProjectAllocation> allocations = DataContext.ProjectAllocations.Where(a => a.IsDeleted == false
+                    && a.AllocationEndDate >= DateTime.Now && a.EmployeeID == emp.EmployeeEntryID).ToList();
+
+                // if no active allocations found, creating an allocation entry with allocation type as not allocated
+                if (allocations.Count() == 0)
+                {
+                    allocationDetails.Add(new BillabilityWiseAllocationDetailDto
+                    {
+                        AllocationTypeID = 6,
+                        AllocationType = "Not Allocated Yet", // non-comitted buffer
+                        Comments = "No allocations found",
+                        EmployeeEntryID = emp.EmployeeEntryID,
+                        EmployeeID = emp.EmployeeID,
+                        EmployeeName = emp.FirstName + " " + emp.LastName,
+                        PrimarySkills = emp.PrimarySkills,
+                        SecondarySkills = emp.SecondarySkills,
+                    });
+                }
+                else
+                {
+                    foreach (ProjectAllocation allocation in allocations)
+                    {
+                        BillabilityWiseAllocationDetailDto allocationDetail = new BillabilityWiseAllocationDetailDto
+                        {
+                            AllocationTypeID = allocation.AllocationTypeID,
+                            AllocationType = DataContext.DropDownSubCategories.FirstOrDefault(ds => ds.SubCategoryID == allocation.AllocationTypeID)?.SubCategoryName,
+                            EmployeeEntryID = emp.EmployeeEntryID,
+                            EmployeeID = emp.EmployeeID,
+                            EmployeeName = emp.FirstName + " " + emp.LastName,
+                            PrimarySkills = emp.PrimarySkills,
+                            SecondarySkills = emp.SecondarySkills,
+                            AllocationEndDate = allocation.AllocationEndDate,
+                            AllocationStartDate = allocation.AllocationStartDate,
+                        };
+
+                        Project prj = DataContext.Projects.FirstOrDefault(p => p.ProjectID == allocation.ProjectID && p.IsDeleted == false);
+                        if (prj == null)
+                        {
+                            allocationDetail.Comments = "Project is missing";
+                        }
+                        else
+                        {
+                            allocationDetail.BusinessUnitID = prj.BusinessUnitID;
+                            allocationDetail.BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == prj.BusinessUnitID).SubCategoryName;
+                            allocationDetail.POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == prj.PracticeID)?.PracticeName;
+                            allocationDetail.PracticeID = prj.PracticeID;
+                            allocationDetail.ProjectID = prj.ProjectID;
+                            allocationDetail.ProjectManager = (from e in DataContext.Employees where e.EmployeeEntryID == prj.ProjectManagerID select e.FirstName + " " + e.LastName).FirstOrDefault();
+                            allocationDetail.ProjectManagerID = prj.ProjectManagerID;
+                            allocationDetail.ProjectName = prj.ProjectName;
+                            allocationDetail.ProjectTypeID = prj.ProjectTypeID;
+                            allocationDetail.ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == prj.ProjectTypeID).SubCategoryName;
+                        }
+
+                        allocationDetails.Add(allocationDetail);
+                    }
+                }
+
+            }
+            return allocationDetails;
+        }
+
+        private int GetNonAllocatedResourcesCount(bool forDelivery = true)
+        {
+            DbCommand cmd = DataContext.Database.Connection.CreateCommand();
+            cmd.CommandText = "dbo.GetCountOfNotAllocatedEmployees";
+            SqlParameter param = new SqlParameter
+            {
+                ParameterName = "IsForDelivery",
+                Value = forDelivery ? 1 : 0
+            };
+            cmd.Parameters.Add(param); cmd.CommandType = CommandType.StoredProcedure;
+            DataContext.Database.Connection.Open();
+            object result = cmd.ExecuteScalar();
+            int count = result != null ? int.Parse(result.ToString()) : 0;
+            DataContext.Database.Connection.Close();
+            return count;
+        }
+
         #endregion
     }
 
@@ -766,6 +985,6 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         IEnumerable<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary();
 
-        IEnumerable<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(int allocationTypeID);
+        IEnumerable<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue);
     }
 }

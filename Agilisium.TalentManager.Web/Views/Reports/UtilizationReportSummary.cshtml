@@ -1,41 +1,40 @@
-﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.BillabilityWiseAllocationSummaryModel>
+﻿@model List<Agilisium.TalentManager.Web.Models.BillabilityWiseAllocationSummaryModel>
 
 @{
-    ViewBag.Title = "Billability-Wise Allocation Summary";
+    ViewBag.Title = "Utilization Report";
 }
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3>Billability-Wise Allocation Summary</h3>
+        <h3>Utilization Report</h3>
     </div>
     <div class="panel-body">
         <table style="width:40%" class="table">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.AllocationType)
+                    @Html.DisplayNameFor(model => model[0].AllocationType)
                 </th>
                 <th class="text-right">
-                    @Html.DisplayNameFor(model => model.NumberOfEmployees)
+                    @Html.DisplayNameFor(model => model[0].NumberOfEmployees)
                 </th>
             </tr>
-
-            @foreach (var item in Model)
+            @for (int i = 0; i < Model.Count - 1; i++)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AllocationType)
+                        @Html.DisplayFor(modelItem => Model[i].AllocationType)
                     </td>
                     <td class="text-right">
-                        @Html.ActionLink(item.NumberOfEmployees.ToString(), "BillabilityWiseAllocationDetail", new { id = item.AllocationTypeID })
+                        @Html.ActionLink(Model[i].NumberOfEmployees.ToString(), "UtilizationReportDetail", new { filterType = "alt", filterValue = Model[i].AllocationTypeID })
                     </td>
                 </tr>
             }
             <tr>
                 <td>
-                    <b>Total</b>
+                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].AllocationType)
                 </td>
                 <td class="text-right">
-                    <b>@Model.Sum(a => a.NumberOfEmployees)</b>
+                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].NumberOfEmployees)
                 </td>
             </tr>
         </table>

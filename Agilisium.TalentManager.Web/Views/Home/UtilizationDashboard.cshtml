@@ -1,0 +1,30 @@
+﻿@model List<Agilisium.TalentManager.Web.Models.BillabilityWiseAllocationSummaryModel>
+
+<div class="dashboardItem">
+    <div class="dashboardItemHeader">Utilization Summary</div>
+    <div class="dashboardItemBody">
+        <table class="tbl">
+            @for (int i = 0; i < Model.Count - 1; i++)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[i].AllocationType)
+                </td>
+                <td>:</td>
+                <td>
+                    @Html.ActionLink(Model[i].NumberOfEmployees.ToString(), "UtilizationReportDetail", "Reports", new { filterType = "alt", filterValue = Model[i].AllocationTypeID }, new { @style="color:navy;"})
+                </td>
+            </tr>
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].AllocationType)
+                </td>
+                <td>:</td>
+                <td >
+                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].NumberOfEmployees)
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

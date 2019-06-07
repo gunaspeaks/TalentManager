@@ -271,6 +271,7 @@
     <Compile Include="Models\AllocationViewModel.cs" />
     <Compile Include="Models\BillabilityWiseAllocationDetailModel.cs" />
     <Compile Include="Models\BillabilityWiseAllocationSummaryModel.cs" />
+    <Compile Include="Models\BillabilityWiseResourceCountModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CategoryViewModel.cs" />
     <Compile Include="Models\ContractorViewModel.cs" />
@@ -281,7 +282,7 @@
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EmployeeQuickModel.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
-    <Compile Include="Models\EmployeeWidgetModel.cs" />
+    <Compile Include="Models\ResourceCountModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManagerWiseAllocationModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Models\SubPracticeHeadCountModel.cs" />
     <Compile Include="Models\SubPracticeModel.cs" />
     <Compile Include="Models\SubPracticeViewModel.cs" />
+    <Compile Include="Models\UtilizationReportDetailViewModel.cs" />
     <Compile Include="Models\VendorSearchResultViewModel.cs" />
     <Compile Include="Models\VendorSpecializedPartnerModel.cs" />
     <Compile Include="Models\VendorViewModel.cs" />
@@ -457,8 +459,8 @@
     <Content Include="Views\Project\Create.cshtml" />
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\List.cshtml" />
-    <Content Include="Views\Reports\BillabilityWiseAllocationDetail.cshtml" />
-    <Content Include="Views\Reports\BillabilityWiseAllocationSummary.cshtml" />
+    <Content Include="Views\Reports\UtilizationReportDetail.cshtml" />
+    <Content Include="Views\Reports\UtilizationReportSummary.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Reports\ManagerWiseAllocations.cshtml" />
     <Content Include="Views\Reports\ManagerWiseProjects.cshtml" />
@@ -491,6 +493,7 @@
     <Content Include="Views\DevReq\Create.cshtml" />
     <Content Include="Views\DevReq\Edit.cshtml" />
     <Content Include="Views\DevReq\List.cshtml" />
+    <Content Include="Views\Home\UtilizationDashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
