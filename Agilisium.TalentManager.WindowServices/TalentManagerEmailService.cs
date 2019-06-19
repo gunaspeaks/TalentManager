@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Agilisium.TalentManager.ReportingService;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -25,6 +26,9 @@ namespace Agilisium.TalentManager.WindowServices
         {
             try
             {
+                TalentManagerEmailProcessor processor = new TalentManagerEmailProcessor();
+                processor.GenerateResourceAllocationReport();
+
                 serviceTimer = new Timer();
                 double defaultScheduledMin = 12 * 60 * 60 * 1000;
 
@@ -41,14 +45,15 @@ namespace Agilisium.TalentManager.WindowServices
                 serviceTimer.Start();
                 serviceTimer.Elapsed += TimerElapsed;
             }
-            catch (Exception)
+            catch (Exception exp)
             {
             }
         }
 
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            //serviceHelper.SendPeriodicCastExecutionReport();
+            TalentManagerEmailProcessor processor = new TalentManagerEmailProcessor();
+            processor.GenerateResourceAllocationReport();
         }
 
         protected override void OnStop()

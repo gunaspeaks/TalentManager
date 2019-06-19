@@ -56,7 +56,7 @@ namespace Agilisium.TalentManager.Web.Controllers
                 List<BillabilityWiseAllocationSummaryDto> dto = allocationService.GetBillabilityWiseAllocationSummary();
                 model = Mapper.Map<List<BillabilityWiseAllocationSummaryDto>, List<BillabilityWiseAllocationSummaryModel>>(dto);
             }
-            catch (Exception) { }
+            catch (Exception exp) { }
             return PartialView(model);
         }
 

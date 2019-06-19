@@ -1,5 +1,6 @@
 ﻿using Agilisium.TalentManager.Dto;
 using Agilisium.TalentManager.Model.Entities;
+using Agilisium.TalentManager.PostgresDbHelper;
 using Agilisium.TalentManager.Repository.Abstract;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,13 @@ namespace Agilisium.TalentManager.Repository.Repositories
 {
     public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
     {
+        private readonly PostgresSqlProcessor postgresSqlProcessor = null;
+
+        public EmployeeRepository()
+        {
+            postgresSqlProcessor = new PostgresSqlProcessor();
+        }
+
         #region Constants
 
         private const string YET_TO_JOIN_EMP_TYPE_NAME = "Yet to Join";
@@ -275,20 +283,30 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<PracticeHeadCountDto> GetPracticeWiseHeadCount()
         {
-            return (from e in Entities
-                    where e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                    group e by e.PracticeID into eg
-                    orderby eg.Count() descending
-                    select new PracticeHeadCountDto
-                    {
-                        HeadCount = eg.Count(emp => emp.IsDeleted == false),
-                        PracticeID = eg.Key,
-                        Practice = DataContext.Practices.FirstOrDefault(p => p.PracticeID == eg.Key).PracticeName
-                    });
+            if(DataContext.IsPostgresDB)
+            {
+                return postgresSqlProcessor.GetPracticeWiseHeadCountPostgres();
+            }
+
+            DbCommand cmd = DataContext.Database.Connection.CreateCommand();
+            cmd.CommandText = "dbo.GetPracticeWiseHeadCount";
+            cmd.CommandType = CommandType.StoredProcedure;
+            DataContext.Database.Connection.Open();
+            DbDataReader reader = cmd.ExecuteReader();
+            ObjectResult<PracticeHeadCountDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<PracticeHeadCountDto>(reader);
+
+            List<PracticeHeadCountDto> records = items.ToList();
+            DataContext.Database.Connection.Close();
+            return records;
         }
 
         public IEnumerable<SubPracticeHeadCountDto> GetSubPracticeWiseHeadCount()
         {
+            if (DataContext.IsPostgresDB)
+            {
+                return postgresSqlProcessor.GetSubPracticeWiseHeadCountFromPostgres();
+            }
+
             DbCommand cmd = DataContext.Database.Connection.CreateCommand();
             cmd.CommandText = "dbo.GetSubPracticeWiseHeadCount";
             cmd.CommandType = CommandType.StoredProcedure;

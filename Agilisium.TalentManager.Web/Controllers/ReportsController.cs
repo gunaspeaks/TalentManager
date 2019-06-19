@@ -94,7 +94,7 @@ namespace Agilisium.TalentManager.Web.Controllers
                 List<BillabilityWiseAllocationDetailDto> summaryDtos = allocationService.GetBillabilityWiseAllocationDetail(filterType, filterValue);
                 model.Allocations = Mapper.Map<List<BillabilityWiseAllocationDetailDto>, List<BillabilityWiseAllocationDetailModel>>(summaryDtos);
                 model.FilterValueListItems = GetFilterValueListItems(filterType);
-                LoadFilterValueListItems(filterType);
+                //LoadFilterValueListItems(filterType);
                 if(model.Allocations.Count()==0)
                 {
                     DisplayWarningMessage("No records found. Please try with different filter conditions");
@@ -240,7 +240,7 @@ namespace Agilisium.TalentManager.Web.Controllers
 
             projectTypeItems.Add(new SelectListItem
             {
-                Text = "Not Allocated Yet (Non-Delivery)",
+                Text = "Not Allocated Yet (BD/BO)",
                 Value = "-2",
             });
 
@@ -252,6 +252,13 @@ namespace Agilisium.TalentManager.Web.Controllers
             List<SelectListItem> filterValues = new List<SelectListItem>();
             switch (filterType?.ToLower())
             {
+                case "all":
+                    filterValues.Add(new SelectListItem
+                    {
+                        Text = "For All Resources",
+                        Value = "all"
+                    });
+                    break;
                 case "emp":
                     filterValues = GetEmployeesList();
                     break;

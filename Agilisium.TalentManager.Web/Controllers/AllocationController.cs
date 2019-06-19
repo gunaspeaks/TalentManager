@@ -345,6 +345,8 @@ namespace Agilisium.TalentManager.Web.Controllers
             return Json(filterValues);
         }
 
+        #region Private Methods
+
         private IEnumerable<AllocationModel> GetAllocations(string filterType, int filterValueID, string sortBy, string sortType, int pageNo)
         {
             IEnumerable<ProjectAllocationDto> allocations = allocationService.GetAll(filterType, filterValueID, sortBy, sortType, RecordsPerPage, pageNo);
@@ -488,5 +490,7 @@ namespace Agilisium.TalentManager.Web.Controllers
 
             return empDDList;
         }
+
+        #endregion
     }
 }

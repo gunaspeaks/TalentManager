@@ -6,7 +6,10 @@ namespace Agilisium.TalentManager.PostgresModel
 {
     public class TalentManagerDataContext : DbContext
     {
+        public bool IsPostgresDB { get; set; }
+
         public TalentManagerDataContext():base(nameOrConnectionString: "TalentDataContextPostgres") {
+            IsPostgresDB = true;
             //Database.SetInitializer<TalentManagerDataContext>(null);
         }
 

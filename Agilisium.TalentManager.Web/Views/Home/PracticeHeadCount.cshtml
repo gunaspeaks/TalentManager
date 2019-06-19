@@ -12,12 +12,14 @@
             {
                 <tr>
                     <td class="text-left">@item.Practice</td>
-                    <td class="text-right">@item.HeadCount</td>
+                    <td class="text-right">
+                        @Html.ActionLink(item.HeadCount.ToString(), "UtilizationReportDetail", "Reports", new { filterType = "pod", filterValue = item.PracticeID }, new { @style = "color:navy;" })
+                    </td>
                 </tr>
             }
         </table>
         <text class="pull-right">
-            @Html.ActionLink("Show All", "SubPracticeHeadCount", null, new { @style = "color:darkblue" })
+            @Html.ActionLink("View All Grouped Count by POD & Competencies", "SubPracticeHeadCount", null, new { @style = "color:darkblue" })
         </text>
     </div>
 </div>

@@ -14,7 +14,7 @@ namespace Agilisium.TalentManager.Web.Models
 
         public ViewModelBase()
         {
-            StringBuilder adminName = new StringBuilder(HttpContext.Current.User.Identity.Name);
+            StringBuilder adminName = new StringBuilder(HttpContext.Current.User.Identity.GetUserName());
             string ignorableString = HttpContext.Current.Application[UIConstants.CONFIG_IGNORABLE_TEXT_IN_USER_NAME]?.ToString();
             if (!string.IsNullOrWhiteSpace(ignorableString))
             {
@@ -26,6 +26,7 @@ namespace Agilisium.TalentManager.Web.Models
                 }
             }
             LoggedInUserName = adminName.ToString();
+            HttpContext.Current.Application["LoggedInUser"] = LoggedInUserName;
         }
     }
 }

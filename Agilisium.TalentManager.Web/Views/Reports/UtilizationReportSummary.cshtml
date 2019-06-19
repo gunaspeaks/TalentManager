@@ -18,7 +18,7 @@
                     @Html.DisplayNameFor(model => model[0].NumberOfEmployees)
                 </th>
             </tr>
-            @for (int i = 0; i < Model.Count - 1; i++)
+            @for (int i = 0; i < Model.Count; i++)
             {
                 <tr>
                     <td>
@@ -29,14 +29,6 @@
                     </td>
                 </tr>
             }
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].AllocationType)
-                </td>
-                <td class="text-right">
-                    @Html.DisplayFor(modelItem => Model[Model.Count - 1].NumberOfEmployees)
-                </td>
-            </tr>
         </table>
     </div>
     <div class="panel-footer">

@@ -1,5 +1,4 @@
 ﻿using Agilisium.TalentManager.Model;
-//using Agilisium.TalentManager.PostgresModel;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -8,11 +7,11 @@ namespace Agilisium.TalentManager.Repository.Abstract
 {
     public abstract class RepositoryBase<T> : IDisposable where T : EntityBase
     {
-        private TalentManagerDataContext dataContext;
+        private PostgresModel.TalentManagerDataContext dataContext;
 
         public DbSet<T> Entities => DataContext.Set<T>();
 
-        protected TalentManagerDataContext DataContext => dataContext ?? (dataContext = new TalentManagerDataContext());
+        protected PostgresModel.TalentManagerDataContext DataContext => dataContext ?? (dataContext = new PostgresModel.TalentManagerDataContext());
 
         public void Dispose()
         {

@@ -1,5 +1,6 @@
 ﻿using Agilisium.TalentManager.Dto;
 using Agilisium.TalentManager.Model.Entities;
+using Agilisium.TalentManager.PostgresDbHelper;
 using Agilisium.TalentManager.Repository.Abstract;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,13 @@ namespace Agilisium.TalentManager.Repository.Repositories
 {
     public class AllocationRepository : RepositoryBase<ProjectAllocation>, IAllocationRepository
     {
+        private readonly PostgresSqlProcessor postgresSqlProcessor = null;
+
+        public AllocationRepository()
+        {
+            postgresSqlProcessor = new PostgresSqlProcessor();
+        }
+
         #region Public Methods
 
         public void Add(ProjectAllocationDto entity)
@@ -313,7 +321,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                     from pmd in pme.DefaultIfEmpty()
                     join dm in DataContext.Employees on pd.ProjectManagerID equals dm.EmployeeEntryID into dme
                     from dmd in dme.DefaultIfEmpty()
-                    where a.EmployeeID == employeeID && a.IsActive == true
+                    where a.EmployeeID == employeeID && a.AllocationEndDate >= DateTime.Now
                     select new CustomAllocationDto
                     {
                         AllocatedPercentage = a.PercentageOfAllocation,
@@ -631,7 +639,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                     join p in DataContext.Projects on a.ProjectID equals p.ProjectID
                     where a.IsDeleted == false && a.IsActive == true
                         && p.ProjectName.ToLower() == "bench"
-                        && a.EmployeeID == employeeID
+                        && a.EmployeeID == employeeID && a.AllocationEndDate >= DateTime.Now
                     select a).Any();
         }
 
@@ -647,6 +655,11 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<ManagerWiseAllocationDto> GetManagerWiseAllocationSummary()
         {
+            if (DataContext.IsPostgresDB)
+            {
+                return postgresSqlProcessor.GetManagerWiseAllocationSummaryFromPostgres();
+            }
+
             DbCommand cmd = DataContext.Database.Connection.CreateCommand();
             cmd.CommandText = "dbo.GetManagerWiseProjectsSummary";
             cmd.CommandType = CommandType.StoredProcedure;
@@ -660,39 +673,44 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary()
         {
-            List<BillabilityWiseAllocationSummaryDto> items = new List<BillabilityWiseAllocationSummaryDto>
+#pragma warning disable IDE0028 // Simplify collection initialization
+            List<BillabilityWiseAllocationSummaryDto> items = new List<BillabilityWiseAllocationSummaryDto>();
+#pragma warning restore IDE0028 // Simplify collection initialization
+
+            items.Add(new BillabilityWiseAllocationSummaryDto
             {
-                new BillabilityWiseAllocationSummaryDto
-                {
-                    AllocationType = "Billable",
-                    AllocationTypeID = (int)AllocationType.Billable,
-                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.Billable)
-                },
-                new BillabilityWiseAllocationSummaryDto
-                {
-                    AllocationType = "Committed Buffer",
-                    AllocationTypeID = (int)AllocationType.CommittedBuffer,
-                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.CommittedBuffer)
-                },
-                new BillabilityWiseAllocationSummaryDto
-                {
-                    AllocationType = "Non-Committed Buffer",
-                    AllocationTypeID = (int)AllocationType.NonCommittedBuffer,
-                    NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.NonCommittedBuffer)
-                },
-                new BillabilityWiseAllocationSummaryDto
-                {
-                    AllocationType = "Not Allocated Yet (Delivery)",
-                    AllocationTypeID = -1,
-                    NumberOfEmployees = GetNonAllocatedResourcesCount(true),
-                },
-                new BillabilityWiseAllocationSummaryDto
-                {
-                    AllocationType = "Not Allocated Yet (Others)",
-                    AllocationTypeID = -2,
-                    NumberOfEmployees = GetNonAllocatedResourcesCount(false),
-                },
-            };
+                AllocationType = "Billable",
+                AllocationTypeID = (int)AllocationType.Billable,
+                NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.Billable)
+            });
+
+            items.Add(new BillabilityWiseAllocationSummaryDto
+            {
+                AllocationType = "Committed Buffer",
+                AllocationTypeID = (int)AllocationType.CommittedBuffer,
+                NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.CommittedBuffer)
+            });
+
+            items.Add(new BillabilityWiseAllocationSummaryDto
+            {
+                AllocationType = "Non-Committed Buffer",
+                AllocationTypeID = (int)AllocationType.NonCommittedBuffer,
+                NumberOfEmployees = GetEmployeesCountByAllocationType(AllocationType.NonCommittedBuffer)
+            });
+
+            items.Add(new BillabilityWiseAllocationSummaryDto
+            {
+                AllocationType = "Not Allocated Yet (Delivery)",
+                AllocationTypeID = -1,
+                NumberOfEmployees = DataContext.IsPostgresDB ? postgresSqlProcessor.GetNonAllocatedResourcesCountFromPostgres(true) : GetNonAllocatedResourcesCount(true),
+            });
+
+            items.Add(new BillabilityWiseAllocationSummaryDto
+            {
+                AllocationType = "Not Allocated (BD/BO)",
+                AllocationTypeID = -2,
+                NumberOfEmployees = DataContext.IsPostgresDB ? postgresSqlProcessor.GetNonAllocatedResourcesCountFromPostgres(false) : GetNonAllocatedResourcesCount(false),
+            });
 
             return items;
         }
@@ -705,33 +723,28 @@ namespace Agilisium.TalentManager.Repository.Repositories
             {
                 case "emp":
                 case "psk":
+                case "pod":
                 case "ssk":
-                    // filter by employee name/ primary skills/ secondary skills
+                case "all":
+                    // filter by employee name/ primary skills/ secondary skills /pod
                     allocationDetailDtos = GetAllAllocationDetailFilteredByEmployeeData(filterBy, filterValue);
                     break;
-                case "pod":
                 case "prj":
                 case "acc":
-                    // filter by project's pod/project name/account
+                    // filter by project's project name/account
                     allocationDetailDtos = GetAllAllocationDetailFilteredByProjectData(filterBy, filterValue);
                     break;
                 case "alt":
                     // filter by allocation type
                     int.TryParse(filterValue, out int allocationTypeID);
-                    DbCommand cmd = DataContext.Database.Connection.CreateCommand();
-                    cmd.CommandText = "dbo.GetBillabilityWiseDetails";
-                    SqlParameter param = new SqlParameter
+                    if (DataContext.IsPostgresDB)
                     {
-                        ParameterName = "AllocationType",
-                        Value = allocationTypeID
-                    };
-                    cmd.Parameters.Add(param);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    DataContext.Database.Connection.Open();
-                    DbDataReader reader = cmd.ExecuteReader();
-                    ObjectResult<BillabilityWiseAllocationDetailDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<BillabilityWiseAllocationDetailDto>(reader);
-                    allocationDetailDtos = items.ToList();
-                    DataContext.Database.Connection.Close();
+                        allocationDetailDtos = postgresSqlProcessor.GetAllocationEntriesByAllocationTypeFromPostgres(allocationTypeID);
+                    }
+                    else
+                    {
+                        allocationDetailDtos = GetAllocationEntriesByAllocationType(allocationTypeID);
+                    }
                     break;
             }
 
@@ -741,6 +754,26 @@ namespace Agilisium.TalentManager.Repository.Repositories
         #endregion
 
         #region Private Methods
+
+        private List<BillabilityWiseAllocationDetailDto> GetAllocationEntriesByAllocationType(int allocationType)
+        {
+            List<BillabilityWiseAllocationDetailDto> allocationDetailDtos = null;
+            DbCommand cmd = DataContext.Database.Connection.CreateCommand();
+            cmd.CommandText = "dbo.GetBillabilityWiseDetails";
+            SqlParameter param = new SqlParameter
+            {
+                ParameterName = "AllocationType",
+                Value = allocationType
+            };
+            cmd.Parameters.Add(param);
+            cmd.CommandType = CommandType.StoredProcedure;
+            DataContext.Database.Connection.Open();
+            DbDataReader reader = cmd.ExecuteReader();
+            ObjectResult<BillabilityWiseAllocationDetailDto> items = ((IObjectContextAdapter)DataContext).ObjectContext.Translate<BillabilityWiseAllocationDetailDto>(reader);
+            allocationDetailDtos = items.ToList();
+            DataContext.Database.Connection.Close();
+            return allocationDetailDtos;
+        }
 
         private ProjectAllocation CreateBusinessEntity(ProjectAllocationDto projectDto, bool isNewEntity = false)
         {
@@ -790,11 +823,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             string filterByText = filterBy?.ToLower();
             int.TryParse(filterValue, out int filterValueID);
 
-            if (filterByText == "pod")
-            {
-                projects = DataContext.Projects.Where(p => p.IsDeleted == false && p.PracticeID == filterValueID).ToList();
-            }
-            else if (filterByText == "prj")
+            if (filterByText == "prj")
             {
                 projects = DataContext.Projects.Where(p => p.IsDeleted == false && p.ProjectID == filterValueID).ToList();
             }
@@ -827,7 +856,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                         AllocationEndDate = allocation.AllocationEndDate,
                         AllocationStartDate = allocation.AllocationStartDate,
                         BusinessUnitID = project.BusinessUnitID,
-                        BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.BusinessUnitID).SubCategoryName,
+                        BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.BusinessUnitID)?.SubCategoryName,
                         POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == project.PracticeID)?.PracticeName,
                         PracticeID = project.PracticeID,
                         ProjectID = project.ProjectID,
@@ -835,7 +864,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                         ProjectManagerID = project.ProjectManagerID,
                         ProjectName = project.ProjectName,
                         ProjectTypeID = project.ProjectTypeID,
-                        ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.ProjectTypeID).SubCategoryName,
+                        ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == project.ProjectTypeID)?.SubCategoryName,
                     });
                 }
             }
@@ -849,21 +878,29 @@ namespace Agilisium.TalentManager.Repository.Repositories
             List<Employee> employees = null;
             string filterByText = filterBy?.ToLower();
 
-            if (filterByText == "emp")
+            switch (filterByText)
             {
-                int.TryParse(filterValue, out int empID);
-                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                             && e.EmployeeEntryID == empID).ToList();
-            }
-            else if (filterByText == "psk")
-            {
-                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                             && e.PrimarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
-            }
-            else if (filterByText == "ssk")
-            {
-                employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                             && e.SecondarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+                case "all":
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false).ToList();
+                    break;
+                case "emp":
+                    int.TryParse(filterValue, out int empID);
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                                 && e.EmployeeEntryID == empID).ToList();
+                    break;
+                case "psk":
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                                 && e.PrimarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+                    break;
+                case "ssk":
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                                 && e.SecondarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+                    break;
+                case "pod":
+                    int.TryParse(filterValue, out int practiceID);
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                                 && e.PracticeID == practiceID).ToList();
+                    break;
             }
 
             if (employees.Count() == 0)
@@ -889,6 +926,12 @@ namespace Agilisium.TalentManager.Repository.Repositories
                         EmployeeName = emp.FirstName + " " + emp.LastName,
                         PrimarySkills = emp.PrimarySkills,
                         SecondarySkills = emp.SecondarySkills,
+                        POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == emp.PracticeID)?.PracticeName,
+                        PracticeID = emp.PracticeID,
+                        ProjectManagerID = emp.ReportingManagerID,
+                        ProjectManager = (from e in DataContext.Employees where e.EmployeeEntryID == emp.ReportingManagerID select e.FirstName + " " + e.LastName).FirstOrDefault(),
+                        BusinessUnitID = emp.BusinessUnitID,
+                        BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == emp.BusinessUnitID)?.SubCategoryName
                     });
                 }
                 else
@@ -906,25 +949,26 @@ namespace Agilisium.TalentManager.Repository.Repositories
                             SecondarySkills = emp.SecondarySkills,
                             AllocationEndDate = allocation.AllocationEndDate,
                             AllocationStartDate = allocation.AllocationStartDate,
+                            BusinessUnitID = emp.BusinessUnitID,
+                            BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == emp.BusinessUnitID)?.SubCategoryName,
+                            POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == emp.PracticeID)?.PracticeName,
+                            PracticeID = emp.PracticeID,
                         };
 
-                        Project prj = DataContext.Projects.FirstOrDefault(p => p.ProjectID == allocation.ProjectID && p.IsDeleted == false);
+                        Project prj = DataContext.Projects.FirstOrDefault(p => p.ProjectID == allocation.ProjectID);
                         if (prj == null)
                         {
                             allocationDetail.Comments = "Project is missing";
                         }
                         else
                         {
-                            allocationDetail.BusinessUnitID = prj.BusinessUnitID;
-                            allocationDetail.BusinessUnit = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == prj.BusinessUnitID).SubCategoryName;
-                            allocationDetail.POD = DataContext.Practices.FirstOrDefault(p => p.PracticeID == prj.PracticeID)?.PracticeName;
-                            allocationDetail.PracticeID = prj.PracticeID;
                             allocationDetail.ProjectID = prj.ProjectID;
-                            allocationDetail.ProjectManager = (from e in DataContext.Employees where e.EmployeeEntryID == prj.ProjectManagerID select e.FirstName + " " + e.LastName).FirstOrDefault();
+                            allocationDetail.ProjectManager = (from e in DataContext.Employees where e.EmployeeEntryID == prj.ProjectManagerID select e.FirstName + " " + e.LastName)?.FirstOrDefault();
                             allocationDetail.ProjectManagerID = prj.ProjectManagerID;
                             allocationDetail.ProjectName = prj.ProjectName;
                             allocationDetail.ProjectTypeID = prj.ProjectTypeID;
-                            allocationDetail.ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == prj.ProjectTypeID).SubCategoryName;
+                            allocationDetail.ProjectType = DataContext.DropDownSubCategories.FirstOrDefault(bu => bu.SubCategoryID == prj.ProjectTypeID)?.SubCategoryName;
+                            allocationDetail.AccountName = DataContext.ProjectAccounts.FirstOrDefault(a => a.AccountID == prj.ProjectAccountID)?.AccountName;
                         }
 
                         allocationDetails.Add(allocationDetail);

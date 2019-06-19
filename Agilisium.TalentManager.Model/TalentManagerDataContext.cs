@@ -6,8 +6,11 @@ namespace Agilisium.TalentManager.Model
 {
     public class TalentManagerDataContext : DbContext
     {
+        public bool IsPostgresDB { get; set; }
+
         public TalentManagerDataContext() : base("TalentDataContext")
         {
+            IsPostgresDB = false;   
             //// Uu-comment the below line to re-create the database freshly
             //Database.SetInitializer<TalentManagerDataContext>(null);
         }

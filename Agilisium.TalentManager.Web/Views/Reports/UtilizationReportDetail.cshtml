@@ -89,6 +89,9 @@
                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectName)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().ProjectManager)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AccountName)
                     </th>
                     <th>
@@ -128,6 +131,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectManager)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.AccountName)

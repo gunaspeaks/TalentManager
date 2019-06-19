@@ -31,6 +31,8 @@
             // 
             // TalentManagerEmailService
             // 
+            this.CanPauseAndContinue = true;
+            this.CanShutdown = true;
             this.ServiceName = "Agilisium - Talent Manager Email Service";
 
         }

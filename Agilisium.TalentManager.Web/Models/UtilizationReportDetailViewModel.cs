@@ -16,16 +16,11 @@ namespace Agilisium.TalentManager.Web.Models
                     Text = "Employee Name",
                     Value = "emp"
                 },
-                //new SelectListItem
-                //{
-                //    Text = "Primary Skills",
-                //    Value = "psk"
-                //},
-                //new SelectListItem
-                //{
-                //    Text = "Secondary Skills",
-                //    Value = "ssk",
-                //},
+                new SelectListItem
+                {
+                    Text = "For All Resources",
+                    Value = "all"
+                },
                 new SelectListItem
                 {
                     Text = "POD",

@@ -15,8 +15,8 @@ namespace Agilisium.TalentManager.ServerUtilities
             this.ownerEmailID = ownerEmailID;
         }
 
-        public void SendEmail(string emailClientIp, string toEmailID, string emailSubject, 
-            string emailBody, string bccEmailId = "")
+        public void SendEmail(string emailClientIp, string toEmailID, string emailSubject,
+            string emailBody, string bccEmailId = "", string attachedFilePath = "")
         {
             SmtpClient smtpClient = null;
             MailMessage mailMessage = new MailMessage()
@@ -24,18 +24,34 @@ namespace Agilisium.TalentManager.ServerUtilities
                 From = new MailAddress(ownerEmailID),
                 Subject = emailSubject,
                 IsBodyHtml = true,
-                Body = emailBody
+                Body = emailBody,
             };
+
+            if (string.IsNullOrEmpty(attachedFilePath) == false)
+            {
+                mailMessage.Attachments.Add(new Attachment(attachedFilePath));
+            }
 
             try
             {
-                mailMessage.To.Add(toEmailID);
+                string[] toMailIDs = toEmailID.Split(';');
+                foreach (string str in toMailIDs)
+                {
+                    if (string.IsNullOrWhiteSpace(str) == false)
+                    {
+                        mailMessage.To.Add(new MailAddress(str));
+                    }
+                }
+
                 if (string.IsNullOrWhiteSpace(bccEmailId) == false)
                 {
                     string[] mailIDs = bccEmailId.Split(';');
                     foreach (string str in mailIDs)
                     {
-                        mailMessage.CC.Add(new MailAddress(str));
+                        if (string.IsNullOrWhiteSpace(str) == false)
+                        {
+                            mailMessage.CC.Add(new MailAddress(str));
+                        }
                     }
                 }
                 smtpClient = new SmtpClient(emailClientIp, 587)

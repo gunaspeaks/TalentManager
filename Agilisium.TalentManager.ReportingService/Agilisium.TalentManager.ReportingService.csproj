@@ -42,10 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContractorRequestProcessor.cs" />
-    <Compile Include="ProjectAllocationUpdaterProcessor.cs" />
+    <Compile Include="TalentManagerEmailProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Agilisium.TalentManager.Data\Agilisium.TalentManager.Repository.csproj">
+      <Project>{5cfe3b1b-f50d-4d49-9008-819f6f708f21}</Project>
+      <Name>Agilisium.TalentManager.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Agilisium.TalentManager.Dto\Agilisium.TalentManager.Dto.csproj">
       <Project>{210c185d-668e-4460-9df0-e96460a1ae81}</Project>
       <Name>Agilisium.TalentManager.Dto</Name>
@@ -58,6 +62,9 @@
       <Project>{e93e7895-5291-4d88-a402-8e0e3b49ad12}</Project>
       <Name>Agilisium.TalentManager.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

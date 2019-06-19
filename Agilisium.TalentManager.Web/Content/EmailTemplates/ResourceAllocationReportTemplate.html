@@ -1,0 +1,233 @@
+﻿<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Agilisium - Resource Allocation Report</title>
+    <style>
+        .dashboard {
+            float: left;
+        }
+
+            .dashboard .dashboard3col {
+                float: left;
+            }
+
+        .dashboardCol {
+            float: left;
+            width: 33%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .dashboardItem {
+            margin: 10px 10px 10px 10px;
+            border: solid 2px gray;
+            border-radius: 25px;
+        }
+
+        .dashboardItemHeader {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px 15px;
+            background-color: gray;
+            border-radius: 22px;
+            text-align: center;
+        }
+
+        .dashboardItemBody {
+            margin: 10px;
+            overflow: hidden;
+        }
+
+        .dashboardFooter {
+            clear: both;
+            width: 100%;
+            background-color: Red;
+        }
+
+        /* ======== Table ======== */
+        .tbl {
+            table-layout: auto;
+            border-collapse: collapse;
+        }
+
+            .tbl thead th {
+                border-bottom: solid 1px gray;
+                background-color: #ededed;
+                padding: 5px;
+                text-align: left;
+                color: #9c9c9c;
+                font-size: 1em;
+                font-weight: normal;
+            }
+
+            .tbl tbody td {
+                border-bottom: solid 1px gray;
+                padding: 5px;
+                color: black;
+                font-size: 1.1em
+            }
+
+        .pageHeader {
+            height: 20px;
+            background-color: #056cd5;
+            padding: 10px 10px;
+            margin-bottom: 10px;
+            color: White;
+            position: relative;
+        }
+
+            .pageHeader h1 {
+                font: normal 1.2em Arial;
+                color: White;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            .pageHeader .platformular {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+        .pageBody {
+            margin: 0 10px;
+        }
+
+        .pageFooter {
+            clear: both;
+            padding-top: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: #686868;
+            margin: 25px 0 0 0;
+            border-top: solid 1px #e7e7e7;
+        }
+    </style>
+</head>
+<body style="background-color:Highlight">
+    <div align="left">
+        <table border=0 cellspacing=0 cellpadding=0>
+            <tr>
+                <td>
+                    <p>
+                        Dear Team,<br />
+                        Find below the resource allocation summary which shows the total head count and Billability-wise allocation summary. The Attached CSV file was generated as of "<b>__TODAY__</b>" and contains a record for each resource and his allocation details.                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign=top style='background:Highlight;padding:0in 0in 0in .2in'>
+                    <div class="dashboard3Col">
+                        <div class="dashboardCol">
+                            <div class="dashboardItem">
+                                <div class="dashboardItemHeader">Our Strength</div>
+                                <div class="dashboardItemBody">
+                                    <table class="tbl">
+                                        <tr>
+                                            <td>
+                                                Total Strength
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">__TOTAL_COUNT__</td>
+                                        </tr>
+                                        <tr>
+
+                                            <td>
+                                                Delivery
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                __DELIVERY_COUNT__
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Business Development
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                __BD_COUNT__
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Business Operations
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                __BO_COUNT__
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboardCol">
+                            <div class="dashboardItem">
+                                <div class="dashboardItemHeader">Utilization Summary</div>
+                                <div class="dashboardItemBody">
+                                    <table class="tbl">
+                                        <tr>
+                                            <td>
+                                                Billable
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td>
+                                                <a href="http://agls-lt-191/AgilisiumSoft/Reports/UtilizationReportDetail?filterType=alt&amp;filterValue=4" style="color:navy;">__BILLABLE__</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Committed Buffer
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td>
+                                                <a href="http://agls-lt-191/AgilisiumSoft/Reports/UtilizationReportDetail?filterType=alt&amp;filterValue=7" style="color:navy;">__COMMITED_BUFFER__</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Non-Committed Buffer
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td>
+                                                <a href="http://agls-lt-191/AgilisiumSoft/Reports/UtilizationReportDetail?filterType=alt&amp;filterValue=6" style="color:navy;">__NON_COMMITED_BUFFER__</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Not Allocated Yet (Delivery)
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td>
+                                                <a href="http://agls-lt-191/AgilisiumSoft/Reports/UtilizationReportDetail?filterType=alt&amp;filterValue=-1" style="color:navy;">__NOT_ALLOCATED_YET_DELIVERY__</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Not Allocated Yet (Others)
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td>
+                                                <a href="http://agls-lt-191/AgilisiumSoft/Reports/UtilizationReportDetail?filterType=alt&amp;filterValue=-2" style="color:navy;">__NOT_ALLOCATED_YET_OTHERS__</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <hr />
+                    Regards,<br />Agilisium Talent Management Team.
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

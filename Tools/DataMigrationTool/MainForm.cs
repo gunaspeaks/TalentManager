@@ -2,6 +2,7 @@
 using Agilisium.TalentManager.Repository.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,8 +11,9 @@ namespace DataMigrationTool
 {
     public partial class MainForm : Form
     {
-        private readonly Agilisium.TalentManager.Model.TalentManagerDataContext sqlDataContext = new Agilisium.TalentManager.Model.TalentManagerDataContext();
-        private readonly Agilisium.TalentManager.PostgresModel.TalentManagerDataContext postgressDataContext = new Agilisium.TalentManager.PostgresModel.TalentManagerDataContext();
+        private Agilisium.TalentManager.Model.TalentManagerDataContext sqlDataContext = new Agilisium.TalentManager.Model.TalentManagerDataContext();
+        private Agilisium.TalentManager.PostgresModel.TalentManagerDataContext postgressDataContext = new Agilisium.TalentManager.PostgresModel.TalentManagerDataContext();
+        private Npgsql.NpgsqlConnection con = null;
 
         public MainForm()
         {
@@ -23,59 +25,59 @@ namespace DataMigrationTool
             statusList.Items.Clear();
             try
             {
-                UpdateApplicationStatus("Migrating System Settings, please wait...");
-                int res = await MigrateSystemSettings();
-                statusList.Items.Add($"System Settings  - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating System Settings, please wait...");
+                //int res = await MigrateSystemSettings();
+                //statusList.Items.Add($"System Settings  - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Categories, please wait...");
-                res = await MigrateDropDownCategories();
-                statusList.Items.Add($"Categories - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Categories, please wait...");
+                //res = await MigrateDropDownCategories();
+                //statusList.Items.Add($"Categories - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Sub-Categories, please wait...");
-                res = await MigrateDropDownSubCategories();
-                statusList.Items.Add($"Sub-Categories - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Sub-Categories, please wait...");
+                //res = await MigrateDropDownSubCategories();
+                //statusList.Items.Add($"Sub-Categories - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating PODs, please wait...");
-                res = await MigratePractices();
-                statusList.Items.Add($"PODs - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating PODs, please wait...");
+                //res = await MigratePractices();
+                //statusList.Items.Add($"PODs - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Competencies, please wait...");
-                res = await MigrateSubPractices();
-                statusList.Items.Add($"Competencies - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Competencies, please wait...");
+                //res = await MigrateSubPractices();
+                //statusList.Items.Add($"Competencies - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Employees, please wait...");
-                res = await MigrateEmployees();
-                statusList.Items.Add($"Employees - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Employees, please wait...");
+                //res = await MigrateEmployees();
+                //statusList.Items.Add($"Employees - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Accounts, please wait...");
-                res = await MigrateAccounts();
-                statusList.Items.Add($"Accounts - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Accounts, please wait...");
+                //res = await MigrateAccounts();
+                //statusList.Items.Add($"Accounts - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
 
                 UpdateApplicationStatus("Migrating Projects, please wait...");
-                res = await MigrateProjects();
+                int res = await MigrateProjects();
                 statusList.Items.Add($"Projects - {res} migrated");
                 statusList.Refresh();
                 statusList.Invalidate();
 
-                UpdateApplicationStatus("Migrating Project Allocations, please wait...");
-                res = await MigrateAllocations();
-                statusList.Items.Add($"Project Allocations - {res} migrated");
-                statusList.Refresh();
-                statusList.Invalidate();
+                //UpdateApplicationStatus("Migrating Project Allocations, please wait...");
+                //res = await MigrateAllocations();
+                //statusList.Items.Add($"Project Allocations - {res} migrated");
+                //statusList.Refresh();
+                //statusList.Invalidate();
             }
             catch (Exception exp)
             {
@@ -106,15 +108,12 @@ namespace DataMigrationTool
                     postgressDataContext.SystemSettings.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateSystemSettings();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
-                MessageBox.Show($"Error while migrating Sub-Categories. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
-            }
-            finally
-            {
-                repository.Dispose();
+                MessageBox.Show($"Error while migrating System Settings. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
             return recCount;
         }
@@ -137,15 +136,12 @@ namespace DataMigrationTool
                     postgressDataContext.DropDownCategories.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateDropDownCategories();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
-                MessageBox.Show($"Error while migrating Sub-Categories. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
-            }
-            finally
-            {
-                repository.Dispose();
+                MessageBox.Show($"Error while migrating Categories. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
             return recCount;
         }
@@ -168,15 +164,12 @@ namespace DataMigrationTool
                     postgressDataContext.DropDownSubCategories.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateDropDownSubCategories();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Sub-Categories. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
-            }
-            finally
-            {
-                repository.Dispose();
             }
             return recCount;
         }
@@ -189,6 +182,7 @@ namespace DataMigrationTool
 
             try
             {
+                postgressDataContext = new Agilisium.TalentManager.PostgresModel.TalentManagerDataContext();
                 // delete all existing records from Postgres Database
                 postgressDataContext.Practices.RemoveRange(postgressDataContext.Practices);
                 await postgressDataContext.SaveChangesAsync();
@@ -199,15 +193,13 @@ namespace DataMigrationTool
                     postgressDataContext.Practices.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdatePractices();
+
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating PODs. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
-            }
-            finally
-            {
-                repository.Dispose();
             }
             return recCount;
         }
@@ -230,16 +222,14 @@ namespace DataMigrationTool
                     postgressDataContext.SubPractices.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateSubPractices();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Competencies. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
-            finally
-            {
-                repository.Dispose();
-            }
+
             return recCount;
         }
 
@@ -261,16 +251,14 @@ namespace DataMigrationTool
                     postgressDataContext.Employees.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateEmployees();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Employees. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
-            finally
-            {
-                repository.Dispose();
-            }
+
             return recCount;
         }
 
@@ -292,16 +280,14 @@ namespace DataMigrationTool
                     postgressDataContext.ProjectAccounts.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateAcounts();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Accounts. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
-            finally
-            {
-                repository.Dispose();
-            }
+
             return recCount;
         }
 
@@ -323,16 +309,14 @@ namespace DataMigrationTool
                     postgressDataContext.Projects.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateProjects();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Projects. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
-            finally
-            {
-                repository.Dispose();
-            }
+
             return recCount;
         }
 
@@ -354,17 +338,252 @@ namespace DataMigrationTool
                     postgressDataContext.ProjectAllocations.Add(rec);
                 }
                 await postgressDataContext.SaveChangesAsync();
+                //await UpdateAllocations();
                 recCount = records.Count;
             }
             catch (Exception exp)
             {
                 MessageBox.Show($"Error while migrating Project Allocations. The error is {Environment.NewLine}Main Exception: {exp.Message}{Environment.NewLine}Inner Exception: {exp.InnerException?.Message}");
             }
+
+            return recCount;
+        }
+
+        private async Task UpdateSystemSettings()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                sqlDataContext = new Agilisium.TalentManager.Model.TalentManagerDataContext();
+                List<SystemSetting> oldSettings = sqlDataContext.SystemSettings.ToList();
+                // update primary column id
+                postgressDataContext = new Agilisium.TalentManager.PostgresModel.TalentManagerDataContext();
+                List<SystemSetting> newSettings = postgressDataContext.SystemSettings.ToList();
+                foreach (SystemSetting newRec in newSettings)
+                {
+                    int oldPracticeID = oldSettings.FirstOrDefault(p => p.SettingName == newRec.SettingName).SettingEntryID;
+                    string qry = $"UPDATE \"TalentManager\".\"SystemSettings\" SET \"SettingEntryID\"={oldPracticeID} WHERE \"SettingEntryID\"={newRec.SettingEntryID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
             finally
             {
-                repository.Dispose();
+                con.Close();
+                con.Dispose();
             }
-            return recCount;
+        }
+
+        private async Task UpdateDropDownCategories()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                sqlDataContext = new Agilisium.TalentManager.Model.TalentManagerDataContext();
+                List<DropDownCategory> oldCategories = sqlDataContext.DropDownCategories.ToList();
+                // update primary column id
+                List<DropDownCategory> newCategories = postgressDataContext.DropDownCategories.ToList();
+                foreach (DropDownCategory newRec in newCategories)
+                {
+                    int oldPracticeID = oldCategories.FirstOrDefault(p => p.CategoryName == newRec.CategoryName).CategoryID;
+                    string qry = $"UPDATE \"TalentManager\".\"DropDownCategory\" SET \"CategoryID\"={oldPracticeID} WHERE \"CategoryID\"={newRec.CategoryID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateDropDownSubCategories()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<DropDownSubCategory> oldCategories = sqlDataContext.DropDownSubCategories.ToList();
+                // update primary column id
+                List<DropDownSubCategory> newCategories = postgressDataContext.DropDownSubCategories.ToList();
+                foreach (DropDownSubCategory newRec in newCategories)
+                {
+                    int oldPracticeID = oldCategories.FirstOrDefault(p => p.SubCategoryName == newRec.SubCategoryName).SubCategoryID;
+                    string qry = $"UPDATE \"TalentManager\".\"DropDownSubCategory\" SET \"SubCategoryID\"={oldPracticeID} WHERE \"SubCategoryID\"={newRec.SubCategoryID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdatePractices()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<Practice> oldPractices = sqlDataContext.Practices.ToList();
+                // update primary column id
+                List<Practice> newPractices = postgressDataContext.Practices.ToList();
+                foreach (Practice newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.PracticeName == newRec.PracticeName).PracticeID;
+                    string qry = $"UPDATE \"TalentManager\".\"Practice\" SET \"PracticeID\"={oldPracticeID} WHERE \"PracticeID\"={newRec.PracticeID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateSubPractices()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<SubPractice> oldPractices = sqlDataContext.SubPractices.ToList();
+                // update primary column id
+                List<SubPractice> newPractices = postgressDataContext.SubPractices.ToList();
+                foreach (SubPractice newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.SubPracticeName == newRec.SubPracticeName).SubPracticeID;
+                    string qry = $"UPDATE \"TalentManager\".\"SubPractice\" SET \"SubPracticeID\"={oldPracticeID} WHERE \"SubPracticeID\"={newRec.SubPracticeID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateEmployees()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<Employee> oldPractices = sqlDataContext.Employees.ToList();
+                // update primary column id
+                List<Employee> newPractices = postgressDataContext.Employees.ToList();
+                foreach (Employee newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.EmployeeID == newRec.EmployeeID).EmployeeEntryID;
+                    string qry = $"UPDATE \"TalentManager\".\"Employee\" SET \"EmployeeEntryID\"={oldPracticeID} WHERE \"EmployeeEntryID\"={newRec.EmployeeEntryID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateAcounts()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<ProjectAccount> oldPractices = sqlDataContext.ProjectAccounts.ToList();
+                // update primary column id
+                List<ProjectAccount> newPractices = postgressDataContext.ProjectAccounts.ToList();
+                foreach (ProjectAccount newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.AccountName == newRec.AccountName).AccountID;
+                    string qry = $"UPDATE \"TalentManager\".\"ProjectAccount\" SET \"AccountID\"={oldPracticeID} WHERE \"AccountID\"={newRec.AccountID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateProjects()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<Project> oldPractices = sqlDataContext.Projects.ToList();
+                // update primary column id
+                List<Project> newPractices = postgressDataContext.Projects.ToList();
+                foreach (Project newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.ProjectName == newRec.ProjectName).ProjectID;
+                    string qry = $"UPDATE \"TalentManager\".\"Project\" SET \"ProjectID\"={oldPracticeID} WHERE \"ProjectID\"={newRec.ProjectID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
+        }
+
+        private async Task UpdateAllocations()
+        {
+            con = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["TalentDataContextPostgres"].ConnectionString);
+
+            try
+            {
+                con.Open();
+                List<ProjectAllocation> oldPractices = sqlDataContext.ProjectAllocations.ToList();
+                // update primary column id
+                List<ProjectAllocation> newPractices = postgressDataContext.ProjectAllocations.ToList();
+                foreach (ProjectAllocation newRec in newPractices)
+                {
+                    int oldPracticeID = oldPractices.FirstOrDefault(p => p.EmployeeID == newRec.EmployeeID && p.ProjectID == newRec.ProjectID).AllocationEntryID;
+                    string qry = $"UPDATE \"TalentManager\".\"ProjectAllocation\" SET \"AllocationEntryID\"={oldPracticeID} WHERE \"AllocationEntryID\"={newRec.AllocationEntryID}";
+                    Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
+                    int val = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                con.Close();
+                con.Dispose();
+            }
         }
 
         private void UpdateApplicationStatus(string message = "")

@@ -141,7 +141,7 @@
                     <li><label style="width:30px;">&nbsp;</label></li>
                     <li>
                         @{
-                            string userName = User.Identity.Name;
+                            string userName = HttpContext.Current.Application["LoggedInUser"]!=null? HttpContext.Current.Application["LoggedInUser"].ToString():HttpContext.Current.User.Identity.Name;
                             if (User.Identity.Name.Split('\\').Count() > 1)
                             {
                                 userName = User.Identity.Name.Split('\\')[1];
