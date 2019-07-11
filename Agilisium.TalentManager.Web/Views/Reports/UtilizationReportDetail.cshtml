@@ -32,8 +32,8 @@
 </script>
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3>Utilization Report</h3>
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Utilization Report</b></h3>
     </div>
     <div class="panel-body">
         @using (Html.BeginForm("UtilizationReportDetail", "Reports", new { filterType = Model.FilterType, filterValue = Model.FilterValue }))
@@ -64,7 +64,7 @@
             </table>
         }
         <div>
-            <table class="table table-striped table-condensed table-bordered">
+            <table style="width:100%" class="table table-striped table-condensed table-bordered">
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeID)
@@ -103,68 +103,68 @@
                     <th class="text-right">
                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().AllocationEndDate)
                     </th>
-                    <th class="text-right">
+                    <th>
                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().Comments)
                     </th>
                 </tr>
 
                 @foreach (var item in Model.Allocations)
                 {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmployeeID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmployeeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PrimarySkills)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SecondarySkills)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BusinessUnit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.POD)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProjectName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProjectManager)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AccountName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AllocationType)
-                    </td>
-                    <td class="text-right">
-                        @if (item.AllocationStartDate.HasValue)
-                        {
-                            <text>@item.AllocationStartDate.Value.ToString("dd/MMM/yyyy")</text>
-                        }
-                        else
-                        {
-                            <text> &nbsp;</text>
-                        }
-                    </td>
-                    <td class="text-right">
-                        @if (item.AllocationEndDate.HasValue)
-                        {
-                            <text>@item.AllocationEndDate.Value.ToString("dd/MMM/yyyy")</text>
-                        }
-                        else
-                        {
-                            <text> &nbsp;</text>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Comments)
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrimarySkills)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondarySkills)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BusinessUnit)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.POD)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProjectManager)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AllocationType)
+                        </td>
+                        <td class="text-right">
+                            @if (item.AllocationStartDate.HasValue)
+                            {
+                                <text>@item.AllocationStartDate.Value.ToString("dd/MMM/yyyy")</text>
+                            }
+                            else
+                            {
+                                <text> &nbsp;</text>
+                            }
+                        </td>
+                        <td class="text-right">
+                            @if (item.AllocationEndDate.HasValue)
+                            {
+                                <text>@item.AllocationEndDate.Value.ToString("dd/MMM/yyyy")</text>
+                            }
+                            else
+                            {
+                                <text> &nbsp;</text>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comments)
+                        </td>
+                    </tr>
                 }
 
             </table>

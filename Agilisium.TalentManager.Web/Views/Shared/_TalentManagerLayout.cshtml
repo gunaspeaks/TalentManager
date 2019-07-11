@@ -122,14 +122,14 @@
                     }
 
                     @*<li class="dropdown">
-                                <a href="#" data-toggle="dropdown" style="font-size:small;" class="dropdown-toggle">Reports <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Manager-Wise Allocation Report", "ManagerWiseAllocations", "Reports")</li>
-                                    <li>@Html.ActionLink("Billability-Wise Allocation Report", "Index", "Reports")</li>
-                                    @*<li>@Html.ActionLink("Practices", "Index", "Practice")</li>
-                                    <li>@Html.ActionLink("Sub Practices", "Index", "SubPractice")</li>
-                        </ul>
-                        </li>*@
+                    <a href="#" data-toggle="dropdown" style="font-size:small;" class="dropdown-toggle">Reports <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Manager-Wise Allocation Report", "ManagerWiseAllocations", "Reports")</li>
+                        <li>@Html.ActionLink("Billability-Wise Allocation Report", "Index", "Reports")</li>
+                        @*<li>@Html.ActionLink("Practices", "Index", "Practice")</li>
+                        <li>@Html.ActionLink("Sub Practices", "Index", "SubPractice")</li>
+            </ul>
+            </li>*@
                     @if (Request.Url.ToString().ToLower().Contains("reports"))
                     {
                         <li>@Html.ActionLink("Reports", "Index", "Reports", new { @style = "color:GreenYellow" })</li>
@@ -141,7 +141,7 @@
                     <li><label style="width:30px;">&nbsp;</label></li>
                     <li>
                         @{
-                            string userName = HttpContext.Current.Application["LoggedInUser"]!=null? HttpContext.Current.Application["LoggedInUser"].ToString():HttpContext.Current.User.Identity.Name;
+                            string userName = HttpContext.Current.Application["LoggedInUser"] != null ? HttpContext.Current.Application["LoggedInUser"].ToString() : HttpContext.Current.User.Identity.Name;
                             if (User.Identity.Name.Split('\\').Count() > 1)
                             {
                                 userName = User.Identity.Name.Split('\\')[1];
@@ -154,6 +154,7 @@
                     </li>
                     <li>@Html.ActionLink("+", "List", "DevReq", null, new { @style = "font-size:20px; color:Green" })</li>
                 </ul>
+                @*@Html.Partial("_LoginPartial")*@
             </div>
         </div>
     </div>

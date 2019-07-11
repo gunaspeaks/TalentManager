@@ -7,8 +7,8 @@
     <ProjectGuid>{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Agilisium.TalentManager.ReportingService</RootNamespace>
-    <AssemblyName>Agilisium.TalentManager.ReportingService</AssemblyName>
+    <RootNamespace>Agilisium.TalentManager.ServiceProcessors</RootNamespace>
+    <AssemblyName>Agilisium.TalentManager.ServiceProcessors</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllocationsUpdaterServiceProcessor.cs" />
     <Compile Include="ContractorRequestProcessor.cs" />
-    <Compile Include="TalentManagerEmailProcessor.cs" />
+    <Compile Include="AllocationsMessengerServiceProcessor.cs" />
+    <Compile Include="ProcessorHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

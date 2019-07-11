@@ -33,13 +33,11 @@
 </script>
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <table style="width:100%">
-            <tr><td><h3><b>Project Allocations History</b></h3></td></tr>
-        </table>
+    <div class="panel-heading" style="text-align:center">
+        <h3><b>Project Allocations History</b></h3>
     </div>
     <div class="panel-body">
-        @using (Html.BeginForm("AllocationHistory", "Allocation", new { filterType = Model.FilterType, filterValue = Model.FilterValue, sortBy=Model.SortBy, sortType=Model.SortType }))
+        @using (Html.BeginForm("AllocationHistory", "Allocation", new { filterType = Model.FilterType, filterValue = Model.FilterValue, sortBy = Model.SortBy, sortType = Model.SortType }))
         {
             <table style=" align-self:center; width:550px">
                 <tr>
@@ -317,7 +315,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.ActionLink(item.EmployeeName, "Edit", new { id = item.AllocationEntryID })
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ProjectName)

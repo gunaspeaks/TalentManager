@@ -33,12 +33,16 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public bool Exists(string itemName)
         {
-            return Entities.Any(e => e.FirstName.ToLower() == itemName.ToLower() && e.IsDeleted == false);
+            return Entities.Any(e => e.FirstName.ToLower() == itemName.ToLower() 
+                && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                && e.IsDeleted == false);
         }
 
         public bool Exists(int id)
         {
-            return Entities.Any(e => e.EmployeeEntryID == id && e.IsDeleted == false);
+            return Entities.Any(e => e.EmployeeEntryID == id 
+            && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+            && e.IsDeleted == false);
         }
 
         public EmployeeDto GetByID(int id)
@@ -115,8 +119,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             List<EmployeeDto> employees = new List<EmployeeDto>();
 
             List<Employee> pastEmployees = (from emp in Entities
-                                            where emp.LastWorkingDay.HasValue == true
-                                            || emp.IsDeleted == true
+                                            where emp.IsDeleted == true || (emp.LastWorkingDay.HasValue == true && emp.LastWorkingDay.Value < DateTime.Now)
                                             select emp).ToList();
 
             foreach (Employee emp in pastEmployees)
@@ -149,7 +152,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public int GetPastEmployeesCount()
         {
-            return Entities.Count(emp => emp.LastWorkingDay.HasValue == true || emp.IsDeleted == true);
+            return Entities.Count(emp => emp.IsDeleted == true || (emp.LastWorkingDay.HasValue == true && emp.LastWorkingDay.Value >= DateTime.Now));
         }
 
         public bool IsDuplicateName(string firstName, string lastName)
@@ -191,7 +194,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             DataContext.Entry(buzEntity).State = EntityState.Modified;
             DataContext.SaveChanges();
 
-            UpdateEmployeeIDTracker(entity.EmploymentTypeID, entity.EmployeeID);
+            //UpdateEmployeeIDTracker(entity.EmploymentTypeID, entity.EmployeeID);
         }
 
         public void Delete(EmployeeDto entity)
@@ -214,7 +217,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
         {
             return (from emp in Entities
                     join sp in DataContext.SubPractices on emp.SubPracticeID equals sp.SubPracticeID
-                    where emp.IsDeleted == false && sp.SubPracticeName == "Project Management"
+                    where emp.IsDeleted == false && sp.SubPracticeName == "Project Management" 
+                    && (emp.LastWorkingDay.HasValue == false || (emp.LastWorkingDay.HasValue == true && emp.LastWorkingDay.Value >= DateTime.Now))
                     orderby emp.EmployeeID
                     select new EmployeeDto
                     {
@@ -276,6 +280,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             else
             {
                 return Entities.Count(e => e.IsDeleted == false
+                && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
                 && (e.FirstName.ToLower().StartsWith(searchText.ToLower())
                 || e.LastName.ToLower().StartsWith(searchText.ToLower())));
             }
@@ -283,7 +288,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<PracticeHeadCountDto> GetPracticeWiseHeadCount()
         {
-            if(DataContext.IsPostgresDB)
+            if (DataContext.IsPostgresDB)
             {
                 return postgresSqlProcessor.GetPracticeWiseHeadCountPostgres();
             }
@@ -346,19 +351,24 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public int PracticeWiseRecordsCount(int practiceID)
         {
-            return Entities.Count(e => e.IsDeleted == false && e.PracticeID == practiceID);
+            return Entities.Count(e => e.IsDeleted == false
+                && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                && e.PracticeID == practiceID);
         }
 
         public int SubPracticeWiseRecordsCount(int subPracticeID)
         {
-            return Entities.Count(e => e.IsDeleted == false && e.SubPracticeID == subPracticeID);
+            return Entities.Count(e => e.IsDeleted == false
+                && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                && e.SubPracticeID == subPracticeID);
         }
 
         public ResourceCountDto GetEmployeesCountSummary()
         {
             ResourceCountDto dto = new ResourceCountDto
             {
-                TotalCount = Entities.Count(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false),
+                TotalCount = Entities.Count(e => e.IsDeleted == false 
+                    && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))),
                 DeliveryCount = GetEmployeesCountByBU(BusinessUnit.Delivery),
                 BoCount = GetEmployeesCountByBU(BusinessUnit.BusinessOperations),
                 BdCount = GetEmployeesCountByBU(BusinessUnit.BusinessDevelopment),
@@ -436,6 +446,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                         from rmd in rme.DefaultIfEmpty()
 
                         where emp.IsDeleted == false && emp.LastWorkingDay.HasValue == false
+                        || (emp.LastWorkingDay.HasValue == true && emp.LastWorkingDay.Value >= DateTime.Now)
                         orderby emp.EmployeeID
                         select new EmployeeDto
                         {
@@ -513,14 +524,18 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return (from e in Entities
                     join a in DataContext.ProjectAllocations on e.EmployeeEntryID equals a.EmployeeID
                     where a.AllocationTypeID == (int)allocationType
-                    && e.LastWorkingDay.HasValue == false && e.IsDeleted == false && a.IsDeleted == false
+                    && e.LastWorkingDay.HasValue == false 
+                    && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                    && e.IsDeleted == false && a.IsDeleted == false
                     && a.AllocationEndDate >= DateTime.Now
                     select a.EmployeeID).Distinct().Count();
         }
 
         private int GetEmployeesCountByBU(BusinessUnit bu)
         {
-            return Entities.Count(e => e.LastWorkingDay.HasValue == false && e.IsDeleted == false && e.BusinessUnitID == (int)bu);
+            return Entities.Count(e => e.IsDeleted == false
+                && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                && e.BusinessUnitID == (int)bu);
         }
 
         #endregion

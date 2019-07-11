@@ -64,7 +64,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                                     IsReserved = p.IsReserved,
                                                     ManagerID = p.ManagerID,
                                                     ManagerName = string.IsNullOrEmpty(ed.FirstName) ? "" : ed.LastName + ", " + ed.FirstName,
-                                                    HeadCount = DataContext.Employees.Count(h => h.PracticeID == p.PracticeID)
+                                                    HeadCount = DataContext.Employees.Count(h => h.PracticeID == p.PracticeID && h.IsDeleted == false && h.LastWorkingDay.HasValue == false)
                                                 };
 
             if (pageSize <= 0 || pageNo < 1)

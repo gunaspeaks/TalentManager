@@ -129,5 +129,10 @@ namespace Agilisium.TalentManager.Service.Concreate
         {
             return repository.GetBillabilityWiseAllocationDetail(filterBy, filterValue).ToList();
         }
+
+        public List<UtilizedDaysSummaryDto> GetUtilizedDaysSummary(string filterBy, string filterValue, string sortBy, string sortType)
+        {
+            return repository.GetUtilizedDaysSummary(filterBy, filterValue, sortBy, sortType).ToList();
+        }
     }
 }

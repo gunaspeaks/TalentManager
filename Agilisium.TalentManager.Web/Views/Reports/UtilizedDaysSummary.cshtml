@@ -1,0 +1,157 @@
+﻿@model Agilisium.TalentManager.Web.Models.UtilizedDaysViewModel
+
+@{
+    ViewBag.Title = "Resource Allocation Aging Report";
+}
+
+
+<div class="panel panel-default">
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Resource Allocation Aging Report</b></h3>@Html.ActionLink("(Download as CSV Format)", "DownloadUtilizedDaysSummary", new { filterType = Model.FilterType, filterValue = Model.FilterValue })
+    </div>
+    <div class="panel-body">
+        <table style="width:90%" class="table table-striped table-condensed table-bordered">
+            <tr>
+                <th>
+                    @if (String.Compare(Model.SortBy, "ename", true) == 0)
+                    {
+                        if (String.Compare(Model.SortType, "asc", true) == 0)
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="ename" , sortType="desc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeName).ToString()
+                                    <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="ename" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeName).ToString()
+                                    <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="ename" , sortType="asc" })">
+                            <div style="color:darkgreen;">
+                                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeName).ToString()
+                            </div>
+                        </a>
+                    }
+                </th>
+                <th class="text-center">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().EmployeeID)
+                </th>
+                <th>
+                    @if (String.Compare(Model.SortBy, "pod", true) == 0)
+                    {
+                        if (String.Compare(Model.SortType, "asc", true) == 0)
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="pod" , sortType="desc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().PracticeName).ToString()
+                                    <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="pod" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().PracticeName).ToString()
+                                    <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="pod" , sortType="asc" })">
+                            <div style="color:darkgreen;">
+                                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().PracticeName).ToString()
+                            </div>
+                        </a>
+                    }
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().DateOfJoin)
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().LastAllocatedDate)
+                </th>
+                <th class="text-right">
+                    @if (String.Compare(Model.SortBy, "aged", true) == 0)
+                    {
+                        if (String.Compare(Model.SortType, "asc", true) == 0)
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="aged" , sortType="desc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().AgingDays).ToString()
+                                    <img src="~/Content/Images/num-sort-desc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="aged" , sortType="asc" })">
+                                <div style="color:darkgreen;">
+                                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().AgingDays).ToString()
+                                    <img src="~/Content/Images/num-sort-asc.png" style="height:20px; width:20px" />
+                                </div>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UtilizedDaysSummary", "Reports", new { sortBy="aged" , sortType="asc" })">
+                            <div style="color:darkgreen;">
+                                @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().AgingDays).ToString()
+                            </div>
+                        </a>
+                    }
+                </th>
+                <th class="text-right">
+                    @Html.DisplayNameFor(model => model.Employees.FirstOrDefault().AnyAllocation)
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Employees)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                    </td>
+                    <td class="text-center">
+                        @Html.ActionLink(item.EmployeeID, "Edit", "Employee", new { id = item.EmployeeEntryID }, null)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PracticeName)
+                    </td>
+                    <td class="text-right">
+                        <text>@item.DateOfJoin.ToString("dd/MMM/yyyy")</text>
+                    </td>
+                    <td class="text-right">
+                        @if (item.LastAllocatedDate.HasValue)
+                        {
+                            <text>@item.LastAllocatedDate.Value.ToString("dd/MMM/yyyy")</text>
+                        }
+                        else
+                        {
+                            <item>&nbsp;</item>
+                        }
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.AgingDays)
+                    </td>
+                    <td class="text-right">
+                        @Html.DisplayFor(modelItem => item.AnyAllocation)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

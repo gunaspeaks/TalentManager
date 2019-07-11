@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<Agilisium.TalentManager.Web.Models.CustomAllocationModel>
 <hr />
-<div>
-    <table width="100%">
-        <tr><td><h3><b>Current Allocations  for the Selected Employee</b></h3></td></tr>
-    </table>
+<div style="text-align:center" class="panel-heading">
+    <h3><b>Current Allocations for the Selected Employee</b></h3>
 </div>
 @if (Model.Count() == 0)
 {

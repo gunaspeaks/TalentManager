@@ -433,6 +433,32 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return newProjectCode.ToUpper();
         }
 
+        public ProjectDto GetBenchProjectByPractice(int practiceID)
+        {
+            return (from p in Entities
+                    where p.PracticeID == practiceID && p.IsDeleted == false && p.ProjectName.ToLower().Contains("bench")
+                    select new ProjectDto
+                    {
+                        BusinessUnitID = p.BusinessUnitID,
+                        DeliveryManagerID = p.DeliveryManagerID,
+                        EndDate = p.EndDate,
+                        PracticeID = p.PracticeID,
+                        ProjectCode = p.ProjectCode,
+                        ProjectID = p.ProjectID,
+                        ProjectManagerID = p.ProjectManagerID,
+                        ProjectName = p.ProjectName,
+                        ProjectTypeID = p.ProjectTypeID,
+                        SubPracticeID = p.SubPracticeID,
+                        Remarks = p.Remarks,
+                        StartDate = p.StartDate,
+                        IsSowAvailable = p.IsSowAvailable,
+                        SowEndDate = p.SowEndDate,
+                        SowStartDate = p.SowStartDate,
+                        ProjectAccountID = p.ProjectAccountID,
+                        IsReserved = p.IsReserved
+                    }).FirstOrDefault();
+        }
+
         public bool IsReservedEntry(int projectID)
         {
             return Entities.Any(c => c.IsDeleted == false
@@ -514,5 +540,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
         bool IsReservedEntry(int projectID);
 
         IEnumerable<ProjectDto> GetAllByManagerID(int managerID);
+
+        ProjectDto GetBenchProjectByPractice(int practiceID);
     }
 }

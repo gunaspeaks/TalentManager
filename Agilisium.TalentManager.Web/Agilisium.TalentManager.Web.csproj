@@ -239,6 +239,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AllocationController.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Models\DevelopmentRequestViewModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
     <Compile Include="Models\EmployeeQuickModel.cs" />
+    <Compile Include="Models\UtilizedDaysViewModel.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\ResourceCountModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -304,6 +306,7 @@
     <Compile Include="Models\SubPracticeModel.cs" />
     <Compile Include="Models\SubPracticeViewModel.cs" />
     <Compile Include="Models\UtilizationReportDetailViewModel.cs" />
+    <Compile Include="Models\UtilizedDaysSummaryModel.cs" />
     <Compile Include="Models\VendorSearchResultViewModel.cs" />
     <Compile Include="Models\VendorSpecializedPartnerModel.cs" />
     <Compile Include="Models\VendorViewModel.cs" />
@@ -318,6 +321,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\dashboard.css" />
+    <Content Include="Content\EmailTemplates\NewAllocationEmailTemplate.html" />
+    <Content Include="Content\EmailTemplates\AllocationFailureEmailTemplate.html" />
+    <Content Include="Content\EmailTemplates\AllocationEndingEmailTemplate.html" />
     <Content Include="Content\EmailTemplates\ResourceAllocationReportTemplate.html" />
     <Content Include="Content\EmailTemplates\ContractorRequestEmailTemplate.html" />
     <Content Include="Content\error-styles.css" />
@@ -407,7 +413,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -496,6 +504,7 @@
     <Content Include="Views\DevReq\Edit.cshtml" />
     <Content Include="Views\DevReq\List.cshtml" />
     <Content Include="Views\Home\UtilizationDashboard.cshtml" />
+    <Content Include="Views\Reports\UtilizedDaysSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -530,10 +539,6 @@
     <ProjectReference Include="..\Agilisium.TalentManager.PostgresModel\Agilisium.TalentManager.PostgresModel.csproj">
       <Project>{472abbe3-7cdd-4640-8225-cee8d0ede62d}</Project>
       <Name>Agilisium.TalentManager.PostgresModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Agilisium.TalentManager.ReportingService\Agilisium.TalentManager.ReportingService.csproj">
-      <Project>{bf5ce7aa-78f3-4d62-b200-82cc38cfbab2}</Project>
-      <Name>Agilisium.TalentManager.ReportingService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Agilisium.TalentManager.Service\Agilisium.TalentManager.Service.csproj">
       <Project>{e93e7895-5291-4d88-a402-8e0e3b49ad12}</Project>

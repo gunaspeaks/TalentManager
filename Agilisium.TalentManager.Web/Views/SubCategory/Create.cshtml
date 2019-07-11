@@ -1,51 +1,49 @@
 ﻿@model Agilisium.TalentManager.Web.Models.SubCategoryModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create a New Sub-Category";
 }
 <link href="~/Content/error-styles.css" rel="stylesheet" />
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <table width="100%">
-            <tr><td><h3><b>Create a New Sub-Category</b></h3></td></tr>
-        </table>
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Create a New Sub-Category</b></h3>
     </div>
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-    <div class="panel-body">
-        @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
-        @foreach (var property in ViewData.ModelMetadata.Properties)
-        {
-            if (property.PropertyName != "SubCategoryID" &&
-                property.PropertyName != "IsReserved" &&
-                property.PropertyName != "CategoryName" &&
-                property.PropertyName != "LoggedInUserName")
+        <div class="panel-body">
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            @foreach (var property in ViewData.ModelMetadata.Properties)
             {
-                <div class="form-group">
-                    <label>@(property.DisplayName ?? property.PropertyName) </label>
-                    @if (property.PropertyName == "CategoryID")
-                    {
-                        @Html.DropDownList("CategoryID", (IEnumerable<SelectListItem>)ViewBag.CategoryListItems, null, new { @class = "form-control" });
-                    }
-                    else if (property.PropertyName == "Description")
-                    {
-                        @Html.TextArea(property.PropertyName, null, new { @class = "form-control", rows = 2 })
-                    }
-                    else
-                    {
-                        @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
-                    }
-                </div>
+                if (property.PropertyName != "SubCategoryID" &&
+                    property.PropertyName != "IsReserved" &&
+                    property.PropertyName != "CategoryName" &&
+                    property.PropertyName != "LoggedInUserName")
+                {
+                    <div class="form-group">
+                        <label>@(property.DisplayName ?? property.PropertyName) </label>
+                        @if (property.PropertyName == "CategoryID")
+                        {
+                            @Html.DropDownList("CategoryID", (IEnumerable<SelectListItem>)ViewBag.CategoryListItems, null, new { @class = "form-control" });
+                        }
+                        else if (property.PropertyName == "Description")
+                        {
+                            @Html.TextArea(property.PropertyName, null, new { @class = "form-control", rows = 2 })
+                        }
+                        else
+                        {
+                            @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                        }
+                    </div>
+                }
             }
-        }
-        <div class="panel-footer">
-            <input type="submit" value="Save" class="btn btn-primary" />
-            @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            <div class="panel-footer">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
         </div>
-    </div>
     }
 </div>

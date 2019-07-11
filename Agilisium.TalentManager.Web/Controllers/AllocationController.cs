@@ -28,7 +28,7 @@ namespace Agilisium.TalentManager.Web.Controllers
         }
 
         // GET: Project
-        public ActionResult List(string filterType, string filterValue, string sortBy = "EmpName", string sortType = "asc", int page = 1)
+        public ActionResult List(string filterType, string filterValue, string sortBy = "empname", string sortType = "asc", int page = 1)
         {
             AllocationViewModel viewModel = new AllocationViewModel()
             {
@@ -237,7 +237,7 @@ namespace Agilisium.TalentManager.Web.Controllers
 
                     ProjectAllocationDto projectDto = Mapper.Map<AllocationModel, ProjectAllocationDto>(allocation);
                     allocationService.Update(projectDto);
-                    DisplaySuccessMessage($"Project allocation details have been updated for {allocation.EmployeeName}");
+                    DisplaySuccessMessage($"Project allocation details have been updated.");
                     return RedirectToAction("List");
                 }
             }

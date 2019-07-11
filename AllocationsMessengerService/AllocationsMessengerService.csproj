@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F1E3658-85B8-499F-892A-23463CFF6419}</ProjectGuid>
+    <ProjectGuid>{0C711E2B-7AE7-45B2-9AEA-95E580C54910}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Agilisium.TalentManager.WindowServices</RootNamespace>
-    <AssemblyName>Agilisium.TalentManager.WindowServices</AssemblyName>
+    <RootNamespace>AllocationsMessengerService</RootNamespace>
+    <AssemblyName>AllocationsMessengerService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,10 +34,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.2.2.7\lib\net45\Mono.Security.dll</HintPath>
@@ -63,19 +66,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllocationsMessengerService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AllocationsMessengerService.Designer.cs">
+      <DependentUpon>AllocationsMessengerService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
-    <Compile Include="TalentManagerEmailService.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="TalentManagerEmailService.Designer.cs">
-      <DependentUpon>TalentManagerEmailService.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,22 +86,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Agilisium.TalentManager.ServiceProcessors\Agilisium.TalentManager.ServiceProcessors.csproj">
+      <Project>{bf5ce7aa-78f3-4d62-b200-82cc38cfbab2}</Project>
+      <Name>Agilisium.TalentManager.ServiceProcessors</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AllocationsMessengerService.resx">
+      <DependentUpon>AllocationsMessengerService.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TalentManagerEmailService.resx">
-      <DependentUpon>TalentManagerEmailService.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Agilisium.TalentManager.ReportingService\Agilisium.TalentManager.ReportingService.csproj">
-      <Project>{bf5ce7aa-78f3-4d62-b200-82cc38cfbab2}</Project>
-      <Name>Agilisium.TalentManager.ReportingService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Agilisium.TalentManager.ServerUtilities\Agilisium.TalentManager.ServerUtilities.csproj">
-      <Project>{6ff908c2-833e-4a3b-a936-21e36ed88b3f}</Project>
-      <Name>Agilisium.TalentManager.ServerUtilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

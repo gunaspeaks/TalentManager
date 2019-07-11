@@ -1,5 +1,5 @@
-﻿using Agilisium.TalentManager.Model.Configuration;
-using Agilisium.TalentManager.Model.Entities;
+﻿using Agilisium.TalentManager.Model.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
 namespace Agilisium.TalentManager.PostgresModel
@@ -8,8 +8,10 @@ namespace Agilisium.TalentManager.PostgresModel
     {
         public bool IsPostgresDB { get; set; }
 
-        public TalentManagerDataContext():base(nameOrConnectionString: "TalentDataContextPostgres") {
+        public TalentManagerDataContext() : base(nameOrConnectionString: "TalentDataContextPostgres")
+        {
             IsPostgresDB = true;
+            
             //Database.SetInitializer<TalentManagerDataContext>(null);
         }
 
@@ -39,6 +41,8 @@ namespace Agilisium.TalentManager.PostgresModel
 
         public DbSet<ProjectAccount> ProjectAccounts { get; set; }
 
+        public DbSet<NotificationsTracker> AlertNotifications { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Contractor>().ToTable("Contractor", "TalentManager");
@@ -54,6 +58,7 @@ namespace Agilisium.TalentManager.PostgresModel
             modelBuilder.Entity<SubPractice>().ToTable("SubPractice", "TalentManager");
             modelBuilder.Entity<SystemSetting>().ToTable("SystemSettings", "TalentManager");
             modelBuilder.Entity<Vendor>().ToTable("Vendor", "TalentManager");
+            modelBuilder.Entity<NotificationsTracker>().ToTable("AlertNotificationsTracker", "TalentManager");
         }
     }
 }

@@ -1,0 +1,182 @@
+﻿<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>RMT Alert - New Allocation Notification</title>
+    <style>
+        .dashboard {
+            float: left;
+        }
+
+            .dashboard .dashboard3col {
+                float: left;
+            }
+
+        .dashboardCol {
+            float: left;
+            width: 80%;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .dashboardItem {
+            margin: 10px 10px 10px 10px;
+            border: solid 2px gray;
+            border-radius: 25px;
+        }
+
+        .dashboardItemHeader {
+            font-size: 1.5em;
+            font-weight: bold;
+            padding: 10px 15px;
+            background-color: gray;
+            border-radius: 22px;
+            text-align: center;
+        }
+
+        .dashboardItemBody {
+            margin: 10px;
+            overflow: hidden;
+        }
+
+        .dashboardFooter {
+            clear: both;
+            width: 100%;
+            background-color: Red;
+        }
+
+        /* ======== Table ======== */
+        .tbl {
+            table-layout: auto;
+            border-collapse: collapse;
+        }
+
+            .tbl thead th {
+                border-bottom: solid 1px gray;
+                background-color: #ededed;
+                padding: 5px;
+                text-align: left;
+                color: #9c9c9c;
+                font-size: 1em;
+                font-weight: normal;
+            }
+
+            .tbl tbody td {
+                border-bottom: solid 1px gray;
+                padding: 5px;
+                color: black;
+                font-size: 1.1em
+            }
+
+        .pageHeader {
+            height: 20px;
+            background-color: #056cd5;
+            padding: 10px 10px;
+            margin-bottom: 10px;
+            color: White;
+            position: relative;
+        }
+
+            .pageHeader h1 {
+                font: normal 1.2em Arial;
+                color: White;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            .pageHeader .platformular {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+
+        .pageBody {
+            margin: 0 10px;
+        }
+
+        .pageFooter {
+            clear: both;
+            padding-top: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            color: #686868;
+            margin: 25px 0 0 0;
+            border-top: solid 1px #e7e7e7;
+        }
+    </style>
+</head>
+<body style="background-color:Highlight">
+    <div align="left">
+        <table border=0 cellspacing=0 cellpadding=0>
+            <tr>
+                <td>
+                    <p>
+                        All,<br />
+                        Our resource <b>__RESOURCE_NAME__</b> has been moved to <b>__PROJECT_NAME__</b> project. Find below the new allocation details:
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign=top style='background:Highlight;padding:0in 0in 0in .2in'>
+                    <div class="dashboard3Col">
+                        <div class="dashboardCol">
+                            <div class="dashboardItem">
+                                <div class="dashboardItemHeader">New Allocation Details</div>
+                                <div class="dashboardItemBody">
+                                    <table class="tbl">
+                                        <tr>
+                                            <td>
+                                                Project Name
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">__PROJECT_NAME__</td>
+                                        </tr>
+                                        <tr>
+
+                                            <td>
+                                                Resource Name
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                <a href="http://52.88.66.251/agilisiumsoft/allocation/List?filterType=emp&filterValue=__RESOURCE_ID__&sortBy=empname&sortType=asc"  style="color:navy;">__RESOURCE_NAME__</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Allocation Start Date
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                __START_DATE__
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Allocation End Date
+                                            </td>
+                                            <td>:&nbsp;</td>
+                                            <td class="text-right">
+                                                __END_DATE__
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br />
+                    <br />
+                    <b>Note:</b> This is a system generated email, for any discrepancy, please contact Satish Srinivasan.
+                    <hr />
+                    Regards,<br />Agilisium Talent Management Team.
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

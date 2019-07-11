@@ -6,31 +6,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Agilisium.TalentManager.ReportingService
+namespace Agilisium.TalentManager.ServiceProcessors
 {
-    public class TalentManagerEmailProcessor
+    public class AllocationsMessengerServiceProcessor
     {
         private readonly AllocationRepository allocationService;
         private readonly EmployeeRepository empService;
-        private SystemSettingRepository settingsService;
 
-        public TalentManagerEmailProcessor()
+        public AllocationsMessengerServiceProcessor()
         {
 
             allocationService = new AllocationRepository();
             empService = new EmployeeRepository();
-            settingsService = new SystemSettingRepository();
         }
 
         public void GenerateResourceAllocationReport()
         {
-            string emailClientIP = settingsService.GetSystemSettingValue("Email Proxy Server");
-            string ownerEmailID = settingsService.GetSystemSettingValue("Contractor Request Email Owner");
-            string templateFilePath = settingsService.GetSystemSettingValue("Email Templates Folder Path") + "\\ResourceAllocationReportTemplate.html";
-            string toEmailID = settingsService.GetSystemSettingValue("Agilisium Managers Email Group");
-            string outlookPwd = settingsService.GetSystemSettingValue("Owner's Outlook EMAIL Password");
-            string emailSubject = "Agilisium - Resource Allocation Report";
-            string bccEmailIDs = settingsService.GetSystemSettingValue("Agilisium Managers BCC Email Group");
+            string emailClientIP = ProcessorHelper.GetSettingsValue(ProcessorHelper.EMAIL_PROXY_SERVER);
+            string ownerEmailID = ProcessorHelper.GetSettingsValue(ProcessorHelper.CONTRACTOR_REQ_EMAIL_OWNER);
+            string templateFilePath = ProcessorHelper.GetSettingsValue(ProcessorHelper.TEMPLATE_FOLDER_PATH) + "\\ResourceAllocationReportTemplate.html";
+            string toEmailID = ProcessorHelper.GetSettingsValue(ProcessorHelper.MANAGERS_EMAIL_GROUP);
+            string outlookPwd = ProcessorHelper.GetSettingsValue(ProcessorHelper.EMAIL_OWNERS_PASSWORD);
+            string emailSubject = "Agilisium - Resource Allocation Report (From EC2)";
+            string bccEmailIDs = ProcessorHelper.GetSettingsValue(ProcessorHelper.CONTRACTOR_REQ_BCC_RECEIPIENTS);
             EmailHandler emailHandler = new EmailHandler(ownerEmailID, outlookPwd);
             string emailContent = GenerateEmailBody(templateFilePath);
             string attachmentFilePath = GenerateAllocationReportAsCsvFile();
@@ -52,8 +50,8 @@ namespace Agilisium.TalentManager.ReportingService
             emailBody.Replace("__BILLABLE__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Billable")?.NumberOfEmployees.ToString());
             emailBody.Replace("__COMMITED_BUFFER__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Committed Buffer")?.NumberOfEmployees.ToString());
             emailBody.Replace("__NON_COMMITED_BUFFER__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Non-Committed Buffer")?.NumberOfEmployees.ToString());
-            emailBody.Replace("__NOT_ALLOCATED_YET_DELIVERY__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Not Allocated Yet (Delivery)")?.NumberOfEmployees.ToString());
-            emailBody.Replace("__NOT_ALLOCATED_YET_OTHERS__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Not Allocated Yet (Others)")?.NumberOfEmployees.ToString());
+            emailBody.Replace("__NOT_ALLOCATED_YET_DELIVERY__", allocationSummary.FirstOrDefault(e => e.AllocationType == "Not Allocated - Delivery")?.NumberOfEmployees.ToString());
+            emailBody.Replace("__NOT_ALLOCATED_YET_OTHERS__", allocationSummary.FirstOrDefault(e => e.AllocationType == "BD & BO")?.NumberOfEmployees.ToString());
             return emailBody.ToString();
         }
 

@@ -5,7 +5,9 @@ using Agilisium.TalentManager.Web.Models;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Agilisium.TalentManager.Web.Controllers
@@ -328,6 +330,37 @@ namespace Agilisium.TalentManager.Web.Controllers
         {
             EmployeeDto emp = empService.GetEmployee(id);
             return Json(emp);
+        }
+
+        public FileStreamResult DownloadAllEmployees(string filterType, string filterValue)
+        {
+            StringBuilder recordString = new StringBuilder($"Employee ID,Employee Name,Employee Type,Business Unit,POD,Competency,Date of Join,Last Working Day,Primary Skills,Secondary Skills,Reporting Manager{Environment.NewLine}");
+            try
+            {
+                List<EmployeeDto> employees = empService.GetAllEmployees("");
+                foreach (EmployeeDto dto in employees)
+                {
+                    recordString.Append($"{dto.EmployeeID},");
+                    recordString.Append($"{dto.FirstName} {dto.LastName},");
+                    recordString.Append($"{dto.EmploymentTypeName},");
+                    recordString.Append($"{dto.BusinessUnitName},");
+                    recordString.Append($"{dto.PracticeName},");
+                    recordString.Append($"{dto.SubPracticeName},");
+                    recordString.Append($"{dto.DateOfJoin.ToString("dd/MMM/yyyy")},");
+                    recordString.Append($"{dto.LastWorkingDay?.ToString("dd/MMM/yyyy")},");
+                    recordString.Append($"{dto.PrimarySkills},");
+                    recordString.Append($"{dto.SecondarySkills},");
+                    recordString.Append($"{dto.ReportingManagerName}{Environment.NewLine}");
+                }
+
+            }
+            catch (Exception exp)
+            {
+                DisplayLoadErrorMessage(exp);
+            }
+            byte[] byteArr = Encoding.ASCII.GetBytes(recordString.ToString());
+            MemoryStream stream = new MemoryStream(byteArr);
+            return File(stream, "application/vnd.ms-excel", $"Employees As On{DateTime.Now.Year-DateTime.Now.Month-DateTime.Now.Day}.csv");
         }
 
         private IEnumerable<EmployeeModel> GetEmployees(string searchText, int pageNo = 1)

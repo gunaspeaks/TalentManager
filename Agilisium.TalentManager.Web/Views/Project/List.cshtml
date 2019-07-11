@@ -38,10 +38,8 @@
 </script>
 
 <div class="panel panel-default">
-    <div class="panel-heading" style="align-content:center">
-        <table width="100%">
-            <tr><td><h3><b>Projects Master</b></h3></td></tr>
-        </table>
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Projects Master</b></h3>
     </div>
     <div class="panel-body">
         @using (Html.BeginForm("List", "Project", new { filterType = Model.FilterType, filterValue = Model.FilterValue }))

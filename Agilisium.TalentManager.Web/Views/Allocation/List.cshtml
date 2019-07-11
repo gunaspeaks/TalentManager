@@ -3,7 +3,9 @@
 @model Agilisium.TalentManager.Web.Models.AllocationViewModel
 
 @{
-    ViewBag.Title = "Project Allocations";
+                /**/
+
+                ViewBag.Title = "Project Allocations";
 }
 
 <script>
@@ -39,10 +41,8 @@
 </script>
 
 <div class="panel panel-default">
-    <div class="panel-heading" style="align-content:center">
-        <table width="100%">
-            <tr><td><h3><b>Project Allocations</b></h3>(@Html.ActionLink("Allocations History", "AllocationHistory", "Allocation"))</td></tr>
-        </table>
+    <div class="panel-heading" style="text-align:center">
+        <h3><b>Project Allocations</b></h3>(@Html.ActionLink("Allocations History", "AllocationHistory", "Allocation"))
     </div>
     <div class="panel-body">
         @using (Html.BeginForm("List", "Allocation", new { filterType = Model.FilterType, filterValue = Model.FilterValue, sortBy = Model.SortBy, sortType = Model.SortType }))
@@ -74,7 +74,7 @@
                         {
                             if (String.Compare(Model.SortType, "asc", true) == 0)
                             {
-                                <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="desc" })">
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="empname" , sortType="desc" })">
                                     <div style="color:darkgreen;">
                                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
                                         <img src="~/Content/Images/alph-sort-desc.png" style="height:20px; width:20px" />
@@ -83,7 +83,7 @@
                             }
                             else
                             {
-                                <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="asc" })">
+                                <a href="@Url.Action("List", "Allocation", new { sortBy="empname" , sortType="asc" })">
                                     <div style="color:darkgreen;">
                                         @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
                                         <img src="~/Content/Images/alph-sort-asc.png" style="height:20px; width:20px" />
@@ -93,7 +93,7 @@
                         }
                         else
                         {
-                            <a href="@Url.Action("List", "Allocation", new { sortBy="EmpName" , sortType="asc" })">
+                            <a href="@Url.Action("List", "Allocation", new { sortBy="empname" , sortType="asc" })">
                                 <div style="color:darkgreen;">
                                     @Html.DisplayNameFor(model => model.Allocations.FirstOrDefault().EmployeeName).ToString()
                                 </div>

@@ -42,7 +42,9 @@ namespace Agilisium.TalentManager.PostgresDbHelper
             try
             {
                 con.Open();
-                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(PostgresSqlQueries.GET_PRACTICE_WISE_HEAD_COUNT, con);
+                string qry = PostgresSqlQueries.GET_PRACTICE_WISE_HEAD_COUNT;
+                qry = qry.Replace("__CURRENT_DATE__", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}");
+                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
                 Npgsql.NpgsqlDataReader res = cmd.ExecuteReader();
 
                 if (res.HasRows)
@@ -75,7 +77,9 @@ namespace Agilisium.TalentManager.PostgresDbHelper
             try
             {
                 con.Open();
-                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(PostgresSqlQueries.GET_SUB_PRACTICE_WISE_HEAD_COUNT, con);
+                string qry = PostgresSqlQueries.GET_SUB_PRACTICE_WISE_HEAD_COUNT;
+                qry = qry.Replace("__CURRENT_DATE__", $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}");
+                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(qry, con);
                 Npgsql.NpgsqlDataReader res = cmd.ExecuteReader();
                 int? nullInt = null;
                 if (res.HasRows)

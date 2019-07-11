@@ -54,5 +54,7 @@ namespace Agilisium.TalentManager.Service.Abstract
         List<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary();
 
         List<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue);
+
+        List<UtilizedDaysSummaryDto> GetUtilizedDaysSummary(string filterBy, string filterValue, string sortBy="ename", string sortType="asc");
     }
 }

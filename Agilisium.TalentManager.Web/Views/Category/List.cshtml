@@ -3,14 +3,12 @@
 @model Agilisium.TalentManager.Web.Models.CategoryViewModel
 
 @{
-    ViewBag.Title = "All Categories";
+    ViewBag.Title = "Categories Master";
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading" style="align-content:center">
-        <table width="100%">
-            <tr><td><h3><b>All Categories</b></h3></td></tr>
-        </table>
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Categories Master</b></h3>
     </div>
     <div class="panel-body">
         <table style="width: 60%" class="table table-striped table-condensed table-bordered">
@@ -42,7 +40,7 @@
                         @using (Html.BeginForm("Delete", "Category"))
                         {
                             @Html.Hidden("id", item.CategoryID)
-                            <input type="submit" onclick = "return confirm('Are you sure you about deleting this Category?');" class="btn btn-default btn-xs" value="Delete" />
+                            <input type="submit" onclick="return confirm('Are you sure you about deleting this Category?');" class="btn btn-default btn-xs" value="Delete" />
                         }
                     </td>
                 </tr>

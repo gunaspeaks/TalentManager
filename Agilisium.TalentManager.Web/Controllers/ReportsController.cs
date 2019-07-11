@@ -107,6 +107,36 @@ namespace Agilisium.TalentManager.Web.Controllers
             return View(model);
         }
 
+        public ActionResult UtilizedDaysSummary(string filterType, string filterValue, string sortBy = "ename", string sortType = "asc")
+        {
+            UtilizedDaysViewModel model = new UtilizedDaysViewModel()
+            {
+                FilterType = filterType,
+                FilterValue = filterValue,
+                SortBy = sortBy,
+                SortType = sortType
+            };
+
+            try
+            {
+                model.FilterType = filterType;
+                model.FilterValue = filterValue;
+                List<UtilizedDaysSummaryDto> summaryDtos = allocationService.GetUtilizedDaysSummary(filterType, filterValue, sortBy, sortType);
+                model.Employees = Mapper.Map<List<UtilizedDaysSummaryDto>, List<UtilizedDaysSummaryModel>>(summaryDtos);
+                //model.FilterValueListItems = GetFilterValueListItems(filterType);
+                //LoadFilterValueListItems(filterType);
+                if (model.Employees.Count() == 0)
+                {
+                    DisplayWarningMessage("No records found");
+                }
+            }
+            catch (Exception exp)
+            {
+                DisplayLoadErrorMessage(exp);
+            }
+            return View(model);
+        }
+
         [HttpPost]
         public JsonResult LoadFilterValueListItems(string filterType)
         {
@@ -150,6 +180,33 @@ namespace Agilisium.TalentManager.Web.Controllers
                     recordString.Append($"{dto.AllocationEndDate?.ToString("dd/MMM/yyyy")},");
                     recordString.Append($"{dto.ProjectManager},");
                     recordString.Append($"{dto.Comments}{Environment.NewLine}");
+                }
+
+            }
+            catch (Exception exp)
+            {
+                DisplayLoadErrorMessage(exp);
+            }
+            byte[] byteArr = Encoding.ASCII.GetBytes(recordString.ToString());
+            MemoryStream stream = new MemoryStream(byteArr);
+            return File(stream, "application/vnd.ms-excel", "Resource Allocation Report.csv");
+        }
+
+        public FileStreamResult DownloadUtilizedDaysSummary(string filterType, string filterValue)
+        {
+            StringBuilder recordString = new StringBuilder($"Employee ID,Employee Name,POD,Date of Join,Last Allocation End Date,Last Allocation Age In Days,Number Of Allocations{Environment.NewLine}");
+            try
+            {
+                List<UtilizedDaysSummaryDto> summaryDtos = allocationService.GetUtilizedDaysSummary(filterType, filterValue);
+                foreach (UtilizedDaysSummaryDto dto in summaryDtos)
+                {
+                    recordString.Append($"{dto.EmployeeID},");
+                    recordString.Append($"{dto.EmployeeName},");
+                    recordString.Append($"{dto.PracticeName},");
+                    recordString.Append($"{dto.DateOfJoin.ToString("dd/MMM/yyyy")},");
+                    recordString.Append($"{dto.LastAllocatedDate?.ToString("dd/MMM/yyyy")},");
+                    recordString.Append($"{dto.AgingDays},");
+                    recordString.Append($"{dto.AnyAllocation}{Environment.NewLine}");
                 }
 
             }

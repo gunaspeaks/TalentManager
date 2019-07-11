@@ -6,69 +6,67 @@
 <link href="~/Content/error-styles.css" rel="stylesheet" />
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <table width="100%">
-            <tr><td><h3><b>Update Account Details</b></h3></td></tr>
-        </table>
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>Update Account Details</b></h3>
     </div>
 
     @using (Html.BeginForm())
     {
-    <div class="panel-body">
-        @Html.HiddenFor(model => model.AccountID)
-        @Html.AntiForgeryToken()
+        <div class="panel-body">
+            @Html.HiddenFor(model => model.AccountID)
+            @Html.AntiForgeryToken()
 
-        @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
+            @Html.ValidationSummary(false, "Please correct the below Validation Errors to save the data")
 
-        <div>
-            <table style="width:80%;">
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.AccountName)
-                            @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.ShortName)
-                            @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.OffshoreManagerID)
-                            @Html.DropDownListFor(model => model.OffshoreManagerID, (IEnumerable<SelectListItem>)ViewBag.ManagerListItems, "Please Select", new { @class = "form-control" })
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.OnshoreManager)
-                            @Html.EditorFor(model => model.OnshoreManager, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.CountryID)
-                            @Html.DropDownListFor(model => model.CountryID, (IEnumerable<SelectListItem>)ViewBag.CountryListItems, "Please Select", new { @class = "form-control" })
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div>
+                <table style="width:80%;">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AccountName)
+                                @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShortName)
+                                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OffshoreManagerID)
+                                @Html.DropDownListFor(model => model.OffshoreManagerID, (IEnumerable<SelectListItem>)ViewBag.ManagerListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OnshoreManager)
+                                @Html.EditorFor(model => model.OnshoreManager, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CountryID)
+                                @Html.DropDownListFor(model => model.CountryID, (IEnumerable<SelectListItem>)ViewBag.CountryListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
+            </div>
         </div>
-        <div class="panel-footer">
-            <input type="submit" value="Save" class="btn btn-primary" />
-            @Html.ActionLink("Cancel and Go Back", "List", null, new { @class = "btn btn-default" })
-        </div>
-    </div>
     }
 </div>
 

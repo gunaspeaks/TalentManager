@@ -13,13 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Dto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Model", "Agilisium.TalentManager.Model\Agilisium.TalentManager.Model.csproj", "{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ReportingService", "Agilisium.TalentManager.ReportingService\Agilisium.TalentManager.ReportingService.csproj", "{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ServerUtilities", "Agilisium.TalentManager.ServerUtilities\Agilisium.TalentManager.ServerUtilities.csproj", "{6FF908C2-833E-4A3B-A936-21E36ED88B3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.Service", "Agilisium.TalentManager.Service\Agilisium.TalentManager.Service.csproj", "{E93E7895-5291-4D88-A402-8E0E3B49AD12}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.WindowServices", "Agilisium.TalentManager.WindowServices\Agilisium.TalentManager.WindowServices.csproj", "{0F1E3658-85B8-499F-892A-23463CFF6419}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}"
 EndProject
@@ -30,6 +26,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigrationTool", "Tools\DataMigrationTool\DataMigrationTool.csproj", "{8D09095E-51BB-47B0-82F7-3B46754BAF3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.PostgresDbHelper", "Agilisium.TalentManager.PostgresDbHelper\Agilisium.TalentManager.PostgresDbHelper.csproj", "{8F414FAB-097B-4A38-A38A-876EC7D8776A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Services", "Windows Services", "{E7223067-FA8C-4E21-9A1E-C10EC777AE65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllocationsUpdaterService", "AllocationsUpdaterService\AllocationsUpdaterService.csproj", "{8EC49C94-6A3A-4006-8F14-EFE930A94DDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllocationsMessengerService", "AllocationsMessengerService\AllocationsMessengerService.csproj", "{0C711E2B-7AE7-45B2-9AEA-95E580C54910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ServiceProcessors", "Agilisium.TalentManager.ServiceProcessors\Agilisium.TalentManager.ServiceProcessors.csproj", "{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +63,6 @@ Global
 		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD86B3BA-80C3-43BE-AD22-10AA29A1C7B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FF908C2-833E-4A3B-A936-21E36ED88B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,10 +71,6 @@ Global
 		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E93E7895-5291-4D88-A402-8E0E3B49AD12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F1E3658-85B8-499F-892A-23463CFF6419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F1E3658-85B8-499F-892A-23463CFF6419}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F1E3658-85B8-499F-892A-23463CFF6419}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F1E3658-85B8-499F-892A-23463CFF6419}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -91,6 +87,18 @@ Global
 		{8F414FAB-097B-4A38-A38A-876EC7D8776A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F414FAB-097B-4A38-A38A-876EC7D8776A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F414FAB-097B-4A38-A38A-876EC7D8776A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C711E2B-7AE7-45B2-9AEA-95E580C54910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C711E2B-7AE7-45B2-9AEA-95E580C54910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C711E2B-7AE7-45B2-9AEA-95E580C54910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C711E2B-7AE7-45B2-9AEA-95E580C54910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +106,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DC5D0926-32FF-4917-A32C-6A94A13A5DFD} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
 		{8D09095E-51BB-47B0-82F7-3B46754BAF3A} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
+		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF} = {E7223067-FA8C-4E21-9A1E-C10EC777AE65}
+		{0C711E2B-7AE7-45B2-9AEA-95E580C54910} = {E7223067-FA8C-4E21-9A1E-C10EC777AE65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E90358CF-9064-4138-88C2-63D7559469D6}

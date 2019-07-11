@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Agilisium.TalentManager.ReportingService
+namespace Agilisium.TalentManager.ServiceProcessors
 {
     public class ContractorRequestProcessor
     {

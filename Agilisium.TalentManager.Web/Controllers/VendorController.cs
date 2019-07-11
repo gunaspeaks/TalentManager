@@ -1,5 +1,4 @@
 ﻿using Agilisium.TalentManager.Dto;
-using Agilisium.TalentManager.ReportingService;
 using Agilisium.TalentManager.Service.Abstract;
 using Agilisium.TalentManager.Web.Helpers;
 using Agilisium.TalentManager.Web.Models;
@@ -161,8 +160,8 @@ namespace Agilisium.TalentManager.Web.Controllers
                 requestService.Add(requests);
 
                 string templatePath = EmailTemplatesFolderPath + "ContractorRequestEmailTemplate.html";
-                ContractorRequestProcessor emailProcessor = new ContractorRequestProcessor(requestService, settingsService);
-                emailProcessor.ProcessPendingServiceRequests(templatePath);
+                //ContractorRequestProcessor emailProcessor = new ContractorRequestProcessor(requestService, settingsService);
+                //emailProcessor.ProcessPendingServiceRequests(templatePath);
 
                 return RedirectToAction("List", "ServiceRequest");
             }

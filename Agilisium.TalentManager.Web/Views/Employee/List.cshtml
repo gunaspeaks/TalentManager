@@ -7,11 +7,8 @@
 }
 
 <div class="panel panel-default">
-    <div class="panel-heading" style="align-content:center">
-        <table width="100%">
-            <tr><td><h3><b>Employees Master</b></h3>(@Html.ActionLink("Click here for Past Employees", "PastEmployeeList", "Employee"))</td></tr>
-        </table>
-        
+    <div class="panel-heading" style="text-align:center">
+        <h3><b>Employees Master</b></h3>(@Html.ActionLink("Click here for Past Employees", "PastEmployeeList", "Employee"))
     </div>
     <div class="panel-body">
         <table class="table table-striped table-condensed table-bordered">
@@ -84,9 +81,9 @@
                     {
                         <text>&nbsp;Find all who's name starts with</text>
                         @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @style = "height: 32px; font-size: 14px 6px 12px; color: #555;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;" } })
-                        <input type="submit"  class="btn btn-default" value="Find All" />
+                        <input type="submit" class="btn btn-default" value="Find All" />
                     }
-                    
+
                 </td>
                 <td>
                     @Html.ActionLink("Add a New Employee", "Create", null, new { @class = "btn btn-primary" })

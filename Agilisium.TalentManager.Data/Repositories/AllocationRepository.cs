@@ -101,7 +101,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
                                                                ProjectName = prd.ProjectName,
                                                                Remarks = p.Remarks,
                                                                PercentageOfAllocation = p.PercentageOfAllocation,
-                                                               AccountName = acd.AccountName
+                                                               AccountName = acd.AccountName,
+                                                               ProjectID = prd.ProjectID
                                                            };
             return allocations;
 
@@ -117,14 +118,14 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
             switch (filterType?.ToLower())
             {
-                case "emp":
-                    allocations = GetAllocationsByEmployeeID(filterValueID);
-                    break;
                 case "prj":
                     allocations = GetAllocationsByProjectID(filterValueID);
                     break;
                 case "pm":
                     allocations = GetAllocationsByProjectManagerID(filterValueID);
+                    break;
+                case "emp":
+                    allocations = GetAllocationsByEmployeeID(filterValueID);
                     break;
             }
 
@@ -291,9 +292,9 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public int GetPercentageOfAllocation(int employeeID)
         {
-            if (Entities.Any(a => a.EmployeeID == employeeID && a.IsActive == true))
+            if (Entities.Any(a => a.EmployeeID == employeeID && a.AllocationEndDate >= DateTime.Now))
             {
-                return Entities.Where(a => a.EmployeeID == employeeID && a.IsActive == true)
+                return Entities.Where(a => a.EmployeeID == employeeID && a.AllocationEndDate >= DateTime.Now)
                     .Sum(p => p.PercentageOfAllocation);
             }
             else
@@ -344,8 +345,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
             if (string.IsNullOrWhiteSpace(filterType) || filterType?.ToLower() == "please select")
             {
                 recordsCount = (from a in Entities
-                                where a.IsDeleted == false
-                                    && (a.IsActive == false || (a.IsActive == true && a.AllocationEndDate <= DateTime.Now))
+                                where a.IsDeleted == false && a.AllocationEndDate <= DateTime.Now
                                 select a).Count();
             }
 
@@ -353,15 +353,13 @@ namespace Agilisium.TalentManager.Repository.Repositories
             {
                 case "emp":
                     recordsCount = (from a in Entities
-                                    where a.IsDeleted == false
-                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
+                                    where a.IsDeleted == false && a.AllocationEndDate < DateTime.Now
                                         && a.EmployeeID == filterValue
                                     select a).Count();
                     break;
                 case "prj":
                     recordsCount = (from a in Entities
-                                    where a.IsDeleted == false
-                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
+                                    where a.IsDeleted == false & a.AllocationEndDate < DateTime.Now
                                         && a.ProjectID == filterValue
                                     select a).Count();
                     break;
@@ -369,8 +367,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                     recordsCount = (from a in Entities
                                     join p in DataContext.Projects on a.ProjectID equals p.ProjectID into pe
                                     from pd in pe.DefaultIfEmpty()
-                                    where a.IsDeleted == false
-                                        && (a.IsActive == false || a.AllocationEndDate < DateTime.Now)
+                                    where a.IsDeleted == false && a.AllocationEndDate < DateTime.Now
                                         && pd.ProjectManagerID == filterValue
                                     select a).Count();
                     break;
@@ -464,8 +461,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
-                   where p.IsDeleted == false
-                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
+                   where p.IsDeleted == false && p.AllocationEndDate < DateTime.Now
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -481,11 +477,6 @@ namespace Agilisium.TalentManager.Repository.Repositories
                        PercentageOfAllocation = p.PercentageOfAllocation,
                        AccountName = acd.AccountName
                    };
-
-            //            && (p.IsActive == false || (p.IsActive == true && (p.AllocationEndDate.Year <= DateTime.Now.Year
-            //&& p.AllocationEndDate.Month <= DateTime.Now.Month
-            //&& p.AllocationEndDate.Day < DateTime.Now.Day)))
-
         }
 
         private IQueryable<ProjectAllocationDto> GetAllAllocationHistoryByProject(int projectID)
@@ -502,7 +493,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
                    where p.IsDeleted == false
-                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
+                        && p.AllocationEndDate < DateTime.Now
                         && p.ProjectID == projectID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
@@ -537,9 +528,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
-                   where p.IsDeleted == false
-                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
-                        && prd.ProjectManagerID == managerID
+                   where p.IsDeleted == false && p.AllocationEndDate < DateTime.Now && prd.ProjectManagerID == managerID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -573,9 +562,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
                    from pmd in pme.DefaultIfEmpty()
                    join ac in DataContext.ProjectAccounts on prd.ProjectAccountID equals ac.AccountID into ace
                    from acd in ace.DefaultIfEmpty()
-                   where p.IsDeleted == false
-                        && (p.IsActive == false || p.AllocationEndDate < DateTime.Now)
-                        && p.EmployeeID == employeeID
+                   where p.IsDeleted == false && p.AllocationEndDate < DateTime.Now && p.EmployeeID == employeeID
                    orderby prd.ProjectName, p.AllocationStartDate
                    select new ProjectAllocationDto
                    {
@@ -595,7 +582,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public override int TotalRecordsCount()
         {
-            return Entities.Count(e => e.IsDeleted == false && e.IsActive == true);
+            return Entities.Count(e => e.IsDeleted == false && e.AllocationEndDate >= DateTime.Now);
         }
 
         public int TotalRecordsCount(string filterType, int filterValueID)
@@ -626,7 +613,7 @@ namespace Agilisium.TalentManager.Repository.Repositories
         {
             return (from a in Entities
                     join p in DataContext.Projects on a.ProjectID equals p.ProjectID
-                    where a.IsDeleted == false && a.IsActive == true
+                    where a.IsDeleted == false && a.AllocationEndDate >= DateTime.Now
                         && p.ProjectName.ToLower() != "bench"
                         && a.EmployeeID == employeeID
                         && a.AllocationEntryID != allocationID
@@ -637,8 +624,8 @@ namespace Agilisium.TalentManager.Repository.Repositories
         {
             return (from a in Entities
                     join p in DataContext.Projects on a.ProjectID equals p.ProjectID
-                    where a.IsDeleted == false && a.IsActive == true
-                        && p.ProjectName.ToLower() == "bench"
+                    where a.IsDeleted == false
+                        && p.ProjectName.ToLower().Contains("bench")
                         && a.EmployeeID == employeeID && a.AllocationEndDate >= DateTime.Now
                     select a).Any();
         }
@@ -700,14 +687,14 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
             items.Add(new BillabilityWiseAllocationSummaryDto
             {
-                AllocationType = "Not Allocated Yet (Delivery)",
+                AllocationType = "Not Allocated - Delivery",
                 AllocationTypeID = -1,
                 NumberOfEmployees = DataContext.IsPostgresDB ? postgresSqlProcessor.GetNonAllocatedResourcesCountFromPostgres(true) : GetNonAllocatedResourcesCount(true),
             });
 
             items.Add(new BillabilityWiseAllocationSummaryDto
             {
-                AllocationType = "Not Allocated (BD/BO)",
+                AllocationType = "BD & BO",
                 AllocationTypeID = -2,
                 NumberOfEmployees = DataContext.IsPostgresDB ? postgresSqlProcessor.GetNonAllocatedResourcesCountFromPostgres(false) : GetNonAllocatedResourcesCount(false),
             });
@@ -749,6 +736,76 @@ namespace Agilisium.TalentManager.Repository.Repositories
             }
 
             return allocationDetailDtos;
+        }
+
+        public IEnumerable<UtilizedDaysSummaryDto> GetUtilizedDaysSummary(string filterBy, string filterValue, string sortBy, string sortType)
+        {
+            return PrepareUtilizedDaysSummary(filterBy, filterValue, sortBy, sortType);
+        }
+
+        private List<UtilizedDaysSummaryDto> PrepareUtilizedDaysSummary(string filterBy, string filterValue, string sortBy, string sortType)
+        {
+            List<UtilizedDaysSummaryDto> entries = new List<UtilizedDaysSummaryDto>();
+
+            List<Employee> employees = (from e in DataContext.Employees
+                                        where e.BusinessUnitID == 3 && e.IsDeleted == false && e.LastWorkingDay.HasValue == false
+                                        || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now)
+                                        select e).ToList();
+
+            foreach (Employee emp in employees)
+            {
+                UtilizedDaysSummaryDto entry = new UtilizedDaysSummaryDto
+                {
+                    EmployeeEntryID = emp.EmployeeEntryID,
+                    DateOfJoin = emp.DateOfJoin,
+                    EmployeeID = emp.EmployeeID,
+                    EmployeeName = emp.FirstName + " " + emp.LastName,
+                    PracticeID = emp.PracticeID,
+                    PracticeName = DataContext.Practices.FirstOrDefault(p => p.PracticeID == emp.PracticeID)?.PracticeName,
+                    AgingDays = 0
+                };
+
+                if (Entities.Count(a => a.IsDeleted == false && a.EmployeeID == emp.EmployeeEntryID) == 0)
+                {
+                    entry.AgingDays = DateTime.Now.Subtract(emp.DateOfJoin).Days;
+                    entry.AnyAllocation = "No Allocations";
+                    entries.Add(entry);
+                }
+                else if (Entities.Count(a => a.IsDeleted == false && a.EmployeeID == emp.EmployeeEntryID && a.AllocationEndDate <= DateTime.Now) > 0)
+                {
+                    DateTime? allocationEndDate = Entities.Where(a => a.IsDeleted == false
+                        && a.EmployeeID == emp.EmployeeEntryID
+                        && a.AllocationEndDate <= DateTime.Now).OrderByDescending(a => a.AllocationEndDate).Take(1).FirstOrDefault()?.AllocationEndDate;
+                    entry.AnyAllocation = $"{Entities.Count(a => a.IsDeleted == false && a.EmployeeID == emp.EmployeeEntryID && a.AllocationEndDate <= DateTime.Now)} Allocation(s)";
+
+                    if (allocationEndDate.HasValue)
+                    {
+                        entry.LastAllocatedDate = allocationEndDate;
+                        entry.AgingDays = DateTime.Now.Subtract(allocationEndDate.Value).Days;
+                    }
+                    entries.Add(entry);
+                }
+                else
+                {
+                    // ignore the employee as he has active allocation
+                }
+            }
+
+            sortType = string.IsNullOrEmpty(sortType) ? "asc" : sortType.ToLower();
+            switch (sortBy?.ToLower())
+            {
+                case "aged":
+                    entries = sortType == "asc" ? entries.OrderBy(o => o.AgingDays).ToList() : entries.OrderByDescending(o => o.AgingDays).ToList();
+                    break;
+                case "pod":
+                    entries = sortType == "asc" ? entries.OrderBy(o => o.PracticeID).ToList() : entries.OrderByDescending(o => o.PracticeID).ToList();
+                    break;
+                default:
+                    entries = sortType == "asc" ? entries.OrderBy(o => o.EmployeeName).ToList() : entries.OrderByDescending(o => o.EmployeeName).ToList();
+                    break;
+            }
+
+            return entries;
         }
 
         #endregion
@@ -811,8 +868,9 @@ namespace Agilisium.TalentManager.Repository.Repositories
             return (from e in DataContext.Employees
                     join a in Entities on e.EmployeeEntryID equals a.EmployeeID
                     where a.AllocationTypeID == (int)allocationType
-                    && e.LastWorkingDay.HasValue == false && e.IsDeleted == false && a.IsDeleted == false
+                    && e.IsDeleted == false && a.IsDeleted == false
                     && a.AllocationEndDate >= DateTime.Now
+                    && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
                     select a.EmployeeID).Distinct().Count();
         }
 
@@ -881,25 +939,30 @@ namespace Agilisium.TalentManager.Repository.Repositories
             switch (filterByText)
             {
                 case "all":
-                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false).ToList();
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false
+                        && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))).ToList();
                     break;
                 case "emp":
                     int.TryParse(filterValue, out int empID);
-                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                                 && e.EmployeeEntryID == empID).ToList();
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false
+                        && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                        && e.EmployeeEntryID == empID).ToList();
                     break;
                 case "psk":
-                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                                 && e.PrimarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false
+                        && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                        && e.PrimarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
                     break;
                 case "ssk":
-                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                                 && e.SecondarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false
+                        && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                        && e.SecondarySkills.ToLower().Contains(filterValue.ToLower())).ToList();
                     break;
                 case "pod":
                     int.TryParse(filterValue, out int practiceID);
-                    employees = DataContext.Employees.Where(e => e.IsDeleted == false && e.LastWorkingDay.HasValue == false
-                                 && e.PracticeID == practiceID).ToList();
+                    employees = DataContext.Employees.Where(e => e.IsDeleted == false
+                        && (e.LastWorkingDay.HasValue == false || (e.LastWorkingDay.HasValue == true && e.LastWorkingDay.Value >= DateTime.Now))
+                        && e.PracticeID == practiceID).ToList();
                     break;
             }
 
@@ -1030,5 +1093,9 @@ namespace Agilisium.TalentManager.Repository.Repositories
         IEnumerable<BillabilityWiseAllocationSummaryDto> GetBillabilityWiseAllocationSummary();
 
         IEnumerable<BillabilityWiseAllocationDetailDto> GetBillabilityWiseAllocationDetail(string filterBy, string filterValue);
+
+        //IEnumerable<UtilizedDaysDetailDto> GetUtilizedDaysDetail(string filterBy, string filterValue, int pageSize = -1, int pageNo = -1);
+
+        IEnumerable<UtilizedDaysSummaryDto> GetUtilizedDaysSummary(string filterBy, string filterValue, string sortBy, string sortType);
     }
 }

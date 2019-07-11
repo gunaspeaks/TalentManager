@@ -28,32 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.TalentManagerServiceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            this.TalentManagerServiceInstaller = new System.ServiceProcess.ServiceInstaller();
+            this.AgilisiumEmailServiceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
+            this.AgilisiumEmailServiceInstaller = new System.ServiceProcess.ServiceInstaller();
             // 
-            // TalentManagerServiceProcessInstaller
+            // AgilisiumEmailServiceProcessInstaller
             // 
-            this.TalentManagerServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalService;
-            this.TalentManagerServiceProcessInstaller.Password = null;
-            this.TalentManagerServiceProcessInstaller.Username = null;
+            this.AgilisiumEmailServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalService;
+            this.AgilisiumEmailServiceProcessInstaller.Password = null;
+            this.AgilisiumEmailServiceProcessInstaller.Username = null;
             // 
-            // TalentManagerServiceInstaller
+            // AgilisiumEmailServiceInstaller
             // 
-            this.TalentManagerServiceInstaller.DisplayName = "Agilisium Talent Manager Services";
-            this.TalentManagerServiceInstaller.ServiceName = "Agilisium Talent Manager Services";
-            this.TalentManagerServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.AgilisiumEmailServiceInstaller.DisplayName = "Agilisium Email Service Installer";
+            this.AgilisiumEmailServiceInstaller.ServiceName = "Agilisium - Talent Manager Email Service";
+            this.AgilisiumEmailServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.TalentManagerServiceProcessInstaller,
-            this.TalentManagerServiceInstaller});
+            this.AgilisiumEmailServiceProcessInstaller,
+            this.AgilisiumEmailServiceInstaller});
 
         }
 
         #endregion
 
-        public System.ServiceProcess.ServiceProcessInstaller TalentManagerServiceProcessInstaller;
-        public System.ServiceProcess.ServiceInstaller TalentManagerServiceInstaller;
+        private System.ServiceProcess.ServiceProcessInstaller AgilisiumEmailServiceProcessInstaller;
+        private System.ServiceProcess.ServiceInstaller AgilisiumEmailServiceInstaller;
     }
 }

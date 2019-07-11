@@ -51,6 +51,7 @@
     <Compile Include="DropDownSubCategoryDto.cs" />
     <Compile Include="DtoBase.cs" />
     <Compile Include="EmployeeDto.cs" />
+    <Compile Include="NotificationsTrackerDto.cs" />
     <Compile Include="ResourceCountDto.cs" />
     <Compile Include="ManagerWiseAllocationDto.cs" />
     <Compile Include="PracticeDto.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="SubPracticeDto.cs" />
     <Compile Include="SubPracticeHeadCountDto.cs" />
     <Compile Include="SystemSettingDto.cs" />
+    <Compile Include="UtilizedDaysDetailDto.cs" />
+    <Compile Include="UtilizedDaysSummaryDto.cs" />
     <Compile Include="VendorDto.cs" />
     <Compile Include="VendorSearchDto.cs" />
     <Compile Include="VendorSearchResultDto.cs" />

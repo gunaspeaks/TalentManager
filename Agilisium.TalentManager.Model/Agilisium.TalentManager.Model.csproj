@@ -78,6 +78,7 @@
     <Compile Include="Entities\ProjectAllocation.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\SubPractice.cs" />
+    <Compile Include="Entities\NotificationsTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TalentManagerDataContext.cs" />
     <Compile Include="TalentManagerSeedData.cs" />
