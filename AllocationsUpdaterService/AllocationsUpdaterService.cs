@@ -27,14 +27,12 @@ namespace AllocationsUpdaterService
                 logger.Info("*********************************************************************************************");
                 logger.Info("Starting the service");
 
-                int serviceExecutionDayOfWeek = 1;
                 double defaultScheduledMin = 23 * 60 * 60 * 1000;
 
                 if (string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["serviceExecutionDayOfWeek"]) == false)
                 {
                     try
                     {
-                        serviceExecutionDayOfWeek = Convert.ToInt32(ConfigurationManager.AppSettings["serviceExecutionDayOfWeek"]);
                         defaultScheduledMin = Convert.ToDouble(ConfigurationManager.AppSettings["serviceTriggerInterval"]) * 60 * 60 * 1000;
                     }
                     catch (Exception exp)

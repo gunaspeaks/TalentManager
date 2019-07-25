@@ -338,6 +338,9 @@
     <Content Include="Content\Images\contact-manager.jpg" />
     <Content Include="Content\Images\Contractor-management-3.jpg" />
     <Content Include="Content\Images\contractor.jpg" />
+    <Content Include="Content\Images\delete.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\email-icon.png" />
     <Content Include="Content\Images\num-sort-asc.png" />
     <Content Include="Content\Images\num-sort-desc.png" />
@@ -505,6 +508,7 @@
     <Content Include="Views\DevReq\List.cshtml" />
     <Content Include="Views\Home\UtilizationDashboard.cshtml" />
     <Content Include="Views\Reports\UtilizedDaysSummary.cshtml" />
+    <Content Include="Views\Employee\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

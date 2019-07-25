@@ -18,6 +18,7 @@ namespace Agilisium.TalentManager.Web.Controllers
         private readonly IDropDownSubCategoryService subCategoryService;
         private readonly IPracticeService practiceService;
         private readonly ISubPracticeService subPracticeService;
+        private const string NO_VALID_VISA = "No Valid Visa";
 
         public EmployeeController(IEmployeeService empService,
             IDropDownSubCategoryService subCategoryService,
@@ -176,6 +177,7 @@ namespace Agilisium.TalentManager.Web.Controllers
             try
             {
                 InitializePageData(-1);
+                emp.VisaCategoryID = int.Parse(ViewBag.NoVisaCategoryID);
             }
             catch (Exception exp)
             {
@@ -243,6 +245,44 @@ namespace Agilisium.TalentManager.Web.Controllers
 
                 EmployeeDto emp = empService.GetEmployee(id.Value);
                 GetSubPracticeList(emp.PracticeID);
+                empModel = Mapper.Map<EmployeeDto, EmployeeModel>(emp);
+                if(String.IsNullOrWhiteSpace(empModel.TravelledCountries))
+                {
+                    empModel.TravelledCountries = "None";
+                }
+
+                if (empModel.VisaCategoryID.HasValue == false)
+                {
+                    empModel.VisaCategoryID = int.Parse(ViewBag.NoVisaCategoryID);
+                }
+            }
+            catch (Exception exp)
+            {
+                DisplayReadErrorMessage(exp);
+            }
+            return View(empModel);
+        }
+
+        public ActionResult View(int? id)
+        {
+            EmployeeModel empModel = new EmployeeModel();
+
+            if (!id.HasValue)
+            {
+                DisplayWarningMessage("Looks like, the employee ID is missing in your request");
+                return View(empModel);
+            }
+
+            try
+            {
+
+                if (!empService.Exists(id.Value))
+                {
+                    DisplayWarningMessage($"Sorry, we couldn't find the Employee with ID: {id.Value}");
+                    return View(empModel);
+                }
+
+                EmployeeDto emp = empService.GetEmployee(id.Value);
                 empModel = Mapper.Map<EmployeeDto, EmployeeModel>(emp);
             }
             catch (Exception exp)
@@ -360,7 +400,7 @@ namespace Agilisium.TalentManager.Web.Controllers
             }
             byte[] byteArr = Encoding.ASCII.GetBytes(recordString.ToString());
             MemoryStream stream = new MemoryStream(byteArr);
-            return File(stream, "application/vnd.ms-excel", $"Employees As On{DateTime.Now.Year-DateTime.Now.Month-DateTime.Now.Day}.csv");
+            return File(stream, "application/vnd.ms-excel", $"Employees As On{DateTime.Now.Year - DateTime.Now.Month - DateTime.Now.Day}.csv");
         }
 
         private IEnumerable<EmployeeModel> GetEmployees(string searchText, int pageNo = 1)
@@ -406,7 +446,7 @@ namespace Agilisium.TalentManager.Web.Controllers
 
         private void GetOtherDropDownItems()
         {
-            IEnumerable<DropDownSubCategoryDto> buList = subCategoryService.GetAll();
+            List<DropDownSubCategoryDto> buList = subCategoryService.GetAll().ToList();
 
             List<SelectListItem> buListItems = (from c in buList
                                                 orderby c.SubCategoryName
@@ -440,6 +480,25 @@ namespace Agilisium.TalentManager.Web.Controllers
                                                 }).ToList();
 
             ViewBag.EmploymentTypeListItems = empTypeList;
+
+            List<SelectListItem> visaListItems = (from c in buList
+                                                  orderby c.SubCategoryName
+                                                  where c.CategoryID == (int)CategoryType.VisaCategory
+                                                  select new SelectListItem
+                                                  {
+                                                      Text = c.SubCategoryName,
+                                                      Value = c.SubCategoryID.ToString()
+                                                  }).ToList();
+            ViewBag.NoVisaCategoryID = visaListItems.FirstOrDefault(i => i.Text == NO_VALID_VISA).Value;
+            ViewBag.VisaCategoryListItems = visaListItems;
+
+            List<SelectListItem> gradeListItems = new List<SelectListItem>();
+            for (int i = 10; i >= 1; i--)
+            {
+                gradeListItems.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+            }
+            ViewBag.GradeListItems = gradeListItems;
+
         }
 
         private void GetPracticeList()

@@ -39,18 +39,18 @@
             // 
             // AllocationsMessengerServiceInstaller
             // 
+            this.AllocationsMessengerServiceInstaller.DelayedAutoStart = true;
             this.AllocationsMessengerServiceInstaller.Description = "A Windows service designed by Agilisium for sending allocation details in email w" +
     "ith attachement and also summary";
             this.AllocationsMessengerServiceInstaller.DisplayName = "Agilisium-Allocations Messenger Service";
-            this.AllocationsMessengerServiceInstaller.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.AllocationsMessengerServiceProcessInstaller});
             this.AllocationsMessengerServiceInstaller.ServiceName = "Agilisium-AllocationsMessengerService";
             this.AllocationsMessengerServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.AllocationsMessengerServiceInstaller});
+            this.AllocationsMessengerServiceInstaller,
+            this.AllocationsMessengerServiceProcessInstaller});
 
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,6 +6,11 @@ namespace Agilisium.TalentManager.Web.Models
 {
     public class EmployeeModel : ViewModelBase
     {
+        public EmployeeModel()
+        {
+            TravelledCountries = "None";
+        }
+
         public int EmployeeEntryID { get; set; }
 
         [DisplayName("Employee ID")]
@@ -94,5 +98,30 @@ namespace Agilisium.TalentManager.Web.Models
 
         [DisplayName("Employment Type")]
         public string EmploymentTypeName { get; set; }
+
+        [DisplayName("Holding Visa?")]
+        public int? VisaCategoryID { get; set; }
+
+        [DisplayName("Holding Visa?")]
+        public string VisaCategory { get; set; }
+
+        [DisplayName("Visa Validity Upto")]
+        public DateTime? VisaValidUpto { get; set; }
+
+        [DisplayName("Technical Rank")]
+        public int? TechnicalRank { get; set; }
+
+        [DisplayName("Total Experience")]
+        public float? TotalExperience { get; set; }
+
+        [DisplayName("Passport Number")]
+        public string PassportNo { get; set; }
+
+        [DisplayName("Passport Validity Upto")]
+        public DateTime? PassportValidUpto { get; set; }
+
+        [DisplayName("Travelled Countries")]
+        [MaxLength(100, ErrorMessage = "100 Characters maximum")]
+        public string TravelledCountries { get; set; }
     }
 }

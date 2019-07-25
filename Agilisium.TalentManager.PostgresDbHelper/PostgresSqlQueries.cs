@@ -55,13 +55,13 @@ namespace Agilisium.TalentManager.PostgresDbHelper
                     + " ORDER BY 3";
         public static string GET_COUNT_OF_NON_ALLOCATED_EMPLOYEES_FROM_DELIVERY = "SELECT COUNT(1)"
                     + " FROM \"TalentManager\".\"Employee\" AS \"E\""
-                    + " WHERE \"E\".\"IsDeleted\" = False AND \"E\".\"LastWorkingDay\" IS NULL AND \"E\".\"BusinessUnitID\" = 3"
+                    + " WHERE \"E\".\"IsDeleted\" = False AND \"E\".\"BusinessUnitID\" = 3"
                     + " AND (SELECT COUNT(1) FROM \"TalentManager\".\"ProjectAllocation\" WHERE \"EmployeeID\" = \"E\".\"EmployeeEntryID\" "
                     + " AND \"IsDeleted\" = False AND \"AllocationEndDate\" >= '__CURRENT_DATE__') = 0"
                     + " AND \"E\".\"LastWorkingDay\" IS NULL OR (\"E\".\"LastWorkingDay\" IS NOT NULL AND \"E\".\"LastWorkingDay\" >= '__CURRENT_DATE__')";
         public static string GET_COUNT_OF_NON_ALLOCATED_EMPLOYEES_FROM_NON_DELIVERY = "SELECT COUNT(1)"
                     + " FROM \"TalentManager\".\"Employee\" AS \"E\""
-                    + " WHERE \"E\".\"IsDeleted\" = False AND \"E\".\"LastWorkingDay\" IS NULL AND \"E\".\"BusinessUnitID\" != 3"
+                    + " WHERE \"E\".\"IsDeleted\" = False AND \"E\".\"BusinessUnitID\" != 3"
                     + " AND (SELECT COUNT(1) FROM \"TalentManager\".\"ProjectAllocation\" WHERE \"EmployeeID\" = \"E\".\"EmployeeEntryID\" "
                     + " AND \"IsDeleted\" = False AND \"AllocationEndDate\" >= '__CURRENT_DATE__') = 0"
                     + " AND \"E\".\"LastWorkingDay\" IS NULL OR (\"E\".\"LastWorkingDay\" IS NOT NULL AND \"E\".\"LastWorkingDay\" >= '__CURRENT_DATE__')";

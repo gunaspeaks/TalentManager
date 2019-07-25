@@ -46,7 +46,7 @@
                         @Html.DisplayFor(modelItem => item.EmployeeID)
                     </td>
                     <td>
-                        <text>@($"{item.LastName}, {item.FirstName}")</text>
+                        @Html.ActionLink($"{item.FirstName} {item.LastName}", "View", new { id = item.EmployeeEntryID })
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.BusinessUnitName)

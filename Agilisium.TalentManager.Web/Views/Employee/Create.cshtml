@@ -1,9 +1,7 @@
 ﻿@model Agilisium.TalentManager.Web.Models.EmployeeModel
 
 @{
-    /**/
-
-    ViewBag.Title = "Create New Employee";
+    ViewBag.Title = "New Employee Details";
 }
 <link href="~/Content/error-styles.css" rel="stylesheet" />
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -13,8 +11,6 @@
         generateEmployeeIDForEmpPage();
         loadPracticeDropDownListForEmpPage();
         loadSubPracticeDropDownForEmpPage();
-        //getPracticeManagerNameForEmployeePage();
-        //getSubPracticeManagerNameForEmployeePage();
         $("#DateOfJoin").datepicker({
 
             dateFormat: "mm-dd-yy",
@@ -23,6 +19,20 @@
             showAnim: "fadeIn",
         });
         $("#LastWorkingDay").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+        $("#VisaValidUpto").datepicker({
+
+            dateFormat: "mm-dd-yy",
+            changeMonth: true,
+            changeYear: true,
+            showAnim: "fadeIn",
+        });
+        $("#PassportValidUpto").datepicker({
 
             dateFormat: "mm-dd-yy",
             changeMonth: true,
@@ -39,14 +49,7 @@
 
     $(function () {
         $("#PracticeID").change(function (evt) {
-            //getPracticeManagerNameForEmployeePage();
             loadSubPracticeDropDownForEmpPage();
-        });
-    });
-
-    $(function () {
-        $("#SubPracticeID").change(function (evt) {
-            //getSubPracticeManagerNameForEmployeePage();
         });
     });
 
@@ -61,14 +64,13 @@
             if ($("#EmployeeID").val().length > 0) {
                 $("#empID").val($("#EmployeeID").val())
             }
-            //alert($("#empID").val());
         })
     })
 </script>
 
 <div class="panel panel-default">
     <div style="text-align:center" class="panel-heading">
-        <h3><b>Create New Employee</b></h3>
+        <h3><b>New Employee Details</b></h3>
     </div>
 
     @using (Html.BeginForm())
@@ -118,19 +120,24 @@
                         <td width="2%"></td>
                         <td width="20%">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.BusinessUnitID)
-                                @Html.DropDownListFor(model => model.BusinessUnitID, (IEnumerable<SelectListItem>)ViewBag.BuListItems, "Please Select", new { @class = "form-control" })
+                                @Html.LabelFor(model => model.EmailID)
+                                @Html.EditorFor(model => model.EmailID, new { htmlAttributes = new { @class = "form-control" } })
                             </div>
                         </td>
                         <td width="2%"></td>
                         <td width="20%">
                             <div class="form-group">
+                                @Html.LabelFor(model => model.BusinessUnitID)
+                                @Html.DropDownListFor(model => model.BusinessUnitID, (IEnumerable<SelectListItem>)ViewBag.BuListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
                                 @Html.LabelFor(model => model.ReportingManagerID)
                                 @Html.DropDownListFor(model => model.ReportingManagerID, (IEnumerable<SelectListItem>)ViewBag.ReportingManagerListItems, "Please Select", new { @class = "form-control" })
                             </div>
                         </td>
-                        <td width="2%"></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td width="20%">
@@ -159,6 +166,58 @@
                                 @Html.LabelFor(model => model.SecondarySkills)
                                 @Html.EditorFor(model => model.SecondarySkills, new { htmlAttributes = new { @class = "form-control" } })
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TotalExperience)
+                                @Html.EditorFor(model => model.TotalExperience, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td width="20%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TechnicalRank)
+                                @Html.DropDownListFor(model => model.TechnicalRank, (IEnumerable<SelectListItem>)ViewBag.GradeListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td width="20%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PassportNo)
+                                @Html.EditorFor(model => model.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PassportValidUpto)
+                                @Html.EditorFor(model => model.PassportValidUpto, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="20%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VisaCategoryID)
+                                @Html.DropDownListFor(model => model.VisaCategoryID, (IEnumerable<SelectListItem>)ViewBag.VisaCategoryListItems, "Please Select", new { @class = "form-control" })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td width="20%">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.VisaValidUpto)
+                                @Html.EditorFor(model => model.VisaValidUpto, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </td>
+                        <td width="2%"></td>
+                        <td width="20%">
+                            @Html.LabelFor(model => model.TravelledCountries)
+                            @Html.EditorFor(model => model.TravelledCountries, new { htmlAttributes = new { @class = "form-control" } })
+                        </td>
+                        <td width="2%"></td>
+                        <td>
                         </td>
                     </tr>
                 </table>

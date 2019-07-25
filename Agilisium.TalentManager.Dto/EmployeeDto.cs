@@ -53,5 +53,21 @@ namespace Agilisium.TalentManager.Dto
         public int EmploymentTypeID { get; set; }
 
         public string EmploymentTypeName { get; set; }
+
+        public int? VisaCategoryID { get; set; }
+
+        public string VisaCategory { get; set; }
+
+        public DateTime? VisaValidUpto { get; set; }
+
+        public int? TechnicalRank { get; set; }
+
+        public float? TotalExperience { get; set; }
+
+        public string PassportNo { get; set; }
+
+        public DateTime? PassportValidUpto { get; set; }
+
+        public string TravelledCountries { get; set; }
     }
 }

@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllocationsMessengerService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agilisium.TalentManager.ServiceProcessors", "Agilisium.TalentManager.ServiceProcessors\Agilisium.TalentManager.ServiceProcessors.csproj", "{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceExecutor", "Tools\WindowsServiceExecutor\WindowsServiceExecutor.csproj", "{C7989FD1-6841-4A13-BBE3-625216544D8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF5CE7AA-78F3-4D62-B200-82CC38CFBAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7989FD1-6841-4A13-BBE3-625216544D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7989FD1-6841-4A13-BBE3-625216544D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7989FD1-6841-4A13-BBE3-625216544D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7989FD1-6841-4A13-BBE3-625216544D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{8D09095E-51BB-47B0-82F7-3B46754BAF3A} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
 		{8EC49C94-6A3A-4006-8F14-EFE930A94DDF} = {E7223067-FA8C-4E21-9A1E-C10EC777AE65}
 		{0C711E2B-7AE7-45B2-9AEA-95E580C54910} = {E7223067-FA8C-4E21-9A1E-C10EC777AE65}
+		{C7989FD1-6841-4A13-BBE3-625216544D8D} = {DAF51387-193C-4D2E-BFBB-3FBCAEA2E16B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E90358CF-9064-4138-88C2-63D7559469D6}

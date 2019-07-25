@@ -39,18 +39,18 @@
             // 
             // AllocationsUpdaterServiceInstaller
             // 
+            this.AllocationsUpdaterServiceInstaller.DelayedAutoStart = true;
             this.AllocationsUpdaterServiceInstaller.Description = "A Windows service designed by Agilisium for sending alerts and updating project a" +
     "llocations";
             this.AllocationsUpdaterServiceInstaller.DisplayName = "Agilisium - Allocations Updater Service";
-            this.AllocationsUpdaterServiceInstaller.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.AllocationsUpdaterServiceProcessInstaller});
             this.AllocationsUpdaterServiceInstaller.ServiceName = "Agilisium-AllocationsUpdaterService";
             this.AllocationsUpdaterServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.AllocationsUpdaterServiceInstaller});
+            this.AllocationsUpdaterServiceInstaller,
+            this.AllocationsUpdaterServiceProcessInstaller});
 
         }
 

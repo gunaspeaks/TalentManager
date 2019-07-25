@@ -215,8 +215,8 @@ namespace Agilisium.TalentManager.ServiceProcessors
 
             StringBuilder emailBody = new StringBuilder(emailTemplateContent);
             CultureInfo ci = Thread.CurrentThread.CurrentUICulture;
-            emailBody.Replace("__START_DATE__", $"{allocation.AllocationStartDate.Day}/{ci.DateTimeFormat.GetMonthName(allocation.AllocationStartDate.Month)}/{allocation.AllocationStartDate.Year}");
-            emailBody.Replace("__END_DATE__", $"{allocation.AllocationEndDate.Day}/{ci.DateTimeFormat.GetMonthName(allocation.AllocationEndDate.Month)}/{allocation.AllocationEndDate.Year}");
+            emailBody.Replace("__START_DATE__", $"{allocation.AllocationStartDate.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(allocation.AllocationStartDate.Month)}/{allocation.AllocationStartDate.Year}");
+            emailBody.Replace("__END_DATE__", $"{allocation.AllocationEndDate.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(allocation.AllocationEndDate.Month)}/{allocation.AllocationEndDate.Year}");
             emailBody.Replace("__RESOURCE_NAME__", allocation.EmployeeName);
             emailBody.Replace("__PROJECT_NAME__", allocation.ProjectName);
             emailBody.Replace("__RESOURCE_ID__", allocation.EmployeeID.ToString());
@@ -230,8 +230,8 @@ namespace Agilisium.TalentManager.ServiceProcessors
 
             StringBuilder emailBody = new StringBuilder(emailTemplateContent);
             CultureInfo ci = Thread.CurrentThread.CurrentUICulture;
-            emailBody.Replace("__START_DATE__", $"{DateTime.Now.Day}/{ci.DateTimeFormat.GetMonthName(DateTime.Now.Month)}/{DateTime.Now.Year}");
-            emailBody.Replace("__END_DATE__", $"{benchProject.EndDate.Day}/{ci.DateTimeFormat.GetMonthName(benchProject.EndDate.Month)}/{benchProject.EndDate.Year}");
+            emailBody.Replace("__START_DATE__", $"{DateTime.Now.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(DateTime.Now.Month)}/{DateTime.Now.Year}");
+            emailBody.Replace("__END_DATE__", $"{benchProject.EndDate.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(benchProject.EndDate.Month)}/{benchProject.EndDate.Year}");
             emailBody.Replace("__RESOURCE_NAME__", $"{employee.FirstName} {employee.LastName}");
             emailBody.Replace("__PROJECT_NAME__", benchProject.ProjectName);
             emailBody.Replace("__RESOURCE_ID__", employee.EmployeeID.ToString());
@@ -245,8 +245,8 @@ namespace Agilisium.TalentManager.ServiceProcessors
 
             StringBuilder emailBody = new StringBuilder(emailTemplateContent);
             CultureInfo ci = Thread.CurrentThread.CurrentUICulture;
-            emailBody.Replace("__START_DATE__", $"{allocation.AllocationStartDate.Day}/{ci.DateTimeFormat.GetMonthName(allocation.AllocationStartDate.Month)}/{allocation.AllocationStartDate.Year}");
-            emailBody.Replace("__END_DATE__", $"{allocation.AllocationEndDate.Day}/{ci.DateTimeFormat.GetMonthName(allocation.AllocationEndDate.Month)}/{allocation.AllocationEndDate.Year}");
+            emailBody.Replace("__START_DATE__", $"{allocation.AllocationStartDate.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(allocation.AllocationStartDate.Month)}/{allocation.AllocationStartDate.Year}");
+            emailBody.Replace("__END_DATE__", $"{allocation.AllocationEndDate.Day}/{ci.DateTimeFormat.GetAbbreviatedMonthName(allocation.AllocationEndDate.Month)}/{allocation.AllocationEndDate.Year}");
             emailBody.Replace("__RESOURCE_NAME__", allocation.EmployeeName);
             emailBody.Replace("__PROJECT_NAME__", allocation.ProjectName);
             emailBody.Replace("__RESOURCE_ID__", allocation.EmployeeID.ToString());

@@ -35,5 +35,19 @@ namespace Agilisium.TalentManager.Model.Entities
         public int? UtilizationTypeID { get; set; }
 
         public int EmploymentTypeID { get; set; }
+
+        public int? VisaCategoryID { get; set; }
+
+        public DateTime? VisaValidUpto { get; set; }
+
+        public int? TechnicalRank { get; set; }
+
+        public float? TotalExperience { get; set; }
+
+        public string PassportNo { get; set; }
+
+        public DateTime? PassportValidUpto { get; set; }
+
+        public string TravelledCountries { get; set; }
     }
 }

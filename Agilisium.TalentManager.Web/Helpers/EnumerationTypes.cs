@@ -17,7 +17,8 @@ namespace Agilisium.TalentManager.Web.Helpers
         Country,
         DevelopmentRequestType,
         DevelopmentPriority,
-        DevelopmentRequestStatus
+        DevelopmentRequestStatus,
+        VisaCategory,
     }
 
     public enum PracticeType

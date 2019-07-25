@@ -1,0 +1,217 @@
+﻿@model Agilisium.TalentManager.Web.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "View Employee Details";
+}
+
+<div class="panel panel-default">
+    <div style="text-align:center" class="panel-heading">
+        <h3><b>View Employee Details</b></h3>
+    </div>
+
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EmployeeID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmployeeID)
+            </dd>
+
+            <dt>
+                Employee Name
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EmailID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmailID)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BusinessUnitName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BusinessUnitName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PracticeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PracticeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SubPracticeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SubPracticeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfJoin)
+            </dt>
+
+            <dd>
+                @{
+                    System.Globalization.CultureInfo ci = System.Threading.Thread.CurrentThread.CurrentUICulture;
+                    string dateStr = $"{Model.DateOfJoin.Day}-{ci.DateTimeFormat.GetAbbreviatedMonthName(Model.DateOfJoin.Month)}-{Model.DateOfJoin.Year}";
+                    @Html.DisplayFor(model => dateStr);
+                }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastWorkingDay)
+            </dt>
+
+            <dd>
+                @if (Model.LastWorkingDay.HasValue)
+                {
+                    string dateStr1 = $"{Model.LastWorkingDay.Value.Day}-{ci.DateTimeFormat.GetAbbreviatedMonthName(Model.LastWorkingDay.Value.Month)}-{Model.LastWorkingDay.Value.Year}";
+                    @Html.DisplayFor(model => dateStr1);
+                }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PrimarySkills)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PrimarySkills)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SecondarySkills)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SecondarySkills)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReportingManagerName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReportingManagerName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ProjectManagerName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ProjectManagerName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UtilizationTypeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UtilizationTypeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EmploymentTypeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EmploymentTypeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TotalExperience)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TotalExperience)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TechnicalRank)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TechnicalRank)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PassportNo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PassportNo)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.PassportValidUpto)
+            </dt>
+
+            <dd>
+                @if (Model.PassportValidUpto.HasValue)
+                {
+                    string dateStr1 = $"{Model.PassportValidUpto.Value.Day}-{ci.DateTimeFormat.GetAbbreviatedMonthName(Model.PassportValidUpto.Value.Month)}-{Model.PassportValidUpto.Value.Year}";
+                    @Html.DisplayFor(model => dateStr1);
+                }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.VisaCategory)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.VisaCategory)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.VisaValidUpto)
+            </dt>
+
+            <dd>
+                @if (Model.VisaValidUpto.HasValue)
+                {
+                    string dateStr1 = $"{Model.VisaValidUpto.Value.Day}-{ci.DateTimeFormat.GetAbbreviatedMonthName(Model.VisaValidUpto.Value.Month)}-{Model.VisaValidUpto.Value.Year}";
+                    @Html.DisplayFor(model => dateStr1);
+                }
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TravelledCountries)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TravelledCountries)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastWorkingDay)
+            </dt>
+
+            <dd>
+                @if (Model.LastWorkingDay.HasValue)
+                {
+                    string dateStr1 = $"{Model.LastWorkingDay.Value.Day}-{ci.DateTimeFormat.GetAbbreviatedMonthName(Model.LastWorkingDay.Value.Month)}-{Model.LastWorkingDay.Value.Year}";
+                    @Html.DisplayFor(model => dateStr1);
+                }
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EmployeeEntryID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

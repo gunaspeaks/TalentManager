@@ -1,4 +1,4 @@
-﻿using Agilisium.TalentManager.ReportingService;
+﻿using Agilisium.TalentManager.ServiceProcessors;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -34,17 +34,41 @@ namespace WindowsServiceExecutor
 
                 MessageBox.Show(DateTime.Today.DayOfWeek.ToString());
 
-                TalentManagerEmailProcessor processor = new TalentManagerEmailProcessor();
+                AllocationsMessengerServiceProcessor processor = new AllocationsMessengerServiceProcessor();
                 logger.Info("Generating resource allocation report");
 
                 processor.GenerateResourceAllocationReport();
 
-                MessageBox.Show("Message sent");
+                MessageBox.Show("Service execution complete.");
             }
             catch (Exception exp)
             {
                 MessageBox.Show(exp.Message);
                 logger.Error("Error while generating allocation report");
+                logger.Error(exp);
+            }
+        }
+
+        private void allocationsUpdatorServiceButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                logger.Info("");
+                logger.Info("*********************************************************************************************");
+                logger.Info("Allocation Updator Service has initiated");
+
+                MessageBox.Show(DateTime.Today.DayOfWeek.ToString());
+
+                AllocationsUpdaterServiceProcessor processor = new AllocationsUpdaterServiceProcessor();
+
+                processor.ProcessAllocations();
+
+                MessageBox.Show("Service execution complete.");
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                logger.Error("Error while executing Allocation Updator service");
                 logger.Error(exp);
             }
         }

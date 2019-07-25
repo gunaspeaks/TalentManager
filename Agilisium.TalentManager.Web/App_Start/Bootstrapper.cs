@@ -11,7 +11,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataProtection;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Agilisium.TalentManager.Web.App_Start
@@ -34,10 +36,12 @@ namespace Agilisium.TalentManager.Web.App_Start
 
             builder.RegisterType<ApplicationDbContext>().AsSelf()
                 .As<IdentityDbContext<ApplicationUser>>().InstancePerRequest();
+
             builder.RegisterType<ApplicationUserManager>().AsSelf()
                 .As<UserManager<ApplicationUser>>().InstancePerRequest();
-            //builder.RegisterType<DataProtectorTokenProvider>().AsSelf()
-            //    .As<DataProtectorTokenProvider<ApplicationUser>>().InstancePerRequest();
+            //builder.(c => HttpContext.Current.GetOwinContext().GetUserManager).As<ApplicationUserManager>();
+            builder.RegisterType<AuthenticationManager>().AsSelf()
+                .AsImplementedInterfaces().InstancePerRequest();
 
             // Repositories
             builder.RegisterAssemblyTypes(typeof(DropDownCategoryRepository).Assembly)

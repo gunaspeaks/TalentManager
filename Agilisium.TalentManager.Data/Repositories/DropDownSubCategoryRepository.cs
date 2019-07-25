@@ -4,6 +4,7 @@ using Agilisium.TalentManager.Model.Entities;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System;
 
 namespace Agilisium.TalentManager.Repository.Repositories
 {
@@ -46,28 +47,35 @@ namespace Agilisium.TalentManager.Repository.Repositories
 
         public IEnumerable<DropDownSubCategoryDto> GetAll(int pageSize = -1, int pageNo = -1)
         {
-            IQueryable<DropDownSubCategoryDto> subCategories = from s in Entities
-                                                               join c in DataContext.DropDownCategories on s.CategoryID equals c.CategoryID into ce
-                                                               from cd in ce.DefaultIfEmpty()
-                                                               orderby s.SubCategoryName
-                                                               where s.IsDeleted == false
-                                                               select new DropDownSubCategoryDto
-                                                               {
-                                                                   SubCategoryID = s.SubCategoryID,
-                                                                   SubCategoryName = s.SubCategoryName,
-                                                                   CategoryID = s.CategoryID,
-                                                                   Description = s.Description,
-                                                                   ShortName = s.ShortName,
-                                                                   CategoryName = cd.CategoryName,
-                                                                   IsReserved = cd.IsReserved
-                                                               };
-
-            if (pageSize <= 0 || pageNo < 1)
+            IQueryable<DropDownSubCategoryDto> subCategories = null;
+            try
             {
-                return subCategories;
-            }
+                subCategories = from s in Entities
+                                                                   join c in DataContext.DropDownCategories on s.CategoryID equals c.CategoryID into ce
+                                                                   from cd in ce.DefaultIfEmpty()
+                                                                   orderby s.SubCategoryName
+                                                                   where s.IsDeleted == false
+                                                                   select new DropDownSubCategoryDto
+                                                                   {
+                                                                       SubCategoryID = s.SubCategoryID,
+                                                                       SubCategoryName = s.SubCategoryName,
+                                                                       CategoryID = s.CategoryID,
+                                                                       Description = s.Description,
+                                                                       ShortName = s.ShortName,
+                                                                       CategoryName = cd.CategoryName,
+                                                                       IsReserved = cd.IsReserved
+                                                                   };
 
-            return subCategories.Skip((pageNo - 1) * pageSize).Take(pageSize);
+                if (pageSize <= 0 || pageNo < 1)
+                {
+                    return subCategories;
+                }
+            }
+            catch(Exception exp)
+            {
+
+            }
+            return subCategories?.Skip((pageNo - 1) * pageSize).Take(pageSize);
         }
 
         public DropDownSubCategoryDto GetByID(int id)
